@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.Contract", "eHPS.Contract\eHPS.Contract.csproj", "{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0-Modeling and Design", "0-Modeling and Design", "{7CCA57E4-A320-4A87-B6F5-0F80D6CA712A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-Layers", "1-Layers", "{A3ED8289-446B-4C8C-9788-B5859A886533}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{547C5B08-F7B3-4D86-B26B-1665BEF96D40}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.2 Service Contract", "1.2 Service Contract", "{29AA3994-8998-4709-BEF2-EE2531D61495}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1 Common Component", "1.1 Common Component", "{9816B181-C431-481C-BAF6-18F080974961}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.3 Distributed Service", "1.3 Distributed Service", "{B7627750-BAF8-42E0-9832-9AF2E069E2DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.4 Service Provider", "1.4 Service Provider", "{9D77536F-7419-4A62-B687-970850CBF0AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.API", "eHPS.API\eHPS.API.csproj", "{25F1077C-1658-4A36-9987-36C7473717BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.WYServiceImplement", "eHPS.WYServiceImplement\eHPS.WYServiceImplement.csproj", "{DE3E3252-9409-47DE-9A58-D309FD25B9F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25F1077C-1658-4A36-9987-36C7473717BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25F1077C-1658-4A36-9987-36C7473717BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25F1077C-1658-4A36-9987-36C7473717BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25F1077C-1658-4A36-9987-36C7473717BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE3E3252-9409-47DE-9A58-D309FD25B9F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE3E3252-9409-47DE-9A58-D309FD25B9F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE3E3252-9409-47DE-9A58-D309FD25B9F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE3E3252-9409-47DE-9A58-D309FD25B9F1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E} = {29AA3994-8998-4709-BEF2-EE2531D61495}
+		{29AA3994-8998-4709-BEF2-EE2531D61495} = {A3ED8289-446B-4C8C-9788-B5859A886533}
+		{9816B181-C431-481C-BAF6-18F080974961} = {A3ED8289-446B-4C8C-9788-B5859A886533}
+		{B7627750-BAF8-42E0-9832-9AF2E069E2DA} = {A3ED8289-446B-4C8C-9788-B5859A886533}
+		{9D77536F-7419-4A62-B687-970850CBF0AB} = {A3ED8289-446B-4C8C-9788-B5859A886533}
+		{25F1077C-1658-4A36-9987-36C7473717BD} = {B7627750-BAF8-42E0-9832-9AF2E069E2DA}
+		{DE3E3252-9409-47DE-9A58-D309FD25B9F1} = {9D77536F-7419-4A62-B687-970850CBF0AB}
+	EndGlobalSection
+EndGlobal
