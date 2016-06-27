@@ -10,6 +10,8 @@ using eHPS.API.LogAttribute;
 using eHPS.API.Resolver;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
+using eHPS.API.Handlers;
+using eHPS.API.Filter;
 
 namespace eHPS.API
 {
@@ -19,10 +21,12 @@ namespace eHPS.API
         {
             // Web API 配置和服务
             // 将 Web API 配置为仅使用不记名令牌身份验证。
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+            //config.SuppressDefaultHostAuthentication();
+            //config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
 
+            //增加摘要算法验证
+            config.Filters.Add(new DigestAuthorizationFilterAttribute());
             //启用跨域
             config.EnableCors();
 

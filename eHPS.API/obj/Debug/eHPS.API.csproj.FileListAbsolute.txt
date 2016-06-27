@@ -112,3 +112,11 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Microsoft.Practices.Unity.Configuration.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Microsoft.Practices.Unity.RegistrationByConvention.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Sigil.xml
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.API.XML
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.Common.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\IdentityModel.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\System.Web.Cors.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\System.Web.Http.Cors.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.Common.pdb
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\IdentityModel.pdb
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\System.Web.Http.Cors.xml
