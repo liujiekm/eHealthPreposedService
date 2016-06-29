@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ehealthdbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="EH_Hospital">
+          <Key>
+            <PropertyRef Name="HID" />
+          </Key>
+          <Property Name="HID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Secret" Type="nvarchar" MaxLength="32" />
+          <Property Name="ShortName" Type="nvarchar" MaxLength="32" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="128" />
+          <Property Name="Level" Type="nvarchar" MaxLength="2" />
+          <Property Name="Category" Type="nvarchar" MaxLength="32" />
+          <Property Name="ShortInfo" Type="nvarchar" MaxLength="128" />
+          <Property Name="FullInfo" Type="nvarchar" MaxLength="2048" />
+          <Property Name="LogoImg" Type="image" />
+          <Property Name="Panorama" Type="image" />
+          <Property Name="CenterPointE" Type="decimal" Precision="9" Scale="6" />
+          <Property Name="CenterPointN" Type="decimal" Precision="9" Scale="6" />
+          <Property Name="PointOne" Type="nvarchar" MaxLength="32" />
+          <Property Name="PointTwo" Type="nvarchar" MaxLength="32" />
+          <Property Name="PointThree" Type="nvarchar" MaxLength="32" />
+          <Property Name="PointFour" Type="nvarchar" MaxLength="32" />
+          <Property Name="ProvinceID" Type="int" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="ServiceURL" Type="nvarchar" MaxLength="256" />
+          <Property Name="ExpireTime" Type="datetime" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="Creater" Type="int" />
+          <Property Name="ModifyTime" Type="datetime" />
+          <Property Name="Modifier" Type="int" />
+          <Property Name="Mode" Type="int" />
+          <Property Name="HAddress" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityContainer Name="ehealthdbModelStoreContainer">
+          <EntitySet Name="EH_Hospital" EntityType="Self.EH_Hospital" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ehealthdbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ehealthdbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="EH_Hospital" EntityType="ehealthdbModel.EH_Hospital" />
+        </EntityContainer>
+        <EntityType Name="EH_Hospital">
+          <Key>
+            <PropertyRef Name="HID" />
+          </Key>
+          <Property Name="HID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Secret" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ShortName" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Level" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ShortInfo" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FullInfo" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+          <Property Name="LogoImg" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Panorama" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="CenterPointE" Type="Decimal" Precision="9" Scale="6" />
+          <Property Name="CenterPointN" Type="Decimal" Precision="9" Scale="6" />
+          <Property Name="PointOne" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="PointTwo" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="PointThree" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="PointFour" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="ProvinceID" Type="Int32" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="ServiceURL" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireTime" Type="DateTime" Precision="3" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="Creater" Type="Int32" />
+          <Property Name="ModifyTime" Type="DateTime" Precision="3" />
+          <Property Name="Modifier" Type="Int32" />
+          <Property Name="Mode" Type="Int32" />
+          <Property Name="HAddress" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ehealthdbModelStoreContainer" CdmEntityContainer="ehealthdbEntities">
+          <EntitySetMapping Name="EH_Hospital">
+            <EntityTypeMapping TypeName="ehealthdbModel.EH_Hospital">
+              <MappingFragment StoreEntitySet="EH_Hospital">
+                <ScalarProperty Name="HAddress" ColumnName="HAddress" />
+                <ScalarProperty Name="Mode" ColumnName="Mode" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="ModifyTime" ColumnName="ModifyTime" />
+                <ScalarProperty Name="Creater" ColumnName="Creater" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="ExpireTime" ColumnName="ExpireTime" />
+                <ScalarProperty Name="ServiceURL" ColumnName="ServiceURL" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="ProvinceID" ColumnName="ProvinceID" />
+                <ScalarProperty Name="PointFour" ColumnName="PointFour" />
+                <ScalarProperty Name="PointThree" ColumnName="PointThree" />
+                <ScalarProperty Name="PointTwo" ColumnName="PointTwo" />
+                <ScalarProperty Name="PointOne" ColumnName="PointOne" />
+                <ScalarProperty Name="CenterPointN" ColumnName="CenterPointN" />
+                <ScalarProperty Name="CenterPointE" ColumnName="CenterPointE" />
+                <ScalarProperty Name="Panorama" ColumnName="Panorama" />
+                <ScalarProperty Name="LogoImg" ColumnName="LogoImg" />
+                <ScalarProperty Name="FullInfo" ColumnName="FullInfo" />
+                <ScalarProperty Name="ShortInfo" ColumnName="ShortInfo" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+                <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="HID" ColumnName="HID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

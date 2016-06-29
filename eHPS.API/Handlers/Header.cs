@@ -74,7 +74,7 @@ namespace eHPS.API.Handlers
 
         /// <summary>
         /// 使用这个属性处理程序生成 nonce 打包在WWW-Authenticate头,
-        /// 作为401响应的一部分
+        /// 作为401响应的一部分,会生成一个随机数key发送给客户端
         /// </summary>
         public static Header UnauthorizedResponseHeader(string realm)
         {

@@ -38,9 +38,31 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="TinyMapper, Version=2.0.0.40, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TinyMapper.2.0.8\lib\net45\TinyMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppointmentService.cs" />
+    <Compile Include="BascInfoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eHPS.Contract\eHPS.Contract.csproj">
+      <Project>{9e359af3-a016-4472-b7a1-95a2a9a1ca5e}</Project>
+      <Name>eHPS.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eHPS.CrossCutting.NetFramework\eHPS.CrossCutting.NetFramework.csproj">
+      <Project>{98c37512-386b-49fe-a2ce-51980ece5d2a}</Project>
+      <Name>eHPS.CrossCutting.NetFramework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

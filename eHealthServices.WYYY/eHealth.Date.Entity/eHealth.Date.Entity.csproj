@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DF63B4EA-8748-489B-B5C9-5AC2E19C7CC5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eHealth.Date.Entity</RootNamespace>
+    <AssemblyName>eHealth.Date.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="m_cw_ghmx.cs" />
+    <Compile Include="m_i_ysxx.cs" />
+    <Compile Include="m_l_testresult.cs" />
+    <Compile Include="m_r_ryk.cs" />
+    <Compile Include="m_xtgl_ism_send.cs" />
+    <Compile Include="m_xtgl_ism_sendmx.cs" />
+    <Compile Include="m_yjk_ddlbn.cs" />
+    <Compile Include="m_yjk_yyff.cs" />
+    <Compile Include="m_yjk_yypl.cs" />
+    <Compile Include="m_yl_mzhyyz.cs" />
+    <Compile Include="m_yl_mzypyz.cs" />
+    <Compile Include="m_yl_sqdsj.cs" />
+    <Compile Include="m_yyfz_fjxx.cs" />
+    <Compile Include="m_yyfz_hjmb.cs" />
+    <Compile Include="m_yyfz_pbxx.cs" />
+    <Compile Include="m_yyfz_yspb.cs" />
+    <Compile Include="m_yyfz_yyls.cs" />
+    <Compile Include="m_yyfz_yyxx.cs" />
+    <Compile Include="m_yyfz_zkfj_wh.cs" />
+    <Compile Include="m_br_jctx.cs" />
+    <Compile Include="m_cw_khxx.cs" />
+    <Compile Include="m_cw_ycxfmx.cs" />
+    <Compile Include="m_e_zybldm.cs" />
+    <Compile Include="m_oa_glfjb.cs" />
+    <Compile Include="m_oa_xw.cs" />
+    <Compile Include="m_xtgl_bmdm.cs" />
+    <Compile Include="m_xtgl_ddlbn.cs" />
+    <Compile Include="m_xtgl_yhxx.cs" />
+    <Compile Include="m_yl_zljl.cs" />
+    <Compile Include="m_yl_zlzd.cs" />
+    <Compile Include="m_yyfz_zkyysz.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Lenovo.CodeBuild\Lenovo.CodeBuild.csproj">
+      <Project>{5ff65b83-c3a4-4f2f-80a2-3a2209ea8b83}</Project>
+      <Name>Lenovo.CodeBuild</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

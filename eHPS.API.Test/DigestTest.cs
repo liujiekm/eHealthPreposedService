@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Net.Http;
 using System.Net;
 using System.Text;
+using System.Net.Http.Headers;
 
 namespace eHPS.API.Test
 {
@@ -12,14 +13,14 @@ namespace eHPS.API.Test
         [TestMethod]
         public void Call_From_Client_Use_Digest()
         {
-            var requestUri = new Uri("https://localhost/eHPS/Test/Get/"); 
+            var requestUri = new Uri("https://localhost/eHPS/Test/Dick/"); 
 
             var credCache = new CredentialCache 
             { 
                 { 
-                    new Uri("https://localhost/eHPS/Test/Get/"),  
+                    new Uri("https://localhost/eHPS/Test/Dick/"),  
                     "Digest",  
-                    new NetworkCredential("Jordan", "Jordan","lenovohit.com") 
+                    new NetworkCredential("lenovo", "3bc4e4a529ab4a88b6e834199e228741","lenovohit.com") 
                 } 
             }; 
 
@@ -30,9 +31,13 @@ namespace eHPS.API.Test
                 PreAuthenticate = true 
             }) 
             using (var httpClient = new HttpClient(clientHander)) 
-            { 
-                    var responseTask = httpClient.GetAsync(requestUri); 
-                    responseTask.Result.EnsureSuccessStatusCode();
+            {
+                
+
+                var content = new Tuple<String, String>("jack", "rose");
+
+                var responseTask = httpClient.PostAsJsonAsync(requestUri.ToString(), content); 
+                responseTask.Result.EnsureSuccessStatusCode();
             } 
 
         }

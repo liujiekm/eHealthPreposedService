@@ -16,6 +16,7 @@
 using eHPS.Common;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Web;
@@ -48,9 +49,18 @@ namespace eHPS.API.Filter
                 return null;
             }
 
-            var password = GetPassword(header.UserName);
 
-            //
+            //验证appid 
+            var allowAppId = ConfigurationManager.AppSettings["AppID"];
+
+            if(header.UserName!=allowAppId)
+            {
+                return null;
+            }
+
+
+            var secret = GetSecret(header.UserName);
+
 
 
 
@@ -58,7 +68,7 @@ namespace eHPS.API.Filter
                  "{0}:{1}:{2}",
                  header.UserName,
                  header.Realm,
-                 password));
+                 secret));
         
 
 
@@ -85,7 +95,7 @@ namespace eHPS.API.Filter
         }
 
 
-        protected abstract string GetPassword(string userName);
+        protected abstract string GetSecret(string userName);
         protected override AuthenticationHeaderValue GetUnauthorizedResponseHeader(HttpActionContext actionContext)
         {
             var host = actionContext.Request.RequestUri.DnsSafeHost;

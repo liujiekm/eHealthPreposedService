@@ -1,5 +1,5 @@
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\eHPS.Contract.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\eHPS.Contract.pdb
-C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.csprojResolveAssemblyReference.cache
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.pdb
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.csprojResolveAssemblyReference.cache

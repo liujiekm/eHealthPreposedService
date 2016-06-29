@@ -1,0 +1,14 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="$(ProjectDir)bin\\Debug\\Lenovo.CodeBuild.dll" #>
+<#@ output extension=".cs" encoding="utf-8" #>
+<#=Lenovo.CodeBuild.Make.Do("eHealth.Date.DAL",Host.ResolveAssemblyReference("$(ProjectDir)bin\\Debug\\eHealth.Date.Entity.dll")) #>
+
+
+
+
+
+

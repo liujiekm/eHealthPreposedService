@@ -1,0 +1,41 @@
+﻿@using System.Web.Http
+@using System.Web.Http.Controllers
+@using System.Web.Http.Description
+@using eHealthServices.WYYY.Areas.HelpPage
+@using eHealthServices.WYYY.Areas.HelpPage.Models
+@model IGrouping<HttpControllerDescriptor, ApiDescription>
+
+@{
+    var controllerDocumentation = ViewBag.DocumentationProvider != null ? 
+        ViewBag.DocumentationProvider.GetDocumentation(Model.Key) : 
+        null;
+}
+
+<h2 id="@Model.Key.ControllerName">@Model.Key.ControllerName</h2>
+@if (!String.IsNullOrEmpty(controllerDocumentation))
+{
+    <p>@controllerDocumentation 接口</p>
+}
+<table class="help-page-table">
+    <thead> 
+        <tr><th>方法</th><th>描述</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var api in Model)
+    {
+        <tr>
+            <td class="api-name"><a href="@Url.Action("Api", "Help", new { apiId = api.GetFriendlyId() })">@api.HttpMethod.Method @api.RelativePath.Split('/').ToList().FindLast(a=>1==1)</a></td>
+            <td class="api-documentation">
+            @if (api.Documentation != null)
+            {
+                <p>@api.Documentation</p>
+            }
+            else
+            {
+                <p>没有说明.</p>
+            }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

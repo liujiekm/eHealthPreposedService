@@ -73,7 +73,7 @@ namespace eHPS.API.Handlers
                     if(cachedNonce.Item2>DateTime.Now)
                     {
                         //更新nonce 递增
-                        nonces[nonce] = new Tuple<int, DateTime>(Int32.Parse(nonceCount)+1, cachedNonce.Item2);
+                        //nonces[nonce] = new Tuple<int, DateTime>(Int32.Parse(nonceCount)+1, cachedNonce.Item2);
                         return true;
                     }
                 }

@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -27,9 +28,9 @@ namespace eHPS.API.Filter
         {
         }
 
-        protected override string GetPassword(string userName)
+        protected override string GetSecret(string userName)
         {
-            return userName;
+            return ConfigurationManager.AppSettings["AppIDSecret"];
         }
 
         protected override bool IsUserAuthorized(string userName)

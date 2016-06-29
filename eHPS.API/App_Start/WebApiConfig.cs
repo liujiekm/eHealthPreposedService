@@ -12,6 +12,7 @@ using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 using eHPS.API.Handlers;
 using eHPS.API.Filter;
+using eHPS.API.DependencyBootstrap;
 
 namespace eHPS.API
 {
@@ -24,11 +25,11 @@ namespace eHPS.API
             //config.SuppressDefaultHostAuthentication();
             //config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-
-            //增加摘要算法验证
-            config.Filters.Add(new DigestAuthorizationFilterAttribute());
             //启用跨域
             config.EnableCors();
+            //增加摘要算法验证
+            config.Filters.Add(new DigestAuthorizationFilterAttribute());
+
 
             //替换默认的JSON序列化器JSON.NET为Jil
             config.Formatters.Clear();
@@ -43,7 +44,7 @@ namespace eHPS.API
 
             //设置Dependency Resolver
             var container = new UnityContainer();
-            container.LoadConfiguration();
+            ContainerBootstrap.Configure(container);
             config.DependencyResolver = new UnityResolver(container);
 
             // Web API 路由
