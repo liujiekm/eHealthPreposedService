@@ -44,6 +44,8 @@
     <Compile Include="IBasicInfo.cs" />
     <Compile Include="IInspection.cs" />
     <Compile Include="Model\Doctor.cs" />
+    <Compile Include="Model\InspectionReport.cs" />
+    <Compile Include="Model\InspectionReportDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
