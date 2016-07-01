@@ -49,6 +49,7 @@ namespace eHPS.CrossCutting.NetFramework.ExceptionHandler
             {
 
                 LoggerFactory.CreateLog().Error(String.Format(
+
                   "方法 {0} 抛出异常 {1}\r\n堆栈信息：{2}", input.MethodBase,
                   result.Exception.Message,
                   result.Exception.StackTrace), result.Exception);

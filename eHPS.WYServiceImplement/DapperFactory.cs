@@ -1,35 +1,40 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 患者检查检验信息
+// Dapper Connection创建工厂
 //
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/6/29 11:48:46
+// 创建时间：2016/6/30 10:13:57
 // 版本号：  V1.0.0.0
 //===================================================================================
 
 
 
 
-using eHPS.Contract.Model;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eHPS.Contract
+namespace eHPS.WYServiceImplement
 {
-    public interface IInspection
+    public class DapperFactory
     {
-        List<InspectionReport> GetInspectionReportByPatientId(string patientId);
+        public static readonly string connectionString = ConfigurationManager.ConnectionStrings["eHPS"].ToString();
 
+        public static OracleConnection CrateOracleConnection()
+        {
+            var connection = new OracleConnection(connectionString);
+            connection.Open();
+            return connection;
+        }
 
-
-        void GetInspectionReportByPatientIds(List<string> patientIds);
     }
 }

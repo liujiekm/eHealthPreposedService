@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.Contract.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,21 @@ namespace eHPS.Contract
         List<Tuple<String, String, String>> GetDepts();
 
 
+
+        /// <summary>
+        /// 获得所有医生信息
+        /// </summary>
+        /// <returns></returns>
+        List<Doctor> GetDoctors();
+
+
+
+        /// <summary>
+        ///  根据医生标示获取医生信息
+        /// </summary>
+        /// <param name="doctorId"></param>
+        /// <returns></returns>
+        Doctor GetDoctorById(String doctorId);
 
     }
 }
