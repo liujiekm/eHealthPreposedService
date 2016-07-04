@@ -59,23 +59,52 @@ namespace eHPS.WYServiceImplement
             
         }
 
+
+
+        /// <summary>
+        /// 根据用户标识获取用户姓名
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        //public string GetNameById(string userId)
+        //{
+        //    using (var con = DapperFactory.CrateOracleConnection())
+        //    {
+        //        var command = @"select yhxm from xtgl_yhxx where yhid =:UserId";
+
+        //        var condition = new { UserId = userId };
+
+        //        var result = con.Query(command, condition).FirstOrDefault();
+
+        //        return (string)result.yhxm;
+        //    }
+        //}
+
+
+
         public Doctor GetDoctorById(string doctorId)
         {
-            using (var con = DapperFactory.CrateOracleConnection())
-            {
-                var getDoctorById = @"";
-                
+            var doctor = default(Doctor);
+            //using (var con = DapperFactory.CrateOracleConnection())
+            //{
+            //    var getDoctorById = @"";
 
-            }
+
+            //}
+
+            return doctor;
         }
 
         public List<Doctor> GetDoctors()
         {
-            using (var con = DapperFactory.CrateOracleConnection())
-            {
-                var getDoctors = @"";
+            var result = new List<Doctor>();
+            //using (var con = DapperFactory.CrateOracleConnection())
+            //{
+            //    var getDoctors = @"";
 
-            }
+            //}
+
+            return result;
         }
     }
 }

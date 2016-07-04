@@ -23,15 +23,32 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
+    /// <summary>
+    /// 医生信息模型
+    /// </summary>
     public class Doctor
     {
+
+        /// <summary>
+        /// 医生标识
+        /// </summary>
+        public string DoctorId { get; set; }
+
+
         /// <summary>
         /// 医生姓名
         /// </summary>
         public string DoctorName { get; set; }
 
+        /// <summary>
+        /// 医院标识
+        /// </summary>
         public string HospitalId { get; set; }
        
+
+        /// <summary>
+        /// 医院名称
+        /// </summary>
         public string HospitalName { get; set; }
         /// <summary>
         /// 科室名

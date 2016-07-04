@@ -56,9 +56,16 @@
     <Compile Include="AppointmentService.cs" />
     <Compile Include="BasicInfoService.cs" />
     <Compile Include="DapperFactory.cs" />
+    <Compile Include="InspectionService.cs" />
+    <Compile Include="Model\m_getreport.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\eHPS.Common\eHPS.Common.csproj">
+      <Project>{ce4be0a7-5e4c-42fe-814c-7899cd060269}</Project>
+      <Name>eHPS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eHPS.Contract\eHPS.Contract.csproj">
       <Project>{9e359af3-a016-4472-b7a1-95a2a9a1ca5e}</Project>
       <Name>eHPS.Contract</Name>
@@ -72,9 +79,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

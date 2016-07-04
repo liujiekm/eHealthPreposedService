@@ -30,3 +30,5 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYS
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Practices.Unity.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\eHPS.Common.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\eHPS.Common.pdb

@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
+    /// <summary>
+    /// 检查、检验报告总览
+    /// </summary>
     public class InspectionReport
     {
 
