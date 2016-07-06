@@ -55,8 +55,11 @@
   <ItemGroup>
     <Compile Include="AppointmentService.cs" />
     <Compile Include="BasicInfoService.cs" />
+    <Compile Include="CommonService.cs" />
     <Compile Include="DapperFactory.cs" />
+    <Compile Include="DiagnosisService.cs" />
     <Compile Include="InspectionService.cs" />
+    <Compile Include="Model\MultiValue.cs" />
     <Compile Include="Model\m_getreport.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.Contract.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,46 @@ namespace eHPS.Contract
 {
     public interface IAppointment
     {
+
+
+        /// <summary>
+        /// 获取医生可预约信息
+        /// </summary>
+        /// <param name="doctorId">医生标识</param>
+        /// <returns></returns>
+        List<BookableDoctor> GetBookableInfo(String doctorId);
+
+
+        /// <summary>
+        /// 获取患者的预约历史
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <returns></returns>
+        List<BookHistory> GetAppointmentHistory(String patientId);
+
+
+
+        /// <summary>
+        /// 预约
+        /// </summary>
+        /// <param name="obj"></param>
+        void MakeAnAppointment(MakeAnAppointment appointment);
+
+
+
+        /// <summary>
+        /// 取消指定预约
+        /// </summary>
+        /// <param name="obj"></param>
+        void CancelTheAppointment(String apponintId);
+
+
+
+        /// <summary>
+        /// 推送可预约的医生信息
+        /// </summary>
+        /// <returns></returns>
+        List<BookableDoctor> PushBookableDoctors();
 
 
     }

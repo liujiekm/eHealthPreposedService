@@ -42,11 +42,16 @@
   <ItemGroup>
     <Compile Include="IAppointment.cs" />
     <Compile Include="IBasicInfo.cs" />
+    <Compile Include="IDiagnosis.cs" />
     <Compile Include="IInspection.cs" />
+    <Compile Include="Model\BookableDoctor.cs" />
+    <Compile Include="Model\BookHistory.cs" />
+    <Compile Include="Model\DiagnosisRecord.cs" />
     <Compile Include="Model\Doctor.cs" />
     <Compile Include="Model\InspectionReport.cs" />
     <Compile Include="Model\InspectionReportDetail.cs" />
     <Compile Include="Model\LaboratoryItemDetail.cs" />
+    <Compile Include="Model\MakeAnAppointment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -50,5 +50,14 @@ namespace eHPS.Contract
         /// <returns></returns>
         Doctor GetDoctorById(String doctorId);
 
+
+
+        /// <summary>
+        /// 根据患者就诊卡获取患者基本信息
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <returns></returns>
+        dynamic GetPatientInfo(string patientId);
+
     }
 }

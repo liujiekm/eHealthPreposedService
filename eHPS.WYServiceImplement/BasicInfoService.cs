@@ -106,5 +106,10 @@ namespace eHPS.WYServiceImplement
 
             return result;
         }
+
+        public dynamic GetPatientInfo(string patientId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
