@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Dapper;
+using eHPS.CrossCutting.NetFramework.Caching;
 
 namespace eHPS.WYServiceImplement
 {
@@ -42,7 +43,7 @@ namespace eHPS.WYServiceImplement
         {
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"select mc from xtgl_ddlbn where lb = :LB and dm = :DM and ztbz='1'";
+                var command = @"SELECT MC FROM XTGL_DDLBN WHERE LB = :LB AND DM = :DM AND ZTBZ='1'";
                 var condition = new { LB=category,DM=code };
 
                 var result = con.Query<MultiValue>(command, condition).FirstOrDefault();
@@ -50,5 +51,29 @@ namespace eHPS.WYServiceImplement
                 return result;
             }
         } 
+
+        /// <summary>
+        /// 根据科室标识、获取科室名称
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
+        public static string GetDepts(Int32 deptId)
+        {
+            var depts = new Dictionary<Int32, String>();
+            if(CacheProvider.Exist("ehps_Depts"))
+            {
+                depts = (Dictionary<Int32, String>)CacheProvider.Get("ehps_Depts");
+                return depts[deptId];
+            }
+            else
+            {
+                using (var con = DapperFactory.CrateOracleConnection())
+                {
+                    var command = @"SELECT BMID, BMMC FROM XTGL_BMDM WHERE SJBM=1 AND ZTBZ='1'";
+                    var result = con.Query(command).ToDictionary(k=>(Int32)k.BMID,v=>(String)v.BMMC);
+                    return result[deptId];
+                }
+            }
+        }
     }
 }

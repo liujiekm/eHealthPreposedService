@@ -73,10 +73,28 @@ namespace eHPS.Contract.Model
         public String JobTitle { get; set; }
 
 
+        ///// <summary>
+        ///// 可预约号数
+        ///// </summary>
+        //public Int32 BookableNum { get; set; }
+
+
         /// <summary>
-        /// 可预约号数
+        /// 已使用号源数
         /// </summary>
-        public Int32 BookableNum { get; set; }
+        public Int32 UsedBookNum { set; get; }
+
+        /// <summary>
+        /// 号源总数
+        /// </summary>
+        public Int32 SumBookNum { get; set; }
+
+
+
+        /// <summary>
+        /// 排班标识
+        /// </summary>
+        public String ArrangeId { get; set; }
 
         /// <summary>
         /// 排班开始时间
@@ -89,15 +107,27 @@ namespace eHPS.Contract.Model
         public DateTime ArrangeEndTime { get; set; }
 
 
-        /// <summary>
-        /// 是否专家
-        /// </summary>
-        public Boolean IsExpert { get; set; }
+        ///// <summary>
+        ///// 是否专家
+        ///// </summary>
+        //public Boolean IsExpert { get; set; }
 
         /// <summary>
         /// 挂号金额
         /// </summary>
         public Decimal RegisteredAmount { get; set; }
+
+        /// <summary>
+        /// 是否专病
+        /// </summary>
+        public Boolean IsSpecialDisease { get; set; }
+
+
+
+        /// <summary>
+        /// 专病说明
+        /// </summary>
+        public String SpecialDiseaseState { get; set; }
 
 
     }

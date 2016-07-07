@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="IAppointment.cs" />
     <Compile Include="IBasicInfo.cs" />
+    <Compile Include="IConfig.cs" />
     <Compile Include="IDiagnosis.cs" />
     <Compile Include="IInspection.cs" />
     <Compile Include="Model\BookableDoctor.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Model\InspectionReportDetail.cs" />
     <Compile Include="Model\LaboratoryItemDetail.cs" />
     <Compile Include="Model\MakeAnAppointment.cs" />
+    <Compile Include="Model\Patient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

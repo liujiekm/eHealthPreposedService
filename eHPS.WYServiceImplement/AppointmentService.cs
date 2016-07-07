@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using eHPS.Contract.Model;
 using Dapper;
 using eHPS.CrossCutting.NetFramework.Caching;
+using Oracle.ManagedDataAccess.Client;
 
 namespace eHPS.WYServiceImplement
 {
@@ -44,18 +45,80 @@ namespace eHPS.WYServiceImplement
         /// <summary>
         /// 获取医生可预约信息
         /// </summary>
-        /// <param name="doctorId"></param>
+        /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        public List<BookableDoctor> GetBookableInfo(string doctorId)
+        public List<BookableDoctor> GetBookableInfo(String deptId, DateTime? startTime, DateTime? endTime)
         {
-            throw new NotImplementedException();
+            var bookableDoctors = new List<BookableDoctor>();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                //首先取医生排班信息
+                var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
+                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' AND ZKID =:DeptId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
+
+                if(null==startTime)
+                {
+                    startTime = DateTime.Now;
+                }
+                if(null==endTime)
+                {
+                    endTime = DateTime.Now.AddDays(14);
+                }
+                var condition = new { DeptId=Int32.Parse(deptId),KSSJ= startTime, JSSJ= endTime };
+                var result = con.Query(command, condition).ToList();
+
+
+                var userPhotos = new Dictionary<Int32, Byte[]>();
+
+                foreach (var item in result)
+                {
+                    
+                    //每个员工图片只取一次
+                    byte[] photo = default(byte[]);
+                    if(!userPhotos.TryGetValue((Int32)item.RYKID, out photo))
+                    {
+                        photo = GetDoctorPhoto(((Int32)item.RYKID).ToString(), con);
+                        userPhotos.Add((Int32)item.RYKID, photo);
+                    }
+
+
+                    var bookableDoctor = new BookableDoctor {
+                        ArrangeId = ((Int32)item.PBID).ToString(),
+                        ArrangeStartTime = (DateTime)item.SBSJ,
+                        ArrangeEndTime = (DateTime)item.XBSJ,
+                        DeptId = ((Int32)item.ZKID).ToString(),
+                        DeptName=CommonService.GetDepts((Int32)item.ZKID),
+                        DocotorId=((Int32)item.YSYHID).ToString(),
+                        DoctorName=(String)item.YSXM,
+                        JobTitleId=(String)item.GZDM2,
+                        Photo = photo,
+                        RegisteredAmount=GetRegisteredAmount((string)item.ZLLX, (String)item.GZDM2),
+                        IsSpecialDisease=item.ZBYY==null?false:(string)item.ZBYY=="01"?true:false,
+                        JobTitle =GetJobTitle((String)item.GZDM2),
+                        SpecialDiseaseState="",
+                        SumBookNum=(Int32)item.ZKXH,
+                        UsedBookNum=GetUesdBookNum(((Int32)item.PBID).ToString(),con)
+                    };
+                    bookableDoctors.Add(bookableDoctor);
+                }
+            }
+
+            return bookableDoctors;
         }
 
 
 
-
+        /// <summary>
+        /// 预约行为
+        /// </summary>
+        /// <param name="appointment"></param>
         public void MakeAnAppointment(MakeAnAppointment appointment)
         {
+
+
+
+
+
             throw new NotImplementedException();
         }
 
@@ -66,36 +129,95 @@ namespace eHPS.WYServiceImplement
 
 
 
+        /// <summary>
+        /// 获取医生照片
+        /// </summary>
+        /// <param name="doctorId">温附一人员库标识</param>
+        /// <returns></returns>
+        private byte[] GetDoctorPhoto(string doctorId,OracleConnection con)
+        {
+            var command = @"SELECT RYPIC FROM R_RYK WHERE ID=:DoctorId";
+            var condition = new { DoctorId=Int32.Parse(doctorId) };
+            var result = con.Query(command, condition).FirstOrDefault();
+
+
+            return (byte[])result.RYPIC;
+
+        }
+
+
+
 
         /// <summary>
-        /// 
+        /// 获取挂号费用
         /// </summary>
         /// <param name="diagnosisType">诊疗类型</param>
         /// <param name="jobTitle">挂牌工种</param>
-        /// <param name="itemType">挂号相关 收费项目类型</param>
-        private void GetRegisteredAmount(string diagnosisType,string jobTitle,string itemType)
+        private decimal GetRegisteredAmount(string diagnosisTypeId,string jobTitleId)
         {
-            Tuple<Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>> auxiliaryData;
-            if (CacheProvider.Exist("ehps_auxiliaryData"))
+            using (var con = DapperFactory.CrateOracleConnection())
             {
-                auxiliaryData = (Tuple<Dictionary<string, string>, Dictionary<string, string>, Dictionary<string, string>>)CacheProvider.Get("ehps_auxiliaryData");
+                var command = @"select zllx,gzdm,xmid,xmje from cw_zllxghxm";
+                //var result = new Tuple<String,String,Int32,decimal>()
+                var result = con.Query(command).ToList();
+
+                var amount = default(decimal);
+                foreach (var item in result)
+                {
+                    if((string)item.ZLLX== diagnosisTypeId&&(string)item.GZDM== jobTitleId)
+                    {
+                        amount += (decimal)item.XMJE;
+                    }
+                }
+
+                return amount;
+
+            }
+        }
+
+
+
+
+
+        private Int32 GetUesdBookNum(String arrangeId,OracleConnection con)
+        {
+            var command = @"SELECT COUNT(*) AS Num FROM YYFZ_YYXX WHERE ZTBZ<>'9' AND PBID=:ArrangeId";
+            var condition = new { ArrangeId=arrangeId };
+
+            var result = con.Query(command, condition).FirstOrDefault();
+            return (Int32)result.NUM;
+
+        }
+
+
+
+        /// <summary>
+        /// 根据工种代码获取职级
+        /// </summary>
+        /// <param name="jobTitleId"></param>
+        /// <returns></returns>
+        private string GetJobTitle(String jobTitleId)
+        {
+            if(CacheProvider.Exist("ehps_jobTitles"))
+            {
+                var titles = (Dictionary<String, String>)CacheProvider.Get("ehps_jobTitles");
+                return titles[jobTitleId];
             }
             else
             {
-                auxiliaryData = CacheAuxiliaryData();
+                using (var con = DapperFactory.CrateOracleConnection())
+                {
+                    var jobTitlesCommand = @"select DM,MC from s_gz_zwdm where DM!='0000'";
+
+                    var result = con.Query(jobTitlesCommand).ToDictionary(k => (string)k.DM, v => (string)v.MC);
+
+                    CacheProvider.Set("ehps_jobTitles", result);
+
+                    return result[jobTitleId];
+                }
             }
-
-            using (var con = DapperFactory.CrateOracleConnection())
-            {
-                var command = @"";
-            }
-
-
-
-
-
-
         }
+
 
 
         /// <summary>
@@ -109,7 +231,7 @@ namespace eHPS.WYServiceImplement
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 var diagnosisTypesCommand = @"select DM,MC from  xtgl_ddlbn where lb='0051'";
-                var jobTitlesCommand = @"select DM,MC from  xtgl_ddlbn where lb='0022'";
+                var jobTitlesCommand = @"select DM,MC from s_gz_zwdm where DM!='0000'";
                 var itemTypesCommand = @"select XMID,MC from cw_sfxm where xmid in (select xmid from  cw_zhxmmx where zhid=12998)";
 
                 var diagnosisTypes = con.Query(diagnosisTypesCommand).ToDictionary(k => (string)k.DM, v => (string)v.MC);
