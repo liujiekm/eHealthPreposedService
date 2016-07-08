@@ -47,14 +47,14 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        public List<BookableDoctor> GetBookableInfo(String deptId, DateTime? startTime, DateTime? endTime)
+        public List<BookableDoctor> GetBookableInfo(String doctorId, DateTime? startTime, DateTime? endTime)
         {
             var bookableDoctors = new List<BookableDoctor>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 //首先取医生排班信息
                 var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
-                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' AND ZKID =:DeptId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
+                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' AND B.RYKID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
                 if(null==startTime)
                 {
@@ -64,12 +64,9 @@ namespace eHPS.WYServiceImplement
                 {
                     endTime = DateTime.Now.AddDays(14);
                 }
-                var condition = new { DeptId=Int32.Parse(deptId),KSSJ= startTime, JSSJ= endTime };
+                var condition = new { DeDoctorIdptId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
                 var result = con.Query(command, condition).ToList();
-
-
                 var userPhotos = new Dictionary<Int32, Byte[]>();
-
                 foreach (var item in result)
                 {
                     
@@ -80,21 +77,19 @@ namespace eHPS.WYServiceImplement
                         photo = GetDoctorPhoto(((Int32)item.RYKID).ToString(), con);
                         userPhotos.Add((Int32)item.RYKID, photo);
                     }
-
-
                     var bookableDoctor = new BookableDoctor {
                         ArrangeId = ((Int32)item.PBID).ToString(),
                         ArrangeStartTime = (DateTime)item.SBSJ,
                         ArrangeEndTime = (DateTime)item.XBSJ,
                         DeptId = ((Int32)item.ZKID).ToString(),
-                        DeptName=CommonService.GetDepts((Int32)item.ZKID),
+                        DeptName=CommonService.GetDeptName((Int32)item.ZKID),
                         DocotorId=((Int32)item.YSYHID).ToString(),
                         DoctorName=(String)item.YSXM,
                         JobTitleId=(String)item.GZDM2,
                         Photo = photo,
                         RegisteredAmount=GetRegisteredAmount((string)item.ZLLX, (String)item.GZDM2),
                         IsSpecialDisease=item.ZBYY==null?false:(string)item.ZBYY=="01"?true:false,
-                        JobTitle =GetJobTitle((String)item.GZDM2),
+                        JobTitle =CommonService.GetJobTitle((String)item.GZDM2),
                         SpecialDiseaseState="",
                         SumBookNum=(Int32)item.ZKXH,
                         UsedBookNum=GetUesdBookNum(((Int32)item.PBID).ToString(),con)
@@ -188,36 +183,6 @@ namespace eHPS.WYServiceImplement
             return (Int32)result.NUM;
 
         }
-
-
-
-        /// <summary>
-        /// 根据工种代码获取职级
-        /// </summary>
-        /// <param name="jobTitleId"></param>
-        /// <returns></returns>
-        private string GetJobTitle(String jobTitleId)
-        {
-            if(CacheProvider.Exist("ehps_jobTitles"))
-            {
-                var titles = (Dictionary<String, String>)CacheProvider.Get("ehps_jobTitles");
-                return titles[jobTitleId];
-            }
-            else
-            {
-                using (var con = DapperFactory.CrateOracleConnection())
-                {
-                    var jobTitlesCommand = @"select DM,MC from s_gz_zwdm where DM!='0000'";
-
-                    var result = con.Query(jobTitlesCommand).ToDictionary(k => (string)k.DM, v => (string)v.MC);
-
-                    CacheProvider.Set("ehps_jobTitles", result);
-
-                    return result[jobTitleId];
-                }
-            }
-        }
-
 
 
         /// <summary>

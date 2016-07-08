@@ -26,20 +26,23 @@ namespace eHPS.Contract
         /// <summary>
         /// 获得医院内的科室组织结构
         /// </summary>
-        /// <returns>
-        /// Item1:科室唯一标识
-        /// Item2:父节点科室唯一标识
-        /// Item3:科室名称
-        /// </returns>
-        List<Tuple<String, String, String>> GetDepts();
+        /// <param name="areaId">院区标识</param>
+        /// <returns></returns>
+        List<Department> GetDepts(string areaId);
 
 
 
         /// <summary>
-        /// 获得所有医生信息
+        /// 获得科室下医生信息
         /// </summary>
+        /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        List<Doctor> GetDoctors();
+        List<Doctor> GetDoctors(string deptId);
+
+
+
+
+       
 
 
 

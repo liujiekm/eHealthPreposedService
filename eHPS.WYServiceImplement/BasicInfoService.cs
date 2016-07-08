@@ -27,38 +27,31 @@ using Oracle.ManagedDataAccess.Client;
 
 using Dapper;
 using eHPS.Contract.Model;
+using eHPS.CrossCutting.NetFramework.Caching;
 
 namespace eHPS.WYServiceImplement
 {
     public class BasicInfoService : IBasicInfo
     {
-
-
-
-
-        public List<Tuple<string, string, string>> GetDepts()
+        public List<Department> GetDepts(string areaId)
         {
-            var depts = new List<Tuple<string, string, string>>();
-            using (OracleConnection con = DapperFactory.CrateOracleConnection())
+            var depts = new List<Department>();
+            if(CacheProvider.Exist("ehps_depts"))
             {
-                var getDepts = "select dm,fdm,mc,bmid from yyfz_zkfj_wh where  cxbz='1' and ztbz='1'";
-                var results = con.Query(getDepts);
-
-                foreach (var item in results)
-                {
-                    var dept = new Tuple<string, string, string>(
-                            (string)item.dm,
-                            (string)item.fdm,
-                            (string)item.mc);
-                    depts.Add(dept);
-                    
-                }
-                return depts;
-
+                depts = (List<Department>)CacheProvider.Get("ehps_depts");
             }
-            
+            else
+            {
+                using (var con = DapperFactory.CrateOracleConnection())
+                {
+                    var command = @"SELECT BMID AS DeptId,BMMC AS DeptName,' ' AS ParentDeptId  FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
+                    var condition = new { AreaId=areaId };
+                    depts = con.Query<Department>(command, condition).ToList();
+                    CacheProvider.Set("ehps_depts", depts);
+                }
+            }
+            return depts;
         }
-
 
 
         /// <summary>
@@ -95,16 +88,38 @@ namespace eHPS.WYServiceImplement
             return doctor;
         }
 
-        public List<Doctor> GetDoctors()
+
+        /// <summary>
+        /// 医生标识是以温附一人员库ID
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
+        public List<Doctor> GetDoctors(string deptId)
         {
-            var result = new List<Doctor>();
-            //using (var con = DapperFactory.CrateOracleConnection())
-            //{
-            //    var getDoctors = @"";
+            var doctors = new List<Doctor>();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"SELECT A.RYKID,A.XM,A.XB,A.GZDM,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND A.XZKID=:DeptId";
+                var condition = new { DeptId=deptId };
+                var result = con.Query(command, condition).ToList();
+                foreach (var item in result)
+                {
+                    var doctor = new Doctor {
+                         DeptId=deptId,
+                         DeptName=CommonService.GetDeptName(Int32.Parse(deptId)),
+                         DoctorId=((Int32)item.RYKID).ToString(),
+                         DoctorName=(string)item.XM,
+                         Expert="",
+                         Introduction=(string)item.JSNR,
+                         JobTitle=CommonService.GetJobTitle((string)item.GZDM),
+                         Sex=(string)item.XB=="1"?"男":"女",
+                         Photo=(byte[])item.PIC
+                    };
+                    doctors.Add(doctor);
+                }
 
-            //}
-
-            return result;
+            }
+            return doctors;
         }
 
         public dynamic GetPatientInfo(string patientId)

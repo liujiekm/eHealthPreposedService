@@ -14,7 +14,6 @@ namespace eHPS.API.Test
         public void Call_From_Client_Use_Digest()
         {
             var requestUri = new Uri("https://localhost/eHPS/Test/Dick/"); 
-
             var credCache = new CredentialCache 
             { 
                 { 
@@ -23,8 +22,6 @@ namespace eHPS.API.Test
                     new NetworkCredential("lenovo", "3bc4e4a529ab4a88b6e834199e228741","lenovohit.com") 
                 } 
             }; 
-
-
             using (var clientHander = new HttpClientHandler 
             { 
                 Credentials = credCache, 
@@ -32,10 +29,7 @@ namespace eHPS.API.Test
             }) 
             using (var httpClient = new HttpClient(clientHander)) 
             {
-                
-
                 var content = new Tuple<String, String>("jack", "rose");
-
                 var responseTask = httpClient.PostAsJsonAsync(requestUri.ToString(), content); 
                 responseTask.Result.EnsureSuccessStatusCode();
             } 

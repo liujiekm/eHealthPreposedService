@@ -47,6 +47,7 @@
     <Compile Include="IInspection.cs" />
     <Compile Include="Model\BookableDoctor.cs" />
     <Compile Include="Model\BookHistory.cs" />
+    <Compile Include="Model\Department.cs" />
     <Compile Include="Model\DiagnosisRecord.cs" />
     <Compile Include="Model\Doctor.cs" />
     <Compile Include="Model\InspectionReport.cs" />

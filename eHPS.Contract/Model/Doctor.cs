@@ -40,16 +40,16 @@ namespace eHPS.Contract.Model
         /// </summary>
         public string DoctorName { get; set; }
 
-        /// <summary>
-        /// 医院标识
-        /// </summary>
-        public string HospitalId { get; set; }
+        ///// <summary>
+        ///// 医院标识
+        ///// </summary>
+        //public string HospitalId { get; set; }
        
 
-        /// <summary>
-        /// 医院名称
-        /// </summary>
-        public string HospitalName { get; set; }
+        ///// <summary>
+        ///// 医院名称
+        ///// </summary>
+        //public string HospitalName { get; set; }
         /// <summary>
         /// 科室名
         /// </summary>
@@ -64,9 +64,9 @@ namespace eHPS.Contract.Model
         /// </summary>
         public string JobTitle { get; set; }
         /// <summary>
-        /// 头像位置
+        /// 头像
         /// </summary>
-        public string PhotoUrl { get; set; }
+        public byte[] Photo { get; set; }
 
         /// <summary>
         /// 简介
@@ -83,6 +83,6 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 联系电话
         /// </summary>
-        public string PhoneNum { get; set; }
+        //public string PhoneNum { get; set; }
     }
 }
