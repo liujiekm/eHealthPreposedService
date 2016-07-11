@@ -7,6 +7,7 @@ using eHPS.Contract;
 using eHPS.WYServiceImplement;
 using eHPS.CrossCutting.NetFramework.ExceptionHandler;
 using eHPS.CrossCutting.NetFramework.Logging;
+using Jil;
 
 namespace eHPS.ImplementTest
 {
@@ -44,7 +45,11 @@ namespace eHPS.ImplementTest
             var deptId = "33";
             var result = appointmentService.GetBookableInfo(deptId, new DateTime(2015,1,1),new DateTime(2016,1,1));
 
+            var jiled = JSON.Serialize(result);
 
+
+
+            
             Assert.AreEqual(122,result.Count);
             
         }

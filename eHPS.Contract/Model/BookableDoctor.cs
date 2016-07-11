@@ -21,6 +21,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Jil;
+
 namespace eHPS.Contract.Model
 {
 
@@ -90,6 +92,11 @@ namespace eHPS.Contract.Model
         public Int32 SumBookNum { get; set; }
 
 
+        /// <summary>
+        /// 诊疗类型
+        /// 1 普通、2 专家
+        /// </summary>
+        public String DiagnosisType { get; set; }
 
         /// <summary>
         /// 排班标识
@@ -117,18 +124,92 @@ namespace eHPS.Contract.Model
         /// </summary>
         public Decimal RegisteredAmount { get; set; }
 
-        /// <summary>
-        /// 是否专病
-        /// </summary>
-        public Boolean IsSpecialDisease { get; set; }
 
-
+        private AppointmentState _appointmentState;
 
         /// <summary>
-        /// 专病说明
+        /// 医生可预约状态
+        /// </summary>       
+        /// 
+        [JilDirective(TreatEnumerationAs =typeof(Int32))]
+        public AppointmentState AppointmentState {
+            get {
+                if(UsedBookNum>= SumBookNum)
+                {
+                    this._appointmentState=  AppointmentState.FullyBooked;
+                }
+                else
+                {
+                    this._appointmentState = AppointmentState.Bookable;
+                }
+                return this._appointmentState;
+
+            }
+            set
+            {
+                this._appointmentState = value;
+            }
+        }
+
+
+        /// <summary>
+        /// 当前排班下的可预约的时间点
+        /// 如果实施医院不支持预约到时间点 则为空
         /// </summary>
-        public String SpecialDiseaseState { get; set; }
+        public List<BookableTimePoint> BookableTimePoints { get; set; }
+
+
+
+
+        /// <summary>
+        /// 备注说明
+        /// 专病信息等
+        /// </summary>
+        public string Remark { get; set; }
+
+
+        ///// <summary>
+        ///// 是否专病
+        ///// </summary>
+        //public Boolean IsSpecialDisease { get; set; }
+
+
+
+        ///// <summary>
+        ///// 专病说明
+        ///// </summary>
+        //public String SpecialDiseaseState { get; set; }
 
 
     }
+
+    /// <summary>
+    /// 医生可预约排班状态
+    /// </summary>
+    public enum AppointmentState
+    {
+
+        /// <summary>
+        /// 1可以预约
+        /// </summary>
+        Bookable = 1,
+
+        /// <summary>
+        /// 2已经预满
+        /// </summary>
+        FullyBooked = 2,
+
+        /// <summary>
+        /// 3已经过期
+        /// </summary>
+        Expired = 3,
+
+
+        /// <summary>
+        /// 4其他原因不可预约
+        /// </summary>
+        OtherReason = 4
+    }
+
+
 }

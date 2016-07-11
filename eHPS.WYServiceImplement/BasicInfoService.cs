@@ -122,9 +122,45 @@ namespace eHPS.WYServiceImplement
             return doctors;
         }
 
-        public dynamic GetPatientInfo(string patientId)
+
+
+        /// <summary>
+        /// 根据患者标识获取患者基本信息
+        /// </summary>
+        /// <param name="patientId"></param>
+        /// <returns></returns>
+        public Patient GetPatientInfo(string patientId)
         {
-            throw new NotImplementedException();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select brbh,dwdm,knsj,brxm,brxb,gjdm,hyzk,zydm,jgdm,
+                                            mzdm,sfzh,csrq,xzzdm,lxdz,lxdh,yddh,szsj,ztbz from cw_khxx where brbh = :PatientId";
+                var condition = new { PatientId =patientId};
+
+                var result = con.Query(command, condition).FirstOrDefault();
+
+                if(result!=null)
+                {
+                    var patient = new Patient {
+                            PatientId =(string)result.BRBH,
+                            PatientName=(string)result.BRXM,
+                            BornDate=(DateTime)result.CSRQ,
+                            ContactAddress=(string)result.LXDZ,
+                            IdCode=(string)result.SFZH,
+                            Mobile=(string)result.YDDH,
+                            Sex=(string)result.BRXB,
+                            Telephone=(string)result.LXDH,
+                            FirstTimeDiagnosis=(DateTime)result.SZSJ
+                    };
+                    return patient;
+                }
+                else
+                {
+                    return default(Patient);
+                }
+
+           
+            }
         }
     }
 }

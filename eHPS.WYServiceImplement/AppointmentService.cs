@@ -25,11 +25,23 @@ using eHPS.Contract.Model;
 using Dapper;
 using eHPS.CrossCutting.NetFramework.Caching;
 using Oracle.ManagedDataAccess.Client;
+using eHPS.Common;
+using System.Data;
 
 namespace eHPS.WYServiceImplement
 {
     public class AppointmentService : IAppointment
     {
+
+
+        private IBasicInfo basicInfoService;
+
+        public AppointmentService(IBasicInfo basicInfoService)
+        {
+            this.basicInfoService = basicInfoService;
+        }
+
+
         public void CancelTheAppointment(string apponintId)
         {
             throw new NotImplementedException();
@@ -39,6 +51,10 @@ namespace eHPS.WYServiceImplement
         {
             throw new NotImplementedException();
         }
+
+
+
+
 
 
 
@@ -54,7 +70,8 @@ namespace eHPS.WYServiceImplement
             {
                 //首先取医生排班信息
                 var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
-                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' AND B.RYKID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
+                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' 
+                                            AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.RYKID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
                 if(null==startTime)
                 {
@@ -64,7 +81,7 @@ namespace eHPS.WYServiceImplement
                 {
                     endTime = DateTime.Now.AddDays(14);
                 }
-                var condition = new { DeDoctorIdptId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
+                var condition = new { DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
                 var result = con.Query(command, condition).ToList();
                 var userPhotos = new Dictionary<Int32, Byte[]>();
                 foreach (var item in result)
@@ -88,9 +105,10 @@ namespace eHPS.WYServiceImplement
                         JobTitleId=(String)item.GZDM2,
                         Photo = photo,
                         RegisteredAmount=GetRegisteredAmount((string)item.ZLLX, (String)item.GZDM2),
-                        IsSpecialDisease=item.ZBYY==null?false:(string)item.ZBYY=="01"?true:false,
+                        DiagnosisType= (string)item.ZLLX=="04"?"2":"1",
+                        Remark =item.ZBYY==null?"":(string)item.ZBYY=="01"?"专病":"",
                         JobTitle =CommonService.GetJobTitle((String)item.GZDM2),
-                        SpecialDiseaseState="",
+                        BookableTimePoints=GetBookableTimePoint(((Int32)item.PBID).ToString()),
                         SumBookNum=(Int32)item.ZKXH,
                         UsedBookNum=GetUesdBookNum(((Int32)item.PBID).ToString(),con)
                     };
@@ -103,19 +121,368 @@ namespace eHPS.WYServiceImplement
 
 
 
+        public List<BookableTimePoint> GetBookableTimePoint(string arrangeId)
+        {
+            dynamic result;
+
+            var bookableTimePoints = new List<BookableTimePoint>();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,
+                                            (select bn.mc from xtgl_ddlbn bn where bn.lb='0051' and bn.dm=pb.zllx) zllx,
+                                            (select count(*) from yyfz_yyxx xx where xx.yyxh<=pb.zkxh and xx.ztbz<>'9' and xx.pbid=pb.pbid and xx.yysj>sysdate) as syh,
+                                            pb.zbyy ,(select sum(xm.xmje) from  cw_zllxghxm xm where pb.zllx=xm.zllx and pb.gzdm=xm.gzdm) xmje 
+                                            from yyfz_yspb pb where pb.pbid=:ArrangeId";
+                var condition = new { ArrangeId=Int64.Parse(arrangeId) };
+                result = con.Query(command, condition).FirstOrDefault();
+            }
+
+            #region 上一个实现版本拷贝
+            if ((string)result.BCLB == "09" && DateHelper.GetSeconds((DateTime)result.SBSJ, (DateTime)result.XBSJ) / 3600 > 5)   //全天
+            {
+                DateTime[] ldt_sbsj = new DateTime[2];
+                DateTime[] ldt_xbsj = new DateTime[2];
+
+                ldt_sbsj[0] = (DateTime)result.SBSJ;  //上午上班时间
+                string timeAME = "", zd1AME = "";
+                if (((DateTime)result.SBSJ).Month > 9)
+                {
+                    zd1AME = ((DateTime)result.SBSJ).Month + "AME";//begin AMEnd
+                }
+                else
+                {
+                    zd1AME = "0" + ((DateTime)result.SBSJ).Month + "AME";//begin AMEnd
+                }
+                timeAME = CommonService.GetTimetable(zd1AME);
+
+                ldt_xbsj[0] = new DateTime(ldt_sbsj[0].Year, ldt_sbsj[0].Month, ldt_sbsj[0].Day, Convert.ToInt32(timeAME.Split(':')[0]), Convert.ToInt32(timeAME.Split(':')[1]), 0);  //上午下班时间
+
+                ldt_xbsj[1] = (DateTime)result.XBSJ;  //下午下班时间
+
+                string timePMB = "", zd1PMB = "";
+                if (Convert.ToDateTime(result.SBSJ).Month > 9)
+                {
+                    zd1PMB = ((DateTime)result.SBSJ).Month + "PMB";
+                }
+                else
+                {
+                    zd1PMB = "0" + ((DateTime)result.SBSJ).Month + "PMB";
+                }
+                timePMB = CommonService.GetTimetable(zd1PMB);
+                ldt_sbsj[1] = new DateTime(ldt_sbsj[0].Year, ldt_sbsj[0].Month, ldt_sbsj[0].Day, Convert.ToInt32(timePMB.Split(':')[0]), Convert.ToInt32(timePMB.Split(':')[1]), 0);  //下午上班时间
+
+                //计算上下午秒数
+                long sjd0 = DateHelper.GetSeconds(ldt_sbsj[0], ldt_xbsj[0]);
+                long sjd1 = DateHelper.GetSeconds(ldt_sbsj[1], ldt_xbsj[1]);
+
+                //计算上下午专科限号数
+                int zkxh0 = Convert.ToInt32(Math.Floor(Convert.ToDouble((Convert.ToDouble(sjd0) / (sjd0 + sjd1)) * (Int32)result.ZKXH)));
+                int zkxh1 = Convert.ToInt32((Int32)result.ZKXH) - zkxh0;
+
+                CreateTimePoint(ldt_sbsj[0], ldt_xbsj[0], 1, zkxh0, zkxh0, bookableTimePoints, Convert.ToInt64(arrangeId));
+                CreateTimePoint(ldt_sbsj[1], ldt_xbsj[1], zkxh0 + 1, zkxh0 + zkxh1, zkxh1, bookableTimePoints, Convert.ToInt64(arrangeId));
+            }
+            else
+            {
+                CreateTimePoint(Convert.ToDateTime(result.SBSJ), Convert.ToDateTime(result.XBSJ), 1, Convert.ToInt32(result.ZKXH), Convert.ToInt32(result.ZKXH), bookableTimePoints, Convert.ToInt64(arrangeId));
+            }
+            return bookableTimePoints.FindAll(d => d.AppointTime > DateTime.Now).OrderBy(d => d.AppointSequence).ToList();
+
+            #endregion
+
+
+
+
+        }
+
+
+        #region 上一个实现版本拷贝
+
+
+        /// <summary>
+        /// 创建可预约的时间点
+        /// </summary>
+        /// <param name="sbsj"></param>
+        /// <param name="xbsj"></param>
+        /// <param name="ksh"></param>
+        /// <param name="jsh"></param>
+        /// <param name="zkxh"></param>
+        /// <param name="list"></param>
+        /// <param name="pbid"></param>
+        private void CreateTimePoint(DateTime sbsj, DateTime xbsj, int ksh, int jsh, int zkxh, List<BookableTimePoint> list, Int64 pbid)
+        {
+
+            DateTime ldt_yysj = new DateTime();
+            xbsj = xbsj.AddMinutes(-10);
+            long jzsc = Convert.ToInt64(Math.Floor((Convert.ToDouble(DateHelper.GetSeconds(sbsj, xbsj)) / zkxh + 0.5))); //就诊时长
+
+            #region 不显示加号算法
+            for (int i = ksh; i <= jsh; i++)
+            {
+
+                if (i == ksh)
+                {
+                    ldt_yysj = sbsj;
+                }
+                else
+                {
+                    ldt_yysj = ldt_yysj.AddSeconds(Convert.ToDouble(jzsc));
+                }
+
+
+                //已存在的yysj或yyxh不再插入
+                if (ldt_yysj > DateTime.Now &&! IsTimePointBooked(ldt_yysj, i, pbid.ToString()))
+                {
+                    list.Add(new BookableTimePoint { AppointSequence= i, AppointTime= ldt_yysj });
+                }
+
+            }
+            #endregion
+
+        }
+        #endregion
+
+        /// <summary>
+        /// 检查当前时间点或者预约序号是否被占用
+        /// </summary>
+        /// <param name="bookTime">预约时间</param>
+        /// <param name="bookSequence">预约序号</param>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        public bool IsTimePointBooked(DateTime? bookTime, int? bookSequence, string arrangeId)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select count(yysj) yyxh from yyfz_yyxx where (yysj=:BookTime or yyxh=:BookSequence) and ztbz<>'9' and pbid=:ArrangeId";
+                var condition = new { BookTime=bookTime, BookSequence =bookSequence,arrangeId=Int64.Parse(arrangeId) };
+
+                var result = con.Query<Int32>(command, condition).FirstOrDefault();
+                if(result==0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
+
+
+        
+
+        /// <summary>
+        /// 检查一个半天限约两个号源(温附一规则)
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        private bool VerifyAppointCountExceed(String patientId,String arrangeId)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select count(a.lxdh) yyxh from yyfz_yyxx a,yyfz_yspb b,cw_khxx c where c.brbh=:PatientId and b.pbid=:ArrangeId and 
+                                            ((c.lxdh is not null and a.lxdh like '%'||c.lxdh||'%')or(c.yddh is not null and  a.lxdh like '%'||c.yddh||'%')) 
+                                            and a.yysj>=b.sbsj  and a.yysj<=b.xbsj and (a.ztbz='1' or a.ztbz='2') and (a.zllx='02' or a.zllx='04' or a.zllx='07')";
+
+                var condition = new { PatientId =patientId, ArrangeId =arrangeId};
+
+                var result = con.Query(command, condition).FirstOrDefault();
+
+                if((Int32)result.YYXH>=2)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+        }
+
+
+
+        /// <summary>
+        /// 验证在当前排班，患者是否已经预约过了
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        private bool VerifyAlreadyBookedInThisArrange(String patientId, String arrangeId)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select count(brbh) yyxh from yyfz_yyxx where ztbz<>'9' and brbh=:PatientId and pbid=:ArrangeId";
+                var condition = new { PatientId = patientId, ArrangeId = arrangeId };
+                var result = con.Query(command, condition).FirstOrDefault();
+
+                if((Int32)result.YYXH>0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 只有支持预约到时间点才实现如下方法
+        /// 验证此时间点是否被预约过了
+        /// </summary>
+        /// <param name="arrangeId">排班标识</param>
+        /// <param name="appointTime">预约时间</param>
+        /// <returns></returns>
+        private bool VerifyAlreadyBookedInThisTime(string arrangeId,DateTime appointTime)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select count(pbid) YYXH from yyfz_yyxx where pbid=:ArrangeId and yysj=:AppointTime and ztbz<>'9'";
+                var condition = new { ArrangeId=arrangeId, AppointTime =appointTime};
+
+                var result = con.Query(command, condition).FirstOrDefault();
+                if((Int32)result.YYXH>0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 验证排班是否被取消
+        /// </summary>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        private bool VerifyArrangeFunctional(string arrangeId)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select count(*) pbid from yyfz_yspb where ztbz<>'9' and  pbid=:ArrangeId";
+
+                var condition = new { ArrangeId =arrangeId };
+
+                var result = con.Query(command,condition).FirstOrDefault();
+
+                if((Int32)result.PBID<=0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         /// <summary>
         /// 预约行为
         /// </summary>
         /// <param name="appointment"></param>
-        public void MakeAnAppointment(MakeAnAppointment appointment)
+        /// <returns>预约历史</returns>
+        public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
         {
+            var response = new ResponseMessage<BookHistory>();
+            //首先查询是否可预约
+            if(VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
+            {
+                response.HasError = true;
+                response.ErrorMessage = "一个半天限约两个号源";
+                return response;
+            }
+            if (VerifyAlreadyBookedInThisArrange(appointment.PatientId, appointment.ArrangeId))
+            {
+                response.HasError = true;
+                response.ErrorMessage = "您在此排班已经有预约";
+                return response;
+            }
+            if (VerifyAlreadyBookedInThisTime(appointment.PatientId, appointment.AppointTime))
+            {
+                response.HasError = true;
+                response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
+                return response;
+            }
+            if (VerifyArrangeFunctional(appointment.ArrangeId))
+            {
+                response.HasError = true;
+                response.ErrorMessage = "该排班已被取消";
+                return response;
+            }
+
+
+
+            var patient = basicInfoService.GetPatientInfo(appointment.PatientId);
+
+            //插入预约信息,插入预约流水信息
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                IDbTransaction transaction = con.BeginTransaction();
+                //插入预约信息
+
+
+
+                var appointId = CommonService.GetNextValue("seq_yyfz_yyxx_id");
+                var insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRBH,BRXM,BRXB,CSRQ,BZ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
+                                                      values(:FZZBH,:BRBH,:BRXM,:BRXB,:CSRQ,:BZ,:LXDH,:SFZ,:LXDZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
+
+                //获取排班信息
+                var arrangeInfo = GetArrangeInfo(appointment.ArrangeId, con);
+
+
+                var appointInfoCondition = new { FZZBH= appointId,BRBH= appointment.PatientId, BRXM=patient.PatientName, BRXB=patient.Sex, CSRQ=patient.BornDate, BZ="", LXDH=patient.Telephone, SFZ=patient.IdCode, LXDZ=patient.ContactAddress, YYXH=appointment.AppointSequence,
+                    PDH=appointment.AppointSequence, YYSJ=appointment.AppointTime, PBID=Int64.Parse(appointment.ArrangeId), GZDM=(string)arrangeInfo.GZDM, ZKID=(Int64)arrangeInfo.ZKID, YSYHID=(Int64)arrangeInfo.YSYHID, YYFS="8", ZTBZ="1", ZLLX=(string)arrangeInfo.ZLLX, GHID=0,
+                        DJRYID = 19058, CZZID= 19058, XGSJ=DateTime.Now, ZBYY=(string)arrangeInfo.ZBYY, HJLX="1", DJSJ=DateTime.Now};
+
+                var appointListId = CommonService.GetNextValue("");
+                var insertAppointList = @"insert into yyfz_yyls(BRBH,FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:BRBH,:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
+                var AppointListCondition = new { BRBH=appointment.PatientId, FZYYID= appointId, YYFSSJ=DateTime.Now, YYJZSJ= appointment.AppointTime, YSXM=(string)arrangeInfo.YSXM, ZTBZ="0" };
+
+
+                con.Execute(insertAppointInfo, appointInfoCondition);
+                con.Execute(insertAppointList, AppointListCondition);
+
+
+                transaction.Commit();
+
+            }
 
 
 
 
 
-            throw new NotImplementedException();
+
+
+
+            return response;
         }
+
+
+        /// <summary>
+        /// 获得排班信息
+        /// </summary>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        public dynamic GetArrangeInfo(string arrangeId,OracleConnection con)
+        {
+            var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,pb.zllx,
+                                        (select bn.mc from xtgl_ddlbn bn where bn.lb='0051' and bn.dm=pb.zllx) zllxmc,(select count(*) 
+                                        from yyfz_yyxx xx where xx.yyxh<=pb.zkxh and xx.ztbz<>'9' and xx.pbid=pb.pbid and xx.yysj>sysdate) as syh,
+                                        pb.zbyy ,(select sum(xm.xmje) from  cw_zllxghxm xm where pb.zllx=xm.zllx and pb.gzdm=xm.gzdm) xmje 
+                                        from yyfz_yspb pb where pb.pbid=:ArrangeId";
+            var condition = new { ArrangeId=Int64.Parse(arrangeId) };
+
+            return con.Query(command, condition).FirstOrDefault();
+        }
+       
+
 
         public List<BookableDoctor> PushBookableDoctors()
         {
@@ -210,5 +577,7 @@ namespace eHPS.WYServiceImplement
                 return auxiliaryData;
             }
         }
+
+
     }
 }

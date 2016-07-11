@@ -96,7 +96,7 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="sequenceName">oracle序列名称</param>
         /// <returns></returns>
-        public long GetNextValue(string sequenceName)
+        public static long GetNextValue(string sequenceName)
         {
             using (var con = DapperFactory.CrateOracleConnection())
             {
@@ -115,7 +115,7 @@ namespace eHPS.WYServiceImplement
         /// <param name="sequenceName">序列名称</param>
         /// <param name="con">oracle连接对象</param>
         /// <returns></returns>
-        public long GetNextValue(string sequenceName,OracleConnection con)
+        public static long GetNextValue(string sequenceName,OracleConnection con)
         {
             var command = string.Format("select {0}.nextval from dual", sequenceName);
             var result = con.ExecuteScalar(command);
@@ -123,7 +123,23 @@ namespace eHPS.WYServiceImplement
            
         }
 
+        /// <summary>
+        /// 获取医生作息时间
+        /// </summary>
+        /// <param name="indicate"></param>
+        /// <returns></returns>
+        public static string GetTimetable(string indicate)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select zd2 ZTBZ from yyfz_gxdy where lb='YFSJ' and zd1=:Indicate";
+                var condition = new { Indicate=indicate };
 
+                var result = con.Query(command, condition).FirstOrDefault();
+
+                return (string)result.ZTBZ;
+            }
+        }
 
 
         /// <summary>

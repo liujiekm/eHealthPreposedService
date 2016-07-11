@@ -35,12 +35,6 @@ namespace eHPS.Contract
         List<BookableDoctor> GetBookableInfo(String doctorId,DateTime? startTime,DateTime? endTime);
 
 
-
-        //List<BookableDoctor> GetBookableInfo(String doctorId, DateTime? startTime, DateTime? endTime);
-
-
-
-
         /// <summary>
         /// 获取患者的预约历史
         /// </summary>
@@ -49,12 +43,38 @@ namespace eHPS.Contract
         List<BookHistory> GetAppointmentHistory(String patientId);
 
 
-
         /// <summary>
-        /// 预约
+        /// 预约 ,需包含如下逻辑
+        /// 预约之前的判断条件，验证是否可以预约
+        /// 进行预约操作
         /// </summary>
         /// <param name="obj"></param>
-        void MakeAnAppointment(MakeAnAppointment appointment);
+        ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment);
+
+
+        #region 如果预约无需预约到精确时间点则无需实一下方法
+
+        /// <summary>
+        /// 如果预约无需预约到精确时间点则无需实现改方法
+        /// 获得指定排班下面的可预约时间点清单
+        /// </summary>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        List<BookableTimePoint> GetBookableTimePoint(String arrangeId);
+
+
+        /// <summary>
+        /// 如果预约无需预约到精确时间点则无需实现改方法
+        /// 检查当前时间点或者预约序号是否被占用
+        /// </summary>
+        /// <param name="bookTime">预约时间点</param>
+        /// <param name="bookSequence">预约序号</param>
+        /// <param name="arrangeId">排班标识</param>
+        /// <returns></returns>
+        bool IsTimePointBooked(DateTime? bookTime, Int32? bookSequence, string arrangeId);
+
+
+        #endregion
 
 
 

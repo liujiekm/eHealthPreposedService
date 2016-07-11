@@ -60,7 +60,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="patientId"></param>
         /// <returns></returns>
-        dynamic GetPatientInfo(string patientId);
+        Patient GetPatientInfo(string patientId);
 
     }
 }

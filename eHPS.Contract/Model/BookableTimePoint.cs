@@ -1,14 +1,14 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 预约行为
+// 可预约的时间点信息
 //
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/7/6 14:39:33
+// 创建时间：2016/7/11 13:09:41
 // 版本号：  V1.0.0.0
 //===================================================================================
 
@@ -25,32 +25,19 @@ namespace eHPS.Contract.Model
 {
 
     /// <summary>
-    /// 预约行为
+    /// 可预约的时间点信息
     /// </summary>
-    public class MakeAnAppointment
+    public class BookableTimePoint
     {
 
         /// <summary>
-        /// 患者标识（就诊卡）
+        /// 可预约的预约序号
         /// </summary>
-        public String PatientId { get; set; }
+        public Int32 AppointSequence { set; get; }
 
         /// <summary>
-        /// 排班标识
-        /// </summary>
-        public String ArrangeId { get; set; }
-
-        /// <summary>
-        /// 预约时间
+        /// 可预约的时间点
         /// </summary>
         public DateTime AppointTime { get; set; }
-
-
-        /// <summary>
-        /// 预约序号
-        /// </summary>
-        public Int32 AppointSequence { get; set; }
-
-
     }
 }

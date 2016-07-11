@@ -1,14 +1,14 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 预约行为
-//
+// 执行命令的返回信息：
+// 比如 预约、支付、
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/7/6 14:39:33
+// 创建时间：2016/7/11 16:53:01
 // 版本号：  V1.0.0.0
 //===================================================================================
 
@@ -23,34 +23,22 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
-
-    /// <summary>
-    /// 预约行为
-    /// </summary>
-    public class MakeAnAppointment
+    public class ResponseMessage<T> where T:class
     {
 
         /// <summary>
-        /// 患者标识（就诊卡）
+        /// 命令执行是否哟错误
         /// </summary>
-        public String PatientId { get; set; }
+        public bool HasError { get; set; }
 
         /// <summary>
-        /// 排班标识
+        /// 错误信息
         /// </summary>
-        public String ArrangeId { get; set; }
+        public string ErrorMessage { get; set; }
 
         /// <summary>
-        /// 预约时间
+        /// 消息体
         /// </summary>
-        public DateTime AppointTime { get; set; }
-
-
-        /// <summary>
-        /// 预约序号
-        /// </summary>
-        public Int32 AppointSequence { get; set; }
-
-
+        public T Body { get; set; }
     }
 }

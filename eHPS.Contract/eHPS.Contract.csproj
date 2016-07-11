@@ -30,8 +30,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Jil, Version=2.14.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Jil.2.14.3\lib\net45\Jil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sigil, Version=4.6.1.0, Culture=neutral, PublicKeyToken=2d06c3494341c8ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sigil.4.6.1\lib\net45\Sigil.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,6 +55,7 @@
     <Compile Include="IDiagnosis.cs" />
     <Compile Include="IInspection.cs" />
     <Compile Include="Model\BookableDoctor.cs" />
+    <Compile Include="Model\BookableTimePoint.cs" />
     <Compile Include="Model\BookHistory.cs" />
     <Compile Include="Model\Department.cs" />
     <Compile Include="Model\DiagnosisRecord.cs" />
@@ -55,9 +65,12 @@
     <Compile Include="Model\LaboratoryItemDetail.cs" />
     <Compile Include="Model\MakeAnAppointment.cs" />
     <Compile Include="Model\Patient.cs" />
+    <Compile Include="Model\ResponseMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
