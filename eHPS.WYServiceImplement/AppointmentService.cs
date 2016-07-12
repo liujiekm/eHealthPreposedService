@@ -42,7 +42,7 @@ namespace eHPS.WYServiceImplement
         }
 
 
-        public void CancelTheAppointment(string apponintId)
+        public ResponseMessage<string> CancelTheAppointment(string apponintId)
         {
             throw new NotImplementedException();
         }
@@ -383,6 +383,9 @@ namespace eHPS.WYServiceImplement
             }
         }
 
+
+
+
         /// <summary>
         /// 预约行为
         /// </summary>
@@ -445,21 +448,47 @@ namespace eHPS.WYServiceImplement
                 var insertAppointList = @"insert into yyfz_yyls(BRBH,FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:BRBH,:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
                 var AppointListCondition = new { BRBH=appointment.PatientId, FZYYID= appointId, YYFSSJ=DateTime.Now, YYJZSJ= appointment.AppointTime, YSXM=(string)arrangeInfo.YSXM, ZTBZ="0" };
 
+                try
+                {
+                    con.Execute(insertAppointInfo, appointInfoCondition);
+                    con.Execute(insertAppointList, AppointListCondition);
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
 
-                con.Execute(insertAppointInfo, appointInfoCondition);
-                con.Execute(insertAppointList, AppointListCondition);
+                    response.HasError = true;
+                    response.ErrorMessage = "数据保存错误";
 
-
+                    throw;
+                }
                 transaction.Commit();
 
+
+                //返回预约历史信息
+                response.HasError = false;
+                response.Body = new BookHistory
+                {
+                    AppointId = appointId.ToString(),
+                    AppointSequence= appointment.AppointSequence,
+                    AppointState=AppointState.Appointing,
+                    AppointTime=appointment.AppointTime,
+                    ArrangeId= appointment.ArrangeId,
+                    Attention="",
+                    CreateTime=DateTime.Now,
+                    DoctorId= (Int64)arrangeInfo.YSYHID+"",
+                    DoctorName= (string)arrangeInfo.YSXM,
+                    PatientId= appointment.PatientId,
+                    PatientIdCard= patient.IdCode,
+                    PatientName= patient.PatientName,
+                    PatientMobile= patient.Mobile,
+                    RegisteredAmount=(decimal)arrangeInfo.XMJE,
+                    Remark=""
+                };
+
+
+
             }
-
-
-
-
-
-
-
 
             return response;
         }

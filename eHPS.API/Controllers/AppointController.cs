@@ -40,14 +40,51 @@ namespace eHPS.API.Controllers
         }
 
 
-        [Route("DoctorAppoint")]
+        [Route("DoctorAppoint"),HttpPost]
         public List<BookableDoctor> GetBookableInfo(String doctorId, DateTime? startTime, DateTime? endTime)
         {
             return appointmentService.GetBookableInfo(doctorId, startTime, endTime);
         }
 
 
+        /// <summary>
+        /// 获取患者的预约历史
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <returns></returns>
+        [Route("AppointmentHistory"),HttpPost]
+        public List<BookHistory> GetAppointmentHistory(String patientId)
+        {
+            return appointmentService.GetAppointmentHistory(patientId);
+        }
 
+
+        /// <summary>
+        /// 预约 ,需包含如下逻辑
+        /// 预约之前的判断条件，验证是否可以预约
+        /// 进行预约操作
+        /// </summary>
+        /// <param name="appointment"></param>
+        /// <returns></returns>
+        [Route("MakeAnAppointment"), HttpPost]
+        public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
+        {
+            return appointmentService.MakeAnAppointment(appointment);
+        }
+
+
+
+        /// <summary>
+        /// 取消指定预约
+        /// </summary>
+        /// <param name="apponintId">预约标识</param>
+        /// <returns></returns>
+
+        [Route("Cancel"), HttpPost]
+        public ResponseMessage<string> CancelTheAppointment(String apponintId)
+        {
+            return appointmentService.CancelTheAppointment(apponintId);
+        }
 
     }
 }

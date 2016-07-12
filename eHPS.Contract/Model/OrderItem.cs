@@ -1,14 +1,14 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 预约行为
+// 患者就诊时，医生在HIS系统开具的医嘱对应的收费项目详细清单
 //
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/7/6 14:39:33
+// 创建时间：2016/7/12 17:23:13
 // 版本号：  V1.0.0.0
 //===================================================================================
 
@@ -23,50 +23,33 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
-
     /// <summary>
-    /// 预约行为
+    /// 患者就诊时，医生在HIS系统开具的医嘱对应的收费项目详细清单
     /// </summary>
-    public class MakeAnAppointment
+    public class OrderItem
     {
-
         /// <summary>
-        /// 患者标识（就诊卡）
+        /// 收费项目名称
         /// </summary>
-        public String PatientId { get; set; }
-
-        /// <summary>
-        /// 排班标识
-        /// </summary>
-        public String ArrangeId { get; set; }
-
-        /// <summary>
-        /// 预约时间
-        /// </summary>
-        public DateTime AppointTime { get; set; }
+        public String ItemName { get; set; }
 
 
         /// <summary>
-        /// 预约序号
+        /// 收费项目类型
         /// </summary>
-        public Int32 AppointSequence { get; set; }
-
-        /// <summary>
-        /// 患者姓名
-        /// </summary>
-        public String PatientName { get; set; }
-
-        /// <summary>
-        /// 患者手机号码
-        /// </summary>
-        public String  Mobile { get; set; }
+        public String  ItemType { get; set; }
 
 
         /// <summary>
-        /// 患者身份证
+        /// 收费项目单价
         /// </summary>
-        public String  PatientIdCard { get; set; }
+        public decimal ItemUnitPrice { get; set; }
 
 
+
+        /// <summary>
+        /// 收费项目数量
+        /// </summary>
+        public double ItemCount { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using eHPS.WYServiceImplement;
 using eHPS.CrossCutting.NetFramework.ExceptionHandler;
 using eHPS.CrossCutting.NetFramework.Logging;
 using Jil;
+using eHPS.Contract.Model;
 
 namespace eHPS.ImplementTest
 {
@@ -52,6 +53,20 @@ namespace eHPS.ImplementTest
             
             Assert.AreEqual(122,result.Count);
             
+        }
+
+
+        [TestMethod]
+        public void Make_An_Appointment()
+        {
+            var appointmentService = container.Resolve<IAppointment>();
+            var makeAnAppointment = new MakeAnAppointment {
+                 
+
+            };
+            var response = appointmentService.MakeAnAppointment(makeAnAppointment);
+
+            Assert.AreEqual(true, response.HasError);
         }
     }
 }

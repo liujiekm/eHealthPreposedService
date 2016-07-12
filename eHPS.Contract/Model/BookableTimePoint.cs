@@ -39,5 +39,31 @@ namespace eHPS.Contract.Model
         /// 可预约的时间点
         /// </summary>
         public DateTime AppointTime { get; set; }
+
+
+
+
+        /// <summary>
+        /// 预约号描述
+        /// 如果没有预约到时间点则显示 预约序号
+        /// 如果预约到时间点则显示预约序号+$+预约时间点
+        /// </summary>
+        public String ArrangeIndicate {
+
+            get {
+
+                if(AppointTime!=null)
+                {
+                    return AppointSequence + "$" + AppointTime.ToString();
+                }
+                else
+                {
+                    return AppointSequence.ToString();
+                }
+                
+            }
+        }
+
+
     }
 }

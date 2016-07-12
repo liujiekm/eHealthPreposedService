@@ -92,6 +92,25 @@ namespace eHPS.Contract.Model
         public Int32 SumBookNum { get; set; }
 
 
+
+        /// <summary>
+        /// 剩余号源
+        /// </summary>
+        public String UnusedBookNum {
+            get
+            {
+                if(SumBookNum - UsedBookNum<=0)
+                {
+                    return "";
+                }
+                else
+                {
+                    return (SumBookNum - UsedBookNum).ToString();
+                }
+                
+            }
+        }
+
         /// <summary>
         /// 诊疗类型
         /// 1 普通、2 专家
@@ -102,6 +121,11 @@ namespace eHPS.Contract.Model
         /// 排班标识
         /// </summary>
         public String ArrangeId { get; set; }
+
+
+
+        
+
 
         /// <summary>
         /// 排班开始时间
@@ -118,6 +142,9 @@ namespace eHPS.Contract.Model
         ///// 是否专家
         ///// </summary>
         //public Boolean IsExpert { get; set; }
+
+
+        
 
         /// <summary>
         /// 挂号金额

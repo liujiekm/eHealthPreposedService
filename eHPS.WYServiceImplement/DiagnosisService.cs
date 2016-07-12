@@ -35,7 +35,7 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="patientId"></param>
         /// <returns></returns>
-        public List<DiagnosisRecord> GetDiagnosisRecord(string patientId)
+        public List<DiagnosisRecord> GetDiagnosisHistory(string patientId)
         {
             var result = new List<DiagnosisRecord>();
             using (var con = DapperFactory.CrateOracleConnection())
@@ -222,5 +222,9 @@ namespace eHPS.WYServiceImplement
             }
         }
 
+        public ResponseMessage<string> MakeADiagnosis(string patientId, string complaint)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

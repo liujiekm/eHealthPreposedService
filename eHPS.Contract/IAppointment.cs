@@ -82,7 +82,7 @@ namespace eHPS.Contract
         /// 取消指定预约
         /// </summary>
         /// <param name="obj"></param>
-        void CancelTheAppointment(String apponintId);
+        ResponseMessage<string> CancelTheAppointment(String apponintId);
 
 
 

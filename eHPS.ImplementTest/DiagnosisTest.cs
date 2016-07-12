@@ -44,7 +44,7 @@ namespace eHPS.ImplementTest
 
             var diagnosisService = container.Resolve<IDiagnosis>();
 
-            var result = diagnosisService.GetDiagnosisRecord(patientId);
+            var result = diagnosisService.GetDiagnosisHistory(patientId);
 
             Assert.AreEqual(5, result.Count);
         }

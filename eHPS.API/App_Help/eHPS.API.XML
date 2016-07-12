@@ -481,6 +481,127 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:eHPS.API.Controllers.AppointmentController">
+            <summary>
+            对外预约服务
+            </summary>
+        </member>
+        <member name="M:eHPS.API.Controllers.AppointmentController.GetAppointmentHistory(System.String)">
+            <summary>
+            获取患者的预约历史
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.AppointmentController.MakeAnAppointment(eHPS.Contract.Model.MakeAnAppointment)">
+            <summary>
+            预约 ,需包含如下逻辑
+            预约之前的判断条件，验证是否可以预约
+            进行预约操作
+            </summary>
+            <param name="appointment"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.AppointmentController.CancelTheAppointment(System.String)">
+            <summary>
+            取消指定预约
+            </summary>
+            <param name="apponintId">预约标识</param>
+            <returns></returns>
+        </member>
+        <member name="T:eHPS.API.Controllers.BasicInfoController">
+            <summary>
+            基础信息服务，包含：
+            医院科室信息，科室人员信息等
+            </summary>
+        </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetDepts(System.String)">
+            <summary>
+            获得医院内的科室组织结构
+            </summary>
+            <param name="areaId">院区标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetDoctors(System.String)">
+            <summary>
+            获得科室下医生信息
+            </summary>
+            <param name="deptId">科室标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetDoctorById(System.String)">
+            <summary>
+             根据医生标示获取医生信息
+            </summary>
+            <param name="doctorId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetPatientInfo(System.String)">
+            <summary>
+            根据患者就诊卡获取患者基本信息
+            </summary>
+            <param name="patientId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:eHPS.API.Controllers.DiagnosisController">
+            <summary>
+            诊疗服务，包含：
+            获取用户诊疗记录，发起在线诊疗
+            </summary>
+        </member>
+        <member name="M:eHPS.API.Controllers.DiagnosisController.GetDiagnosisHistory(System.String)">
+            <summary>
+            根据用户标识，获取用户诊疗记录
+            </summary>
+            <param name="patientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.DiagnosisController.MakeADiagnosis(System.String,System.String)">
+            <summary>
+            发起在线诊疗
+            操作挂号信息
+            挂号收费后置
+            </summary>
+            <param name="patientId">患者标识</param>
+            <param name="complaint">患者主诉</param>
+            <returns></returns>
+        </member>
+        <member name="T:eHPS.API.Controllers.InspectionController">
+            <summary>
+            检验检查单对外服务
+            </summary>
+        </member>
+        <member name="M:eHPS.API.Controllers.InspectionController.GetInspectionReportDetailByPatientId(System.String)">
+            <summary>
+            根据用户标识获取检查检验报告详情
+            </summary>
+            <param name="patientId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:eHPS.API.Controllers.PaymentController">
+            <summary>
+            支付服务，包含：
+            医嘱收费，挂号收费
+            </summary>
+        </member>
+        <member name="M:eHPS.API.Controllers.PaymentController.Pay(System.Collections.Generic.List{System.String},System.String)">
+            <summary>
+            支付患者的医嘱项目费用
+            支付成功之后，往消息队列发送成功与否的消息
+            </summary>
+            <param name="hospitalOrderId">医院订单标识</param>
+            <param name="hospitalId">医院标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.PaymentController.PayRegistration(System.String,System.String)">
+            <summary>
+            挂号收费
+            收费成功后，往消息队列发送成功与否的消息
+            </summary>
+            <param name="hospitalId">医院标识</param>
+            <param name="appointId">预约标识</param>
+            <returns></returns>
+        </member>
         <member name="F:eHPS.API.Filter.StandardAuthorizationFilterAttributeBase._issueChallenge">
             <summary>
             标示是否发起验证

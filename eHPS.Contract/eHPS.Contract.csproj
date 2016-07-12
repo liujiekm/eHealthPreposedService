@@ -34,6 +34,10 @@
       <HintPath>..\packages\Jil.2.14.3\lib\net45\Jil.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\eHealthPlatformService\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sigil, Version=4.6.1.0, Culture=neutral, PublicKeyToken=2d06c3494341c8ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Sigil.4.6.1\lib\net45\Sigil.dll</HintPath>
       <Private>True</Private>
@@ -54,6 +58,7 @@
     <Compile Include="IConfig.cs" />
     <Compile Include="IDiagnosis.cs" />
     <Compile Include="IInspection.cs" />
+    <Compile Include="IPayment.cs" />
     <Compile Include="Model\BookableDoctor.cs" />
     <Compile Include="Model\BookableTimePoint.cs" />
     <Compile Include="Model\BookHistory.cs" />
@@ -64,6 +69,8 @@
     <Compile Include="Model\InspectionReportDetail.cs" />
     <Compile Include="Model\LaboratoryItemDetail.cs" />
     <Compile Include="Model\MakeAnAppointment.cs" />
+    <Compile Include="Model\Order.cs" />
+    <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\Patient.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
