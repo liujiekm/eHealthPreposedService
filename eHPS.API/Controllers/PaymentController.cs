@@ -59,6 +59,7 @@ namespace eHPS.API.Controllers
         /// <param name="hospitalOrderId">医院订单标识</param>
         /// <param name="hospitalId">医院标识</param>
         /// <returns></returns>
+        [Route("Pay"),HttpPost]
         public ResponseMessage<String> Pay(List<String> hospitalOrderId, String hospitalId)
         {
             return paymentService.Pay(hospitalOrderId, hospitalId);
@@ -72,6 +73,7 @@ namespace eHPS.API.Controllers
         /// <param name="hospitalId">医院标识</param>
         /// <param name="appointId">预约标识</param>
         /// <returns></returns>
+        [Route("PayRegistration"), HttpPost]
         public ResponseMessage<String> PayRegistration(String hospitalId, String appointId)
         {
             return paymentService.PayRegistration(hospitalId, appointId);

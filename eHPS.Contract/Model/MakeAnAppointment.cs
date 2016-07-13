@@ -52,6 +52,12 @@ namespace eHPS.Contract.Model
         public Int32 AppointSequence { get; set; }
 
         /// <summary>
+        /// 预约号描述
+        /// 如果没有预约到时间点则显示 预约序号
+        /// 如果预约到时间点则显示预约序号+$+预约时间点
+        /// </summary>
+        public String ArrangeIndicate { get; set; }
+        /// <summary>
         /// 患者姓名
         /// </summary>
         public String PatientName { get; set; }

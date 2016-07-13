@@ -53,9 +53,9 @@ namespace eHPS.API.Controllers
         /// <param name="patientId">患者标识</param>
         /// <returns></returns>
         [Route("AppointmentHistory"),HttpPost]
-        public List<BookHistory> GetAppointmentHistory(String patientId)
+        public List<BookHistory> GetAppointmentHistory(String patientId,String mobile)
         {
-            return appointmentService.GetAppointmentHistory(patientId);
+            return appointmentService.GetAppointmentHistory(patientId,mobile);
         }
 
 
@@ -66,7 +66,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="appointment"></param>
         /// <returns></returns>
-        [Route("MakeAnAppointment"), HttpPost]
+        [Route("DoAppointment"), HttpPost]
         public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
         {
             return appointmentService.MakeAnAppointment(appointment);
@@ -80,7 +80,7 @@ namespace eHPS.API.Controllers
         /// <param name="apponintId">预约标识</param>
         /// <returns></returns>
 
-        [Route("Cancel"), HttpPost]
+        [Route("CancelAppointment"), HttpPost]
         public ResponseMessage<string> CancelTheAppointment(String apponintId)
         {
             return appointmentService.CancelTheAppointment(apponintId);

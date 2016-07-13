@@ -42,7 +42,12 @@ namespace eHPS.Contract
 
 
 
-       
+        /// <summary>
+        /// 获取科室名称
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
+        string GetDeptName(string deptId);
 
 
 

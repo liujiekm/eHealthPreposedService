@@ -62,6 +62,7 @@
     <Compile Include="Model\MultiValue.cs" />
     <Compile Include="Model\m_getreport.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="PaymentService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

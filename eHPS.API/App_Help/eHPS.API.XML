@@ -486,7 +486,7 @@
             对外预约服务
             </summary>
         </member>
-        <member name="M:eHPS.API.Controllers.AppointmentController.GetAppointmentHistory(System.String)">
+        <member name="M:eHPS.API.Controllers.AppointmentController.GetAppointmentHistory(System.String,System.String)">
             <summary>
             获取患者的预约历史
             </summary>

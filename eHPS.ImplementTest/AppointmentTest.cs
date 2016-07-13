@@ -17,6 +17,7 @@ namespace eHPS.ImplementTest
     {
 
         private IAppointment appointmentService;
+        private IBasicInfo basicInfoService;
         private UnityContainer container;
 
         [TestInitialize]
@@ -26,6 +27,9 @@ namespace eHPS.ImplementTest
 
             container.RegisterType<IAppointment, AppointmentService>(new Interceptor<InterfaceInterceptor>(),
                     new InterceptionBehavior<LoggingInterceptionBehavior>());
+            container.RegisterType<IBasicInfo, BasicInfoService>(new Interceptor<InterfaceInterceptor>(),
+            new InterceptionBehavior<LoggingInterceptionBehavior>());
+
 
             //设定日志类
             LoggerFactory.SetCurrent(new eHPSNLogFactory());
@@ -43,7 +47,7 @@ namespace eHPS.ImplementTest
         {
             var appointmentService = container.Resolve<IAppointment>();
 
-            var deptId = "33";
+            var deptId = "901";
             var result = appointmentService.GetBookableInfo(deptId, new DateTime(2015,1,1),new DateTime(2016,1,1));
 
             var jiled = JSON.Serialize(result);
@@ -67,6 +71,18 @@ namespace eHPS.ImplementTest
             var response = appointmentService.MakeAnAppointment(makeAnAppointment);
 
             Assert.AreEqual(true, response.HasError);
+        }
+
+        [TestMethod]
+        public void Veriry_GetAppointmentHistory()
+        {
+            var appointmentService = container.Resolve<IAppointment>();
+
+            var patientId = "0000003001777362";
+            var mobile = "";
+            var result = appointmentService.GetAppointmentHistory(patientId,mobile);
+
+            Assert.IsNotNull(result);
         }
     }
 }

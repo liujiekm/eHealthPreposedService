@@ -40,7 +40,10 @@ namespace eHPS.Contract
         /// 支付患者的医嘱项目费用
         /// 支付成功之后，往消息队列发送成功与否的消息
         /// </summary>
-        /// <param name="hospitalOrderId">医院订单标识</param>
+        /// <param name="hospitalOrderId">医院订单标识
+        /// 如果是药品，取药品组号
+        /// 如果是检查、检验、治疗 去申请单标识
+        /// </param>
         /// <param name="hospitalId">医院标识</param>
         /// <returns></returns>
         ResponseMessage<String> Pay(List<String> hospitalOrderId, String hospitalId);

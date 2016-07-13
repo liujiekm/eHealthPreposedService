@@ -50,6 +50,17 @@ namespace eHPS.Contract.Model
         public String AppointId { get; set; }
 
         /// <summary>
+        /// 科室标识
+        /// </summary>
+        public String DeptId { get; set; }
+
+
+        /// <summary>
+        /// 科室名称
+        /// </summary>
+        public String DeptName { get; set; }
+
+        /// <summary>
         /// 预约医生标识
         /// </summary>
         public String DoctorId { get; set; }
@@ -60,6 +71,25 @@ namespace eHPS.Contract.Model
         /// 预约医生姓名
         /// </summary>
         public String  DoctorName { get; set; }
+
+        /// <summary>
+        /// 医生职称
+        /// </summary>
+        public String  DoctorJobTitle { get; set; }
+
+
+        /// <summary>
+        /// 医生性别
+        /// </summary>
+        public String DoctorSex { get; set; }
+
+
+        /// <summary>
+        /// 诊疗类型
+        /// 1 普通、2 专家
+        /// </summary>
+        public String DiagnosisType { get; set; }
+
 
         /// <summary>
         /// 预约时间

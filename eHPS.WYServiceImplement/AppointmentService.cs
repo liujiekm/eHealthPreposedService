@@ -41,15 +41,83 @@ namespace eHPS.WYServiceImplement
             this.basicInfoService = basicInfoService;
         }
 
-
+        /// <summary>
+        /// 取消指定预约
+        /// </summary>
+        /// <param name="apponintId">预约标识</param>
         public ResponseMessage<string> CancelTheAppointment(string apponintId)
         {
-            throw new NotImplementedException();
+            var response = new ResponseMessage<string>();
+            //获取预约信息
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select fzyyid,brbh,brxm,brxb,csrq,lxdh,sfz,lxdz,yyxh,pdh,yysj,fzzbh,zkid,
+                                            ysyhid,yyfs,ztbz,zllx,qdsj,jzsj,ghid,bz,djryid,czzid,xgsj,pbid,hjlx,yjnr,djsj,qdryid,
+                                            gzdm,qhpzdm,zmtx,zbyy from yyfz_yyxx where fzyyid = :ApponintId";
+                var condition = new { ApponintId = apponintId};
+
+                var result = con.Query(command, condition).FirstOrDefault();
+
+
+
+
+            }
+
+
+            return response;
         }
 
-        public List<BookHistory> GetAppointmentHistory(string patientId)
+
+        /// <summary>
+        /// 获取患者的预约历史
+        /// 温附一 默认取一个月内的
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="mobile">患者手机</param>
+        /// <returns></returns>
+        public List<BookHistory> GetAppointmentHistory(string patientId,string mobile)
         {
-            throw new NotImplementedException();
+            var bookHistorys = new List<BookHistory>();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var baseCommand = @"SELECT FZYYID,BRBH,BRXM,BRXB,CSRQ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,FZZBH,ZKID,
+                                                    YSYHID,YYFS,ZTBZ,ZLLX,QDSJ,JZSJ,GHID,BZ,DJRYID,CZZID,XGSJ,PBID,HJLX,YJNR,DJSJ,
+                                                    QDRYID,GZDM,QHPZDM,ZMTX,ZBYY FROM YYFZ_YYXX WHERE DJSJ>SYSDATE-31 
+                                                    AND YYFS<>'F' AND (BRBH=:PatientId OR LXDH=:Mobile) ORDER BY ZTBZ,YYSJ DESC";
+
+                var condition = new { PatientId = patientId, Mobile = mobile };
+                var result = con.Query(baseCommand, condition).ToList();
+                foreach (var item in result)
+                {
+                    var doctor = basicInfoService.GetDoctorById((Int64)item.YSYHID + "");
+                    var deptName = basicInfoService.GetDeptName((Int32)item.ZKID + "");
+                    var bookHistory = new BookHistory {
+                        AppointId = (Int64)item.FZYYID + "",
+                        AppointSequence = (Int32)item.PDH,
+                        AppointState= (AppointState)Int32.Parse((string)item.ZTBZ),
+                        AppointTime=(DateTime)item.YYSJ,
+                        DoctorId=(Int64)item.YSYHID+"",
+                        DoctorJobTitle=doctor.JobTitle,
+                        DoctorSex=doctor.Sex,
+                        DiagnosisType= (string)item.ZLLX == "04" ? "2" : "1",
+                        DeptId =(Int32)item.ZKID+"",
+                        DeptName= deptName,     
+                        ArrangeId=(Int64)item.PBID+"",
+                        PatientId=(string)item.BRBH,
+                        PatientName=(string)item.BRXM,
+                        PatientIdCard=(string)item.SFZ,
+                        PatientMobile=(string)item.LXDH,
+                        Attention="",
+                        Remark=(string)item.ZBYY=="01"?"专病":"",
+                        DoctorName= doctor.DoctorName,
+                        CreateTime=(DateTime)item.DJSJ,
+                        RegisteredAmount=GetRegisteredAmount((string)item.ZLLX,(string)item.GZDM)          
+                    };
+                    bookHistorys.Add(bookHistory);
+
+                }
+            }
+            return bookHistorys;
         }
 
 
@@ -71,7 +139,7 @@ namespace eHPS.WYServiceImplement
                 //首先取医生排班信息
                 var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
                                             FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' 
-                                            AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.RYKID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
+                                            AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.YSYHID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
                 if(null==startTime)
                 {
@@ -110,7 +178,8 @@ namespace eHPS.WYServiceImplement
                         JobTitle =CommonService.GetJobTitle((String)item.GZDM2),
                         BookableTimePoints=GetBookableTimePoint(((Int32)item.PBID).ToString()),
                         SumBookNum=(Int32)item.ZKXH,
-                        UsedBookNum=GetUesdBookNum(((Int32)item.PBID).ToString(),con)
+                        UsedBookNum=GetUesdBookNum(((Int32)item.PBID).ToString(),con),
+                         
                     };
                     bookableDoctors.Add(bookableDoctor);
                 }
@@ -128,7 +197,7 @@ namespace eHPS.WYServiceImplement
             var bookableTimePoints = new List<BookableTimePoint>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,
+                var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,pb.bclb,
                                             (select bn.mc from xtgl_ddlbn bn where bn.lb='0051' and bn.dm=pb.zllx) zllx,
                                             (select count(*) from yyfz_yyxx xx where xx.yyxh<=pb.zkxh and xx.ztbz<>'9' and xx.pbid=pb.pbid and xx.yysj>sysdate) as syh,
                                             pb.zbyy ,(select sum(xm.xmje) from  cw_zllxghxm xm where pb.zllx=xm.zllx and pb.gzdm=xm.gzdm) xmje 
@@ -467,6 +536,9 @@ namespace eHPS.WYServiceImplement
 
                 //返回预约历史信息
                 response.HasError = false;
+
+                var doctor = basicInfoService.GetDoctorById((Int64)arrangeInfo.YSYHID + "");
+
                 response.Body = new BookHistory
                 {
                     AppointId = appointId.ToString(),
@@ -483,7 +555,12 @@ namespace eHPS.WYServiceImplement
                     PatientName= patient.PatientName,
                     PatientMobile= patient.Mobile,
                     RegisteredAmount=(decimal)arrangeInfo.XMJE,
-                    Remark=""
+                    Remark="",
+                    DeptId= (Int64)arrangeInfo.ZKID+"",
+                    DeptName=basicInfoService.GetDeptName((Int64)arrangeInfo.ZKID + ""),
+                    DoctorJobTitle= doctor.JobTitle,
+                    DiagnosisType = (string)arrangeInfo.ZLLX == "04" ? "2" : "1",
+                    DoctorSex=doctor.Sex
                 };
 
 

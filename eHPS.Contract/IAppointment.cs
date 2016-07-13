@@ -38,9 +38,10 @@ namespace eHPS.Contract
         /// <summary>
         /// 获取患者的预约历史
         /// </summary>
-        /// <param name="patientId"></param>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="mobile">患者手机</param>
         /// <returns></returns>
-        List<BookHistory> GetAppointmentHistory(String patientId);
+        List<BookHistory> GetAppointmentHistory(String patientId, String mobile);
 
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace eHPS.Contract
         /// <summary>
         /// 取消指定预约
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="apponintId">预约标识</param>
         ResponseMessage<string> CancelTheAppointment(String apponintId);
 
 
