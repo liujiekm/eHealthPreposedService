@@ -80,6 +80,11 @@ namespace eHPS.Contract.Model
         /// 性别
         /// </summary>
         public string Sex { get; set; }
+
+        /// <summary>
+        /// 是否支持在线诊疗
+        /// </summary>
+        public bool IfOnlineDiagnosis { get; set; }
         /// <summary>
         /// 联系电话
         /// </summary>

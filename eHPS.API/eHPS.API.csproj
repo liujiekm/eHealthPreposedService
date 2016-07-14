@@ -294,6 +294,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AppointmentHistoryRequest.cs" />
     <Compile Include="Models\BookableInfoRequest.cs" />
+    <Compile Include="Models\DoctorSearchModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MakeADiagnosisRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -431,6 +432,10 @@
     <ProjectReference Include="..\eHPS.CrossCutting\eHPS.CrossCutting.csproj">
       <Project>{fb293042-da3d-4686-8790-444cf57c3e08}</Project>
       <Name>eHPS.CrossCutting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eHPS.WYServiceImplement\eHPS.WYServiceImplement.csproj">
+      <Project>{de3e3252-9409-47de-9a58-d309fd25b9f1}</Project>
+      <Name>eHPS.WYServiceImplement</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

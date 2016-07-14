@@ -222,7 +222,7 @@ namespace eHPS.WYServiceImplement
             }
         }
 
-        public ResponseMessage<string> MakeADiagnosis(string patientId, string complaint)
+        public ResponseMessage<string> MakeADiagnosis(string patientId,string doctorId, string complaint)
         {
             throw new NotImplementedException();
         }

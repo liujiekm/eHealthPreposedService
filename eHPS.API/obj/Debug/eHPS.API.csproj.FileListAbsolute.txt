@@ -139,3 +139,9 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Microsoft.Practices.Unity.Interception.Configuration.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\NLog.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\TinyMapper.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.WYServiceImplement.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Oracle.ManagedDataAccess.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Dapper.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.WYServiceImplement.pdb
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Dapper.pdb
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Dapper.xml

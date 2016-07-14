@@ -175,7 +175,7 @@ namespace eHPS.WYServiceImplement
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 var command = @"SELECT BRBH,DWDM,KNSJ,BRXM,BRXB,GJDM,HYZK,ZYDM,JGDM,
-                                            MZDM,SFZH,CSRQ,XZZDM,LXDZ,LXDH,YDDH,SZSJ,ZTBZ FROM CW_KHXX WHERE BRBH = :PATIENTID";
+                                            MZDM,SFZH,CSRQ,XZZDM,LXDZ,LXDH,YDDH,SZSJ,ZTBZ FROM CW_KHXX WHERE BRBH = :PatientId";
                 var condition = new { PatientId =patientId};
 
                 var result = con.Query(command, condition).FirstOrDefault();
@@ -202,6 +202,88 @@ namespace eHPS.WYServiceImplement
 
            
             }
+        }
+
+
+
+
+
+        /// <summary>
+        /// 根据患者注册的手机号码获取患者基本信息
+        /// </summary>
+        /// <param name="mobile">手机号码</param>
+        /// <returns></returns>
+        public Patient GetPatientInfoByMobile(string mobile)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"SELECT BRBH,DWDM,KNSJ,BRXM,BRXB,GJDM,HYZK,ZYDM,JGDM,
+                                            MZDM,SFZH,CSRQ,XZZDM,LXDZ,LXDH,YDDH,SZSJ,ZTBZ FROM CW_KHXX WHERE LXDH = :Mobile";
+                var condition = new { Mobile = mobile };
+
+                var result = con.Query(command, condition).FirstOrDefault();
+
+                if (result != null)
+                {
+                    var patient = new Patient
+                    {
+                        PatientId = (string)result.BRBH,
+                        PatientName = (string)result.BRXM,
+                        BornDate = (DateTime)result.CSRQ,
+                        ContactAddress = (string)result.LXDZ,
+                        IdCode = (string)result.SFZH,
+                        Mobile = (string)result.YDDH,
+                        Sex = (string)result.BRXB,
+                        Telephone = (string)result.LXDH,
+                        FirstTimeDiagnosis = (DateTime)result.SZSJ
+                    };
+                    return patient;
+                }
+                else
+                {
+                    return default(Patient);
+                }
+
+
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// 根据姓名或者拼音查询医生信息
+        /// </summary>
+        /// <param name="name">姓名</param>
+        /// <param name="spelling">拼音</param>
+        /// <returns></returns>
+        public List<Doctor> GetDoctors(string name, string spelling)
+        {
+            var doctors = new List<Doctor>();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,A.XZKID,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND (A.XM LIKE %"+name+"% OR A.PY LIKE %"+ spelling + "%)";
+                
+                var result = con.Query(command).ToList();
+                foreach (var item in result)
+                {
+                    var doctor = new Doctor
+                    {
+                        DeptId = (Int32)item.XZKID+"",
+                        DeptName = CommonService.GetDeptName((Int32)item.XZKID),
+                        DoctorId = ((Int64)item.YHID).ToString(),
+                        DoctorName = (string)item.XM,
+                        Expert = "",
+                        Introduction = (string)item.JSNR,
+                        JobTitle = CommonService.GetJobTitle((string)item.GZDM),
+                        Sex = (string)item.XB == "1" ? "男" : "女",
+                        Photo = (byte[])item.PIC
+                    };
+                    doctors.Add(doctor);
+                }
+
+            }
+            return doctors;
         }
     }
 }

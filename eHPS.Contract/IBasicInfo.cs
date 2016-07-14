@@ -41,6 +41,16 @@ namespace eHPS.Contract
 
 
 
+        /// <summary>
+        /// 根据姓名或者拼音查询医生信息
+        /// </summary>
+        /// <param name="name">姓名</param>
+        /// <param name="spelling">拼音</param>
+        /// <returns></returns>
+        List<Doctor> GetDoctors(string name, string spelling);
+
+
+
 
         /// <summary>
         /// 获取科室名称
@@ -54,7 +64,7 @@ namespace eHPS.Contract
         /// <summary>
         ///  根据医生标示获取医生信息
         /// </summary>
-        /// <param name="doctorId"></param>
+        /// <param name="doctorId">医生标识</param>
         /// <returns></returns>
         Doctor GetDoctorById(String doctorId);
 
@@ -63,9 +73,19 @@ namespace eHPS.Contract
         /// <summary>
         /// 根据患者就诊卡获取患者基本信息
         /// </summary>
-        /// <param name="patientId"></param>
+        /// <param name="patientId">患者标识</param>
         /// <returns></returns>
         Patient GetPatientInfo(string patientId);
+
+        /// <summary>
+        /// 根据患者注册的手机号码获取患者基本信息
+        /// </summary>
+        /// <param name="mobile">手机号码</param>
+        /// <returns></returns>
+        Patient GetPatientInfoByMobile(string mobile);
+
+
+        
 
     }
 }

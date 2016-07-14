@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.API.Models;
 using eHPS.Contract;
 using eHPS.Contract.Model;
 using System;
@@ -65,6 +66,17 @@ namespace eHPS.API.Controllers
         public List<Doctor> GetDoctors([FromBody]string deptId)
         {
             return basicInfoService.GetDoctors(deptId);
+        }
+
+        /// <summary>
+        /// 查询医生信息
+        /// </summary>
+        /// <param name="model">查询变量</param>
+        /// <returns></returns>
+        [Route("SearchDoctors"), HttpPost]
+        public List<Doctor> GetDoctors([FromBody]DoctorSearchModel model)
+        {
+            return basicInfoService.GetDoctors(model.Name,model.Spelling);
         }
 
 

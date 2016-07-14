@@ -537,6 +537,13 @@
             <param name="deptId">科室标识</param>
             <returns></returns>
         </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetDoctors(eHPS.API.Models.DoctorSearchModel)">
+            <summary>
+            获得科室下医生信息
+            </summary>
+            <param name="model">查询变量</param>
+            <returns></returns>
+        </member>
         <member name="M:eHPS.API.Controllers.BasicInfoController.GetDoctorById(System.String)">
             <summary>
              根据医生标示获取医生信息
@@ -708,9 +715,39 @@
             预约排班查询结束时间
             </summary>
         </member>
+        <member name="T:eHPS.API.Models.DoctorSearchModel">
+            <summary>
+            查询医生信息的查询对象模型
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.DoctorSearchModel.Name">
+            <summary>
+            中文姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.DoctorSearchModel.Spelling">
+            <summary>
+            拼音
+            </summary>
+        </member>
         <member name="T:eHPS.API.Models.MakeADiagnosisRequest">
             <summary>
             发起在线诊疗请求包装对象
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.MakeADiagnosisRequest.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.MakeADiagnosisRequest.DoctorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.MakeADiagnosisRequest.Complaint">
+            <summary>
+            主诉内容
             </summary>
         </member>
     </members>

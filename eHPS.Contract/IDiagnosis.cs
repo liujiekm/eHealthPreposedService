@@ -41,7 +41,7 @@ namespace eHPS.Contract
         /// <param name="patientId">患者标识</param>
         /// <param name="complaint">患者主诉</param>
         /// <returns></returns>
-        ResponseMessage<string> MakeADiagnosis(String patientId, String complaint);
+        ResponseMessage<string> MakeADiagnosis(String patientId,String doctorId, String complaint);
 
 
 
