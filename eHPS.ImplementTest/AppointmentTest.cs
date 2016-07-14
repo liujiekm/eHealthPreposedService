@@ -46,9 +46,9 @@ namespace eHPS.ImplementTest
         public void Get_Dept_BookableInfo()
         {
             var appointmentService = container.Resolve<IAppointment>();
-
+            var areaId = "01";
             var deptId = "901";
-            var result = appointmentService.GetBookableInfo(deptId, new DateTime(2015,1,1),new DateTime(2016,1,1));
+            var result = appointmentService.GetBookableInfo(areaId,deptId, new DateTime(2015,1,1),new DateTime(2016,1,1));
 
             var jiled = JSON.Serialize(result);
 

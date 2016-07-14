@@ -41,11 +41,10 @@ namespace eHPS.API.Controllers
         /// <summary>
         /// 根据用户标识获取检查检验报告详情
         /// </summary>
-        /// <param name="patientId"></param>
+        /// <param name="patientId">患者标识</param>
         /// <returns></returns>
-
         [Route("InspectionDetail"),HttpPost]
-        public List<InspectionReportDetail> GetInspectionReportDetailByPatientId(string patientId)
+        public List<InspectionReportDetail> GetInspectionReportDetailByPatientId([FromBody]string patientId)
         {
             return inspectionService.GetInspectionReportDetailByPatientId(patientId);
         }

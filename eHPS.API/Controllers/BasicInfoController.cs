@@ -48,7 +48,7 @@ namespace eHPS.API.Controllers
         /// <param name="areaId">院区标识</param>
         /// <returns></returns>
         [Route("Depts"), HttpPost]
-        public List<Department> GetDepts(string areaId)
+        public List<Department> GetDepts([FromBody]string areaId)
         {
             return basicInfoService.GetDepts(areaId);
         }
@@ -62,7 +62,7 @@ namespace eHPS.API.Controllers
         /// <param name="deptId">科室标识</param>
         /// <returns></returns>
         [Route("Doctors"), HttpPost]
-        public List<Doctor> GetDoctors(string deptId)
+        public List<Doctor> GetDoctors([FromBody]string deptId)
         {
             return basicInfoService.GetDoctors(deptId);
         }
@@ -80,7 +80,7 @@ namespace eHPS.API.Controllers
         /// <param name="doctorId"></param>
         /// <returns></returns>
         [Route("Doctor"), HttpPost]
-        public Doctor GetDoctorById(String doctorId)
+        public Doctor GetDoctorById([FromBody]string doctorId)
         {
             return basicInfoService.GetDoctorById(doctorId);
         }
@@ -93,7 +93,7 @@ namespace eHPS.API.Controllers
         /// <param name="patientId"></param>
         /// <returns></returns>
         [Route("Patient"), HttpPost]
-        public Patient GetPatientInfo(string patientId)
+        public Patient GetPatientInfo([FromBody]string patientId)
         {
             return basicInfoService.GetPatientInfo(patientId);
         }

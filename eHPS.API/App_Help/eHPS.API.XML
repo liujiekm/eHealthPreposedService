@@ -486,11 +486,19 @@
             对外预约服务
             </summary>
         </member>
-        <member name="M:eHPS.API.Controllers.AppointmentController.GetAppointmentHistory(System.String,System.String)">
+        <member name="M:eHPS.API.Controllers.AppointmentController.GetBookableInfo(eHPS.API.Models.BookableInfoRequest)">
+            <summary>
+            获取医生可预约情况
+            排班情况等
+            </summary>
+            <param name="request">获取医生可预约情况的请求包装对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.AppointmentController.GetAppointmentHistory(eHPS.API.Models.AppointmentHistoryRequest)">
             <summary>
             获取患者的预约历史
             </summary>
-            <param name="patientId">患者标识</param>
+            <param name="request">获取医生预约历史的请求包装对象</param>
             <returns></returns>
         </member>
         <member name="M:eHPS.API.Controllers.AppointmentController.MakeAnAppointment(eHPS.Contract.Model.MakeAnAppointment)">
@@ -556,14 +564,13 @@
             <param name="patientId"></param>
             <returns></returns>
         </member>
-        <member name="M:eHPS.API.Controllers.DiagnosisController.MakeADiagnosis(System.String,System.String)">
+        <member name="M:eHPS.API.Controllers.DiagnosisController.MakeADiagnosis(eHPS.API.Models.MakeADiagnosisRequest)">
             <summary>
             发起在线诊疗
             操作挂号信息
             挂号收费后置
             </summary>
-            <param name="patientId">患者标识</param>
-            <param name="complaint">患者主诉</param>
+            <param name="request">发起在线诊疗请求包装对象</param>
             <returns></returns>
         </member>
         <member name="T:eHPS.API.Controllers.InspectionController">
@@ -575,7 +582,7 @@
             <summary>
             根据用户标识获取检查检验报告详情
             </summary>
-            <param name="patientId"></param>
+            <param name="patientId">患者标识</param>
             <returns></returns>
         </member>
         <member name="T:eHPS.API.Controllers.PaymentController">
@@ -660,6 +667,51 @@
             <param name="nonce"></param>
             <param name="nonceCount"></param>
             <returns></returns>
+        </member>
+        <member name="T:eHPS.API.Models.AppointmentHistoryRequest">
+            <summary>
+            获取医生预约历史的请求包装对象
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.AppointmentHistoryRequest.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.AppointmentHistoryRequest.Mobile">
+            <summary>
+            患者手机号码
+            </summary>
+        </member>
+        <member name="T:eHPS.API.Models.BookableInfoRequest">
+            <summary>
+            获取医生可预约情况的请求包装对象
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.areaId">
+            <summary>
+            医院院区代码
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.doctorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.startTime">
+            <summary>
+            预约排班查询开始时间
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.endTime">
+            <summary>
+            预约排班查询结束时间
+            </summary>
+        </member>
+        <member name="T:eHPS.API.Models.MakeADiagnosisRequest">
+            <summary>
+            发起在线诊疗请求包装对象
+            </summary>
         </member>
     </members>
 </doc>

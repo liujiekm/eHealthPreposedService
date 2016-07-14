@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.API.Models;
 using eHPS.Contract;
 using eHPS.Contract.Model;
 using System;
@@ -40,22 +41,29 @@ namespace eHPS.API.Controllers
         }
 
 
+
+        /// <summary>
+        /// 获取医生可预约情况
+        /// 排班情况等
+        /// </summary>
+        /// <param name="request">获取医生可预约情况的请求包装对象</param>
+        /// <returns></returns>
         [Route("DoctorAppoint"),HttpPost]
-        public List<BookableDoctor> GetBookableInfo(String doctorId, DateTime? startTime, DateTime? endTime)
+        public List<BookableDoctor> GetBookableInfo([FromBody]BookableInfoRequest request)
         {
-            return appointmentService.GetBookableInfo(doctorId, startTime, endTime);
+            return appointmentService.GetBookableInfo(request.areaId, request.doctorId, request.startTime, request.endTime);
         }
 
 
         /// <summary>
         /// 获取患者的预约历史
         /// </summary>
-        /// <param name="patientId">患者标识</param>
+        /// <param name="request">获取医生预约历史的请求包装对象</param>
         /// <returns></returns>
         [Route("AppointmentHistory"),HttpPost]
-        public List<BookHistory> GetAppointmentHistory(String patientId,String mobile)
+        public List<BookHistory> GetAppointmentHistory([FromBody]AppointmentHistoryRequest request)
         {
-            return appointmentService.GetAppointmentHistory(patientId,mobile);
+            return appointmentService.GetAppointmentHistory(request.PatientId, request.Mobile);
         }
 
 
@@ -67,7 +75,7 @@ namespace eHPS.API.Controllers
         /// <param name="appointment"></param>
         /// <returns></returns>
         [Route("DoAppointment"), HttpPost]
-        public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
+        public ResponseMessage<BookHistory> MakeAnAppointment([FromBody]MakeAnAppointment appointment)
         {
             return appointmentService.MakeAnAppointment(appointment);
         }
@@ -79,9 +87,8 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="apponintId">预约标识</param>
         /// <returns></returns>
-
         [Route("CancelAppointment"), HttpPost]
-        public ResponseMessage<string> CancelTheAppointment(String apponintId)
+        public ResponseMessage<string> CancelTheAppointment([FromBody]String apponintId)
         {
             return appointmentService.CancelTheAppointment(apponintId);
         }

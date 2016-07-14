@@ -14,7 +14,7 @@ namespace eHPS.API.Controllers
 
         [Route("Dick")]
         [HttpPost]
-        public IEnumerable<string> Dick(Tuple<String,String> index)
+        public IEnumerable<string> Dick([FromBody]string v1)
         {
             return new string[] { "value1", "value2" };
         }

@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.API.Models;
 using eHPS.Contract;
 using eHPS.Contract.Model;
 using System;
@@ -45,7 +46,7 @@ namespace eHPS.API.Controllers
         /// <param name="patientId"></param>
         /// <returns></returns>
         [Route("DiagnosisHistory"),HttpPost]
-        public List<DiagnosisRecord> GetDiagnosisHistory(String patientId)
+        public List<DiagnosisRecord> GetDiagnosisHistory([FromBody]String patientId)
         {
             return diagnosisService.GetDiagnosisHistory(patientId);
         }
@@ -57,13 +58,12 @@ namespace eHPS.API.Controllers
         /// 操作挂号信息
         /// 挂号收费后置
         /// </summary>
-        /// <param name="patientId">患者标识</param>
-        /// <param name="complaint">患者主诉</param>
+        /// <param name="request">发起在线诊疗请求包装对象</param>
         /// <returns></returns>
         [Route("MakeADiagnosis"), HttpPost]
-        public ResponseMessage<string> MakeADiagnosis(String patientId, String complaint)
+        public ResponseMessage<string> MakeADiagnosis([FromBody]MakeADiagnosisRequest request)
         {
-            return diagnosisService.MakeADiagnosis(patientId, complaint);
+            return diagnosisService.MakeADiagnosis(request.PatientId, request.Complaint);
         }
     }
 }

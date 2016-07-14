@@ -51,15 +51,54 @@ namespace eHPS.WYServiceImplement
             //获取预约信息
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"select fzyyid,brbh,brxm,brxb,csrq,lxdh,sfz,lxdz,yyxh,pdh,yysj,fzzbh,zkid,
-                                            ysyhid,yyfs,ztbz,zllx,qdsj,jzsj,ghid,bz,djryid,czzid,xgsj,pbid,hjlx,yjnr,djsj,qdryid,
-                                            gzdm,qhpzdm,zmtx,zbyy from yyfz_yyxx where fzyyid = :ApponintId";
-                var condition = new { ApponintId = apponintId};
+                //查找是否有挂号记录
+                var registerCommand = @"select GHID from cw_ghmx where YYID=:ApponintId";
+                var registerCondition = new { ApponintId= Int64.Parse(apponintId) };
+                var registerResult = con.Query(registerCommand, registerCondition).FirstOrDefault();
 
-                var result = con.Query(command, condition).FirstOrDefault();
+                var appointmentState = "9";
+                var excutorId = 19058;
+                var modifyTime = DateTime.Now;
+                var cancelCommand = @"update yyfz_yyxx set ZTBZ=:AppointmentState,CZZID=:ExcutorId,XGSJ=:ModifyTime where FZYYID=:ApponintId";
+                var cancelCondition = new { AppointmentState = appointmentState, ExcutorId = excutorId, ModifyTime = modifyTime, ApponintId = apponintId };
+                
+                using (IDbTransaction transaction = con.BeginTransaction())
+                {
+                        //无挂号记录
+                        if (registerResult == null || (Int64)registerResult.GHID == 0)
+                        {
+                            //修改预约状态
+                            if (con.Execute(cancelCommand, cancelCondition) > 0)
+                            {
+                                response.HasError = 0;
+                                response.ErrorMessage = "取消成功";
+                            }
+                            else
+                            {
+                                response.HasError = 1;
+                                response.ErrorMessage = "数据跟新失败";
+                            }
+                        }
+                        else //存在挂号记录则 设置此挂号 为 未使用
+                        {
+                            var updateRegisterHistory = @"update cw_ghmx set YYID=:ApponintId where GHID=:RegisterId";
+                            var updateRegisterHistoryCondition = new { ApponintId = 0, RegisterId = (Int64)registerResult.GHID };
+                            if (con.Execute(updateRegisterHistory, updateRegisterHistoryCondition) > 0 &&
+                            con.Execute(cancelCommand, cancelCondition) > 0)
+                            {
+                                response.HasError = 0;
+                                response.ErrorMessage = "取消成功";
+                            }
+                            else
+                            {
+                                response.HasError = 1;
+                                response.ErrorMessage = "数据跟新失败";
+                            }
 
+                        }
 
-
+                    transaction.Commit();
+                }
 
             }
 
@@ -131,14 +170,14 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        public List<BookableDoctor> GetBookableInfo(String doctorId, DateTime? startTime, DateTime? endTime)
+        public List<BookableDoctor> GetBookableInfo(String areaId,String doctorId, DateTime? startTime, DateTime? endTime)
         {
             var bookableDoctors = new List<BookableDoctor>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 //首先取医生排班信息
                 var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
-                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000' 
+                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000'  AND B.YQDM=:AreaId
                                             AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.YSYHID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
                 if(null==startTime)
@@ -149,7 +188,7 @@ namespace eHPS.WYServiceImplement
                 {
                     endTime = DateTime.Now.AddDays(14);
                 }
-                var condition = new { DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
+                var condition = new { AreaId=areaId, DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
                 var result = con.Query(command, condition).ToList();
                 var userPhotos = new Dictionary<Int32, Byte[]>();
                 foreach (var item in result)
@@ -466,25 +505,25 @@ namespace eHPS.WYServiceImplement
             //首先查询是否可预约
             if(VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
             {
-                response.HasError = true;
+                response.HasError = 1;
                 response.ErrorMessage = "一个半天限约两个号源";
                 return response;
             }
             if (VerifyAlreadyBookedInThisArrange(appointment.PatientId, appointment.ArrangeId))
             {
-                response.HasError = true;
+                response.HasError = 1;
                 response.ErrorMessage = "您在此排班已经有预约";
                 return response;
             }
             if (VerifyAlreadyBookedInThisTime(appointment.PatientId, appointment.AppointTime))
             {
-                response.HasError = true;
+                response.HasError = 1;
                 response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
                 return response;
             }
             if (VerifyArrangeFunctional(appointment.ArrangeId))
             {
-                response.HasError = true;
+                response.HasError = 1;
                 response.ErrorMessage = "该排班已被取消";
                 return response;
             }
@@ -526,7 +565,7 @@ namespace eHPS.WYServiceImplement
                 {
                     transaction.Rollback();
 
-                    response.HasError = true;
+                    response.HasError = 1;
                     response.ErrorMessage = "数据保存错误";
 
                     throw;
@@ -535,7 +574,7 @@ namespace eHPS.WYServiceImplement
 
 
                 //返回预约历史信息
-                response.HasError = false;
+                response.HasError = 0;
 
                 var doctor = basicInfoService.GetDoctorById((Int64)arrangeInfo.YSYHID + "");
 

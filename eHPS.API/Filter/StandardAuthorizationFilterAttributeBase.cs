@@ -96,14 +96,15 @@ namespace eHPS.API.Filter
 
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (actionContext.Request.RequestUri.Scheme != Uri.UriSchemeHttps)
-            {
-                actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
-                {
-                    ReasonPhrase = "HTTPS Required"
-                };
-                return;
-            }
+            //开启HTTPS
+            //if (actionContext.Request.RequestUri.Scheme != Uri.UriSchemeHttps)
+            //{
+            //    actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
+            //    {
+            //        ReasonPhrase = "HTTPS Required"
+            //    };
+            //    return;
+            //}
 
 
 

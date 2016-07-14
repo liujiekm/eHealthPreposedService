@@ -1,45 +1,38 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 执行命令的返回信息：
-// 比如 预约、支付、
+// 获取医生预约历史的请求包装对象
+// 
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/7/11 16:53:01
+// 创建时间：2016/6/24 16:51:43
 // 版本号：  V1.0.0.0
 //===================================================================================
-
-
-
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace eHPS.Contract.Model
+namespace eHPS.API.Models
 {
-    public class ResponseMessage<T> where T:class
+    /// <summary>
+    /// 获取医生预约历史的请求包装对象
+    /// </summary>
+    public class AppointmentHistoryRequest
     {
+        /// <summary>
+        /// 患者标识
+        /// </summary>
+        public String PatientId { get; set; }
+
 
         /// <summary>
-        /// 命令执行是否哟错误
-        /// 0 正确 1 有问题
+        /// 患者手机号码
         /// </summary>
-        public Int32 HasError { get; set; }
-
-        /// <summary>
-        /// 错误信息
-        /// </summary>
-        public string ErrorMessage { get; set; }
-
-        /// <summary>
-        /// 消息体
-        /// </summary>
-        public T Body { get; set; }
+        public String Mobile { get; set; }
     }
 }
