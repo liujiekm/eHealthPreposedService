@@ -37,7 +37,7 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="patientIds"></param>
         /// <returns></returns>
-        public List<Order> AwareOrderBooked(List<string> patientIds)
+        public List<Treatment> AwareOrderBooked(List<string> patientIds)
         {
             throw new NotImplementedException();
         }
@@ -70,5 +70,7 @@ namespace eHPS.WYServiceImplement
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

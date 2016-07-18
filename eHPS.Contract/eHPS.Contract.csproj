@@ -64,6 +64,7 @@
     <Compile Include="Model\BookHistory.cs" />
     <Compile Include="Model\Department.cs" />
     <Compile Include="Model\DiagnosisRecord.cs" />
+    <Compile Include="Model\Diagnostics.cs" />
     <Compile Include="Model\Doctor.cs" />
     <Compile Include="Model\InspectionReport.cs" />
     <Compile Include="Model\InspectionReportDetail.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\Patient.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
+    <Compile Include="Model\Treatment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

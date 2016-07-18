@@ -30,10 +30,7 @@ namespace eHPS.Contract.Model
     {
 
 
-        /// <summary>
-        /// 患者标识
-        /// </summary>
-        public String PatientId { get; set; }
+
 
 
         /// <summary>
@@ -81,7 +78,7 @@ namespace eHPS.Contract.Model
 
 
         /// <summary>
-        /// 订单装填
+        /// 订单状态
         /// </summary>
         public String OrderState { get; set; }
 

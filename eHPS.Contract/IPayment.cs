@@ -34,7 +34,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="patientIds"></param>
         /// <returns></returns>
-        List<Order> AwareOrderBooked(List<String> patientIds);
+        List<Treatment> AwareOrderBooked(List<String> patientIds);
 
         /// <summary>
         /// 支付患者的医嘱项目费用
