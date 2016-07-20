@@ -502,6 +502,15 @@ namespace eHPS.WYServiceImplement
         public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
         {
             var response = new ResponseMessage<BookHistory>();
+
+            //判断是否无卡预约
+            var noCard = false;
+            if(String.IsNullOrEmpty(appointment.PatientId))
+            {
+                noCard = true;
+            }
+
+
             //首先查询是否可预约
             if(VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
             {
@@ -537,29 +546,116 @@ namespace eHPS.WYServiceImplement
             {
                 IDbTransaction transaction = con.BeginTransaction();
                 //插入预约信息
-
-
-
                 var appointId = CommonService.GetNextValue("seq_yyfz_yyxx_id");
-                var insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRBH,BRXM,BRXB,CSRQ,BZ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
-                                                      values(:FZZBH,:BRBH,:BRXM,:BRXB,:CSRQ,:BZ,:LXDH,:SFZ,:LXDZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
 
+                String insertAppointInfo = String.Empty;
+                String insertAppointList = String.Empty;
+                dynamic appointInfoCondition;
+                dynamic appointListCondition;
                 //获取排班信息
                 var arrangeInfo = GetArrangeInfo(appointment.ArrangeId, con);
 
+                if (!noCard)
+                {
+                    #region 有卡预约
+                    insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRBH,BRXM,BRXB,CSRQ,BZ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
+                                                      values(:FZZBH,:BRBH,:BRXM,:BRXB,:CSRQ,:BZ,:LXDH,:SFZ,:LXDZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
 
-                var appointInfoCondition = new { FZZBH= appointId,BRBH= appointment.PatientId, BRXM=patient.PatientName, BRXB=patient.Sex, CSRQ=patient.BornDate, BZ="", LXDH=patient.Telephone, SFZ=patient.IdCode, LXDZ=patient.ContactAddress, YYXH=appointment.AppointSequence,
-                    PDH=appointment.AppointSequence, YYSJ=appointment.AppointTime, PBID=Int64.Parse(appointment.ArrangeId), GZDM=(string)arrangeInfo.GZDM, ZKID=(Int64)arrangeInfo.ZKID, YSYHID=(Int64)arrangeInfo.YSYHID, YYFS="8", ZTBZ="1", ZLLX=(string)arrangeInfo.ZLLX, GHID=0,
-                        DJRYID = 19058, CZZID= 19058, XGSJ=DateTime.Now, ZBYY=(string)arrangeInfo.ZBYY, HJLX="1", DJSJ=DateTime.Now};
+                    insertAppointList = @"insert into yyfz_yyls(BRBH,FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:BRBH,:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
+                    appointInfoCondition = new
+                    {
+                        FZZBH = appointId,
+                        BRBH = appointment.PatientId,
+                        BRXM = patient.PatientName,
+                        BRXB = patient.Sex,
+                        CSRQ = patient.BornDate,
+                        BZ = "",
+                        LXDH = patient.Telephone,
+                        SFZ = patient.IdCode,
+                        LXDZ = patient.ContactAddress,
+                        YYXH = appointment.AppointSequence,
+                        PDH = appointment.AppointSequence,
+                        YYSJ = appointment.AppointTime,
+                        PBID = Int64.Parse(appointment.ArrangeId),
+                        GZDM = (string)arrangeInfo.GZDM,
+                        ZKID = (Int64)arrangeInfo.ZKID,
+                        YSYHID = (Int64)arrangeInfo.YSYHID,
+                        YYFS = "8",
+                        ZTBZ = "1",
+                        ZLLX = (string)arrangeInfo.ZLLX,
+                        GHID = 0,
+                        DJRYID = 19058,
+                        CZZID = 19058,
+                        XGSJ = DateTime.Now,
+                        ZBYY = (string)arrangeInfo.ZBYY,
+                        HJLX = "1",
+                        DJSJ = DateTime.Now
+                    };
+                    appointListCondition = new
+                    {
+                        BRBH = appointment.PatientId,
+                        FZYYID = appointId,
+                        YYFSSJ = DateTime.Now,
+                        YYJZSJ = appointment.AppointTime,
+                        YSXM = (string)arrangeInfo.YSXM, ZTBZ = "0"
+                    };
 
-                var appointListId = CommonService.GetNextValue("");
-                var insertAppointList = @"insert into yyfz_yyls(BRBH,FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:BRBH,:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
-                var AppointListCondition = new { BRBH=appointment.PatientId, FZYYID= appointId, YYFSSJ=DateTime.Now, YYJZSJ= appointment.AppointTime, YSXM=(string)arrangeInfo.YSXM, ZTBZ="0" };
+                    #endregion
+                }
+                else
+                {
+                    #region 无卡预约
+
+                    insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRXM,BZ,LXDH,SFZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
+                                                      values(:FZZBH,:BRXM,:BZ,:LXDH,:SFZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
+
+                    insertAppointList = @"insert into yyfz_yyls(FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
+                    appointInfoCondition = new
+                    {
+                        FZZBH = appointId,
+                        //BRBH = appointment.PatientId,
+                        BRXM = patient.PatientName,
+                        //BRXB = patient.Sex,
+                        //CSRQ = patient.BornDate,
+                        BZ = "",
+                        LXDH = appointment.Mobile,
+                        SFZ = appointment.PatientIdCard,
+                        //LXDZ = patient.ContactAddress,
+                        YYXH = appointment.AppointSequence,
+                        PDH = appointment.AppointSequence,
+                        YYSJ = appointment.AppointTime,
+                        PBID = Int64.Parse(appointment.ArrangeId),
+                        GZDM = (string)arrangeInfo.GZDM,
+                        ZKID = (Int64)arrangeInfo.ZKID,
+                        YSYHID = (Int64)arrangeInfo.YSYHID,
+                        YYFS = "8",
+                        ZTBZ = "1",
+                        ZLLX = (string)arrangeInfo.ZLLX,
+                        GHID = 0,
+                        DJRYID = 19058,
+                        CZZID = 19058,
+                        XGSJ = DateTime.Now,
+                        ZBYY = (string)arrangeInfo.ZBYY,
+                        HJLX = "1",
+                        DJSJ = DateTime.Now
+                    };
+                    appointListCondition = new
+                    {
+                        //BRBH = appointment.PatientId,
+                        FZYYID = appointId,
+                        YYFSSJ = DateTime.Now,
+                        YYJZSJ = appointment.AppointTime,
+                        YSXM = (string)arrangeInfo.YSXM,
+                        ZTBZ = "0"
+                    };
+
+                    #endregion
+                }
 
                 try
                 {
-                    con.Execute(insertAppointInfo, appointInfoCondition);
-                    con.Execute(insertAppointList, AppointListCondition);
+                    con.Execute(insertAppointInfo, (object)appointInfoCondition);
+                    con.Execute(insertAppointList, (object)appointListCondition);
                 }
                 catch (Exception)
                 {

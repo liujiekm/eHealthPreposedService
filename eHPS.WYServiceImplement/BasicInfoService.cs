@@ -44,9 +44,18 @@ namespace eHPS.WYServiceImplement
             {
                 using (var con = DapperFactory.CrateOracleConnection())
                 {
-                    var command = @"SELECT BMID AS DeptId,BMMC AS DeptName,' ' AS ParentDeptId  FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
+                    var command = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
                     var condition = new { AreaId=areaId };
                     depts = con.Query<Department>(command, condition).ToList();
+
+
+                    foreach (var dept in depts)
+                    {
+                        var subCommand = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM="+dept.DeptId+" AND YQDM=:AreaId";
+                        var subDepts = con.Query<Department>(subCommand, condition).ToList();
+                        dept.Subdivision = subDepts;
+                    }
+
                     CacheProvider.Set("ehps_depts", depts);
                 }
             }
@@ -60,21 +69,20 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public string GetDeptName(string deptId)
         {
-            var depts = new List<Department>();
-            if (CacheProvider.Exist("ehps_allDepts"))
+            using (var con = DapperFactory.CrateOracleConnection())
             {
-                depts = (List<Department>)CacheProvider.Get("ehps_depts");
-            }
-            else
-            {
-                using (var con = DapperFactory.CrateOracleConnection())
+                var command = @"SELECT BMID AS DeptId,BMMC AS DeptName,' ' AS ParentDeptId  FROM XTGL_BMDM WHERE BMID=:DeptId ";
+                var condition = new { DeptId=Int32.Parse(deptId) };
+                var dept =con.Query<Department>(command,condition).FirstOrDefault();
+                if(null!= dept)
                 {
-                    var command = @"SELECT BMID AS DeptId,BMMC AS DeptName,' ' AS ParentDeptId  FROM XTGL_BMDM WHERE SJBM=1 ";
-                    depts = con.Query<Department>(command).ToList();
-                    CacheProvider.Set("ehps_allDepts", depts);
+                    return dept.DeptName;
+                }
+                else
+                {
+                    return "";
                 }
             }
-            return depts.Where(p => p.DeptId == deptId).Select(p => p.DeptName).FirstOrDefault();
         }
 
 
@@ -105,7 +113,7 @@ namespace eHPS.WYServiceImplement
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,B.JSNR,B.PIC,A.XZKID FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND A.YHID=:DoctorId";
-                var condition = new { DoctorId = doctorId };
+                var condition = new { DoctorId = Int32.Parse(doctorId) };
                 var result = con.Query(command, condition).FirstOrDefault();
                 if (result!=null)
                 {
@@ -140,7 +148,8 @@ namespace eHPS.WYServiceImplement
             var doctors = new List<Doctor>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND A.XZKID=:DeptId";
+                var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B 
+                                            ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND A.XZKID=:DeptId";
                 var condition = new { DeptId=deptId };
                 var result = con.Query(command, condition).ToList();
                 foreach (var item in result)
@@ -189,8 +198,8 @@ namespace eHPS.WYServiceImplement
                             ContactAddress=(string)result.LXDZ,
                             IdCode=(string)result.SFZH,
                             Mobile=(string)result.YDDH,
-                            Sex=(string)result.BRXB,
-                            Telephone=(string)result.LXDH,
+                            Sex=(string)result.BRXB == "1" ? "男" : "女",
+                            Telephone =(string)result.LXDH,
                             FirstTimeDiagnosis=(DateTime)result.SZSJ
                     };
                     return patient;
@@ -213,37 +222,37 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="mobile">手机号码</param>
         /// <returns></returns>
-        public Patient GetPatientInfoByMobile(string mobile)
+        public List<Patient> GetPatientInfoByMobile(string mobile)
         {
+            var patients = new List<Patient>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 var command = @"SELECT BRBH,DWDM,KNSJ,BRXM,BRXB,GJDM,HYZK,ZYDM,JGDM,
-                                            MZDM,SFZH,CSRQ,XZZDM,LXDZ,LXDH,YDDH,SZSJ,ZTBZ FROM CW_KHXX WHERE LXDH = :Mobile";
+                                            MZDM,SFZH,CSRQ,XZZDM,LXDZ,LXDH,YDDH,SZSJ,ZTBZ FROM CW_KHXX WHERE YDDH = :Mobile";
                 var condition = new { Mobile = mobile };
 
-                var result = con.Query(command, condition).FirstOrDefault();
+                var result = con.Query(command, condition).ToList();
 
-                if (result != null)
+                foreach (var item in result)
                 {
                     var patient = new Patient
                     {
-                        PatientId = (string)result.BRBH,
-                        PatientName = (string)result.BRXM,
-                        BornDate = (DateTime)result.CSRQ,
-                        ContactAddress = (string)result.LXDZ,
-                        IdCode = (string)result.SFZH,
-                        Mobile = (string)result.YDDH,
-                        Sex = (string)result.BRXB,
-                        Telephone = (string)result.LXDH,
-                        FirstTimeDiagnosis = (DateTime)result.SZSJ
+                        PatientId = (string)item.BRBH,
+                        PatientName = (string)item.BRXM,
+                        BornDate = (DateTime)item.CSRQ,
+                        ContactAddress = (string)item.LXDZ,
+                        IdCode = (string)item.SFZH,
+                        Mobile = (string)item.YDDH,
+                        Sex = (string)item.BRXB == "1" ? "男" : "女",
+                        Telephone = (string)item.LXDH,
+                        FirstTimeDiagnosis = (DateTime)item.SZSJ
                     };
-                    return patient;
-                }
-                else
-                {
-                    return default(Patient);
+
+                    patients.Add(patient);
+
                 }
 
+                return patients;
 
             }
         }
@@ -262,7 +271,8 @@ namespace eHPS.WYServiceImplement
             var doctors = new List<Doctor>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,A.XZKID,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID WHERE  A.ZTBZ=1 AND (A.XM LIKE %"+name+"% OR A.PY LIKE %"+ spelling + "%)";
+                var command = @"SELECT A.YHID, A.RYKID,A.XM,A.XB,A.GZDM,A.XZKID,B.JSNR,B.PIC FROM YL_RYK A LEFT JOIN YYFZ_YSJS B ON A.RYKID=B.RYKID 
+                                            WHERE  A.ZTBZ=1 AND (A.XM LIKE '%"+name+"%' OR A.PY LIKE '%"+ spelling + "%')";
                 
                 var result = con.Query(command).ToList();
                 foreach (var item in result)

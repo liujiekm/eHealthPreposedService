@@ -28,11 +28,6 @@ namespace eHPS.Contract.Model
     /// </summary>
     public class Order
     {
-
-
-
-
-
         /// <summary>
         /// 订单金额
         /// </summary>
@@ -42,7 +37,7 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 订单类型
         /// </summary>
-        public String OrderType { get; set; }
+        public OrderType OrderType { get; set; }
 
 
         /// <summary>
@@ -83,16 +78,47 @@ namespace eHPS.Contract.Model
         public String OrderState { get; set; }
 
 
-        /// <summary>
-        /// 诊疗活动标识
-        /// </summary>
-        public String TreatmentId { get; set; }
+
 
 
         /// <summary>
         /// 收费项目详情
         /// </summary>
         public List<OrderItem> OrderItems { get; set; }
+
+    }
+
+
+
+    public enum OrderType
+    {
+        /// <summary>
+        /// 挂号费
+        /// </summary>
+        Registration =0,
+
+        /// <summary>
+        /// 药品费
+        /// </summary>
+        Medicine=1,
+
+        /// <summary>
+        /// 检查
+        /// </summary>
+        Inspection=2,
+
+        /// <summary>
+        /// 检验
+        /// </summary>
+        Laboratory=3,
+        /// <summary>
+        /// 治疗
+        /// </summary>
+        Cure =4
+
+
+
+
 
     }
 }

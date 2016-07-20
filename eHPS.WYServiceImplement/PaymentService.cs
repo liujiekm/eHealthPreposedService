@@ -23,6 +23,8 @@ using System.Text;
 using System.Threading.Tasks;
 using eHPS.Contract.Model;
 
+using Dapper;
+
 namespace eHPS.WYServiceImplement
 {
     /// <summary>
@@ -30,6 +32,15 @@ namespace eHPS.WYServiceImplement
     /// </summary>
     public class PaymentService : IPayment
     {
+
+
+        private IBasicInfo basicService;
+
+        public PaymentService(IBasicInfo basicService)
+        {
+            this.basicService = basicService;
+        }
+
 
         /// <summary>
         /// 主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
@@ -39,9 +50,82 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public List<Treatment> AwareOrderBooked(List<string> patientIds)
         {
-            throw new NotImplementedException();
+            var treatments = new List<Treatment>();
+            
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var patientIdsCondition = String.Join(",", patientIds.Select(p => "'" + p + "'"));
+                //首先如果 担保挂号，查询担保挂号记录，查找挂号收费项目
+                var registeredCommand = @"Select ZLHDID, BRBH,GZDM, ZLLX, JZSJ 	FROM CW_YGHJL 
+                                                            WHERE GHID IS NULL AND BRBH IN (" + patientIdsCondition + @") 
+                                                            GROUP BY ZLHDID, BRBH,GZDM, ZLLX, JZSJ
+                                                            ORDER BY JZSJ";
+                var registeredResult = con.Query(registeredCommand).ToList();
+
+                foreach (var register in registeredResult)
+                {
+
+                }
+                //根据担保挂号 查询挂号收费项目
+                var registeredItemCommand = @"SELECT B.MC, A.XMJE,A.XMID,A.ZMBS,A.JJRBS FROM CW_ZLLXGHXM A,CW_SFXM B WHERE A.XMID=B.XMID AND  ZLLX = :AS_ZLLX AND GZDM = :AS_GZDM 
+                                                                AND ((KSSJ IS NULL OR KSSJ <= :ADT_SFSJ) AND (JSSJ IS NULL OR JSSJ >= :ADT_SFSJ))";
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+            return treatments;
         }
 
+
+
+        /// <summary>
+        /// 根据诊疗活动标识以及患者标识补充以下数据
+        /// 科室信息、病人基本信息、医生基本信息、诊断信息
+        /// </summary>
+        /// <param name="treatments"></param>
+        private void TreatmentAuxiliaryData(List<Treatment> treatments)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var activityCommand = @"SELECT BRXM,JZYSYHID FROM YL_ZLHD WHERE ZLHDID=:ActiveId";
+                //获取患者诊断信息
+                var diagnoseCommand = @"SELECT ICD,LCZD  FROM YL_ZLZD WHERE ZLHDID=:ActiveId";
+                foreach (var item in treatments)
+                {
+                    var condition = new { ActiveId =Int64.Parse(item.TreatmentId)};
+                    var activityResult = con.Query(activityCommand, condition).FirstOrDefault();
+                    if (activityResult!=null)
+                    {
+                        item.PatientName = (String)activityResult.BRXM;
+                        var doctor = basicService.GetDoctorById((Int64)activityResult.JZYSYHID + "");
+                        item.DoctorId = doctor.DoctorId;
+                        item.DoctorName = doctor.DoctorName;
+                        item.DeptdId = doctor.DeptId;
+                        item.DeptName = doctor.DeptName;
+                    }
+                    var diagnoseResult = con.Query(diagnoseCommand, condition).ToList();
+                    item.Diagnostics = new List<Diagnostics>();
+                    foreach (var diagnose in diagnoseResult)
+                    {
+                        item.Diagnostics.Add(new Diagnostics
+                        {
+                            ICD = (String)diagnose.ICD,
+                            DiagnosisName=(String)diagnose.LCZD
+                        });
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// 支付患者的医嘱项目费用

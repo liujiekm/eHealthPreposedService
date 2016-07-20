@@ -21,6 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace eHPS.API.Controllers
 {
@@ -48,7 +49,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="request">获取医生可预约情况的请求包装对象</param>
         /// <returns></returns>
-        [Route("DoctorAppoint"),HttpPost]
+        [Route("DoctorAppoint"),HttpPost,ResponseType(typeof(List<BookableDoctor>))]
         public List<BookableDoctor> GetBookableInfo([FromBody]BookableInfoRequest request)
         {
             return appointmentService.GetBookableInfo(request.areaId, request.doctorId, request.startTime, request.endTime);
@@ -60,7 +61,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="request">获取医生预约历史的请求包装对象</param>
         /// <returns></returns>
-        [Route("AppointmentHistory"),HttpPost]
+        [Route("AppointmentHistory"),HttpPost, ResponseType(typeof(List<BookHistory>))]
         public List<BookHistory> GetAppointmentHistory([FromBody]AppointmentHistoryRequest request)
         {
             return appointmentService.GetAppointmentHistory(request.PatientId, request.Mobile);
@@ -74,7 +75,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="appointment"></param>
         /// <returns></returns>
-        [Route("DoAppointment"), HttpPost]
+        [Route("DoAppointment"), HttpPost, ResponseType(typeof(ResponseMessage<BookHistory>))]
         public ResponseMessage<BookHistory> MakeAnAppointment([FromBody]MakeAnAppointment appointment)
         {
             return appointmentService.MakeAnAppointment(appointment);

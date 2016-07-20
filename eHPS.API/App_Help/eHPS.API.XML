@@ -539,7 +539,7 @@
         </member>
         <member name="M:eHPS.API.Controllers.BasicInfoController.GetDoctors(eHPS.API.Models.DoctorSearchModel)">
             <summary>
-            获得科室下医生信息
+            查询医生信息
             </summary>
             <param name="model">查询变量</param>
             <returns></returns>
@@ -556,6 +556,13 @@
             根据患者就诊卡获取患者基本信息
             </summary>
             <param name="patientId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.BasicInfoController.GetPatientInfoByMobile(System.String)">
+            <summary>
+            根据患者注册的手机号码获取患者基本信息
+            </summary>
+            <param name="mobile">手机号码</param>
             <returns></returns>
         </member>
         <member name="T:eHPS.API.Controllers.DiagnosisController">

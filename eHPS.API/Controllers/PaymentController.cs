@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace eHPS.API.Controllers
 {
@@ -59,7 +60,7 @@ namespace eHPS.API.Controllers
         /// <param name="hospitalOrderId">医院订单标识</param>
         /// <param name="hospitalId">医院标识</param>
         /// <returns></returns>
-        [Route("Pay"),HttpPost]
+        [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>))]
         public ResponseMessage<String> Pay(List<String> hospitalOrderId, String hospitalId)
         {
             return paymentService.Pay(hospitalOrderId, hospitalId);
@@ -73,7 +74,7 @@ namespace eHPS.API.Controllers
         /// <param name="hospitalId">医院标识</param>
         /// <param name="appointId">预约标识</param>
         /// <returns></returns>
-        [Route("PayRegistration"), HttpPost]
+        [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>))]
         public ResponseMessage<String> PayRegistration(String hospitalId, String appointId)
         {
             return paymentService.PayRegistration(hospitalId, appointId);

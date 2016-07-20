@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace eHPS.API.Controllers
 {
@@ -43,7 +44,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="patientId">患者标识</param>
         /// <returns></returns>
-        [Route("InspectionDetail"),HttpPost]
+        [Route("InspectionDetail"),HttpPost, ResponseType(typeof(List<InspectionReportDetail>))]
         public List<InspectionReportDetail> GetInspectionReportDetailByPatientId([FromBody]string patientId)
         {
             return inspectionService.GetInspectionReportDetailByPatientId(patientId);

@@ -43,6 +43,7 @@ namespace eHPS.Contract
 
         /// <summary>
         /// 根据姓名或者拼音查询医生信息
+        /// 
         /// </summary>
         /// <param name="name">姓名</param>
         /// <param name="spelling">拼音</param>
@@ -82,7 +83,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="mobile">手机号码</param>
         /// <returns></returns>
-        Patient GetPatientInfoByMobile(string mobile);
+        List<Patient> GetPatientInfoByMobile(string mobile);
 
 
         

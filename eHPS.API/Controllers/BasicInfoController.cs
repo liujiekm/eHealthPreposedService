@@ -21,6 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace eHPS.API.Controllers
 {
@@ -48,7 +49,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="areaId">院区标识</param>
         /// <returns></returns>
-        [Route("Depts"), HttpPost]
+        [Route("Depts"), HttpPost,ResponseType(typeof(List<Department>))]
         public List<Department> GetDepts([FromBody]string areaId)
         {
             return basicInfoService.GetDepts(areaId);
@@ -62,7 +63,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        [Route("Doctors"), HttpPost]
+        [Route("Doctors"), HttpPost, ResponseType(typeof(List<Doctor>))]
         public List<Doctor> GetDoctors([FromBody]string deptId)
         {
             return basicInfoService.GetDoctors(deptId);
@@ -73,7 +74,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="model">查询变量</param>
         /// <returns></returns>
-        [Route("SearchDoctors"), HttpPost]
+        [Route("SearchDoctors"), HttpPost, ResponseType(typeof(List<Doctor>))]
         public List<Doctor> GetDoctors([FromBody]DoctorSearchModel model)
         {
             return basicInfoService.GetDoctors(model.Name,model.Spelling);
@@ -91,7 +92,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="doctorId"></param>
         /// <returns></returns>
-        [Route("Doctor"), HttpPost]
+        [Route("Doctor"), HttpPost, ResponseType(typeof(Doctor))]
         public Doctor GetDoctorById([FromBody]string doctorId)
         {
             return basicInfoService.GetDoctorById(doctorId);
@@ -104,12 +105,24 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="patientId"></param>
         /// <returns></returns>
-        [Route("Patient"), HttpPost]
+        [Route("Patient"), HttpPost, ResponseType(typeof(Patient))]
         public Patient GetPatientInfo([FromBody]string patientId)
         {
             return basicInfoService.GetPatientInfo(patientId);
         }
 
+
+
+        /// <summary>
+        /// 根据患者注册的手机号码获取患者基本信息
+        /// </summary>
+        /// <param name="mobile">手机号码</param>
+        /// <returns></returns>
+        [Route("Patients"),HttpPost, ResponseType(typeof(List<Patient>))]
+        public List<Patient> GetPatientInfoByMobile([FromBody]string mobile)
+        {
+            return basicInfoService.GetPatientInfoByMobile(mobile);
+        }
 
     }
 }

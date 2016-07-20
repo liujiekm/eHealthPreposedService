@@ -7,6 +7,7 @@ using Microsoft.Practices.Unity.InterceptionExtension;
 using eHPS.CrossCutting.NetFramework.ExceptionHandler;
 using eHPS.CrossCutting.NetFramework.Logging;
 using eHPS.CrossCutting.Logging;
+using System.Collections.Generic;
 
 namespace eHPS.ImplementTest
 {
@@ -40,10 +41,11 @@ namespace eHPS.ImplementTest
         public void Get_All_Depts()
         {
 
-            //basicService = container.Resolve<IBasicInfo>();
-            //var result = basicService.GetDepts();
+            basicService = container.Resolve<IBasicInfo>();
+            var areaId = "01";
+            var result = basicService.GetDepts(areaId);
 
-            //Assert.AreEqual(5, result.Count);
+            Assert.IsNotNull(result);
         }
 
 
@@ -53,6 +55,26 @@ namespace eHPS.ImplementTest
             NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
             logger.Error("what fuck");
+
+
+        }
+
+        private void ModifyRef(List<String> items)
+        {
+            items.Add("kobe");
+            items.Add("jack");
+        }
+
+        [TestMethod]
+        public void Wheather_Need_Ref()
+        {
+            var items = new List<String>();
+            items.Add("michael");
+            items.Add("jordan");
+
+            ModifyRef(items);
+
+            Assert.AreEqual(4, items.Count);
 
 
         }

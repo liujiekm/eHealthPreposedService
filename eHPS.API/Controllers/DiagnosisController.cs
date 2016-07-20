@@ -21,6 +21,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace eHPS.API.Controllers
 {
@@ -45,7 +46,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="patientId"></param>
         /// <returns></returns>
-        [Route("DiagnosisHistory"),HttpPost]
+        [Route("DiagnosisHistory"),HttpPost, ResponseType(typeof(List<DiagnosisRecord>))]
         public List<DiagnosisRecord> GetDiagnosisHistory([FromBody]String patientId)
         {
             return diagnosisService.GetDiagnosisHistory(patientId);
@@ -60,7 +61,7 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="request">发起在线诊疗请求包装对象</param>
         /// <returns></returns>
-        [Route("MakeADiagnosis"), HttpPost]
+        [Route("MakeADiagnosis"), HttpPost, ResponseType(typeof(ResponseMessage<string>))]
         public ResponseMessage<string> MakeADiagnosis([FromBody]MakeADiagnosisRequest request)
         {
             return diagnosisService.MakeADiagnosis(request.PatientId, request.DoctorId,request.Complaint);

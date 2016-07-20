@@ -37,6 +37,11 @@ namespace eHPS.Contract.Model
 
 
         /// <summary>
+        /// 诊疗活动标识
+        /// </summary>
+        public String TreatmentId { get; set; }
+
+        /// <summary>
         /// 科室标识
         /// </summary>
         public String DeptdId { get; set; }

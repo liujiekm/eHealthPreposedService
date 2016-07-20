@@ -43,9 +43,14 @@ namespace eHPS.Contract.Model
 
 
         /// <summary>
+        /// 子科室
+        /// </summary>
+        public List<Department> Subdivision { get; set; }
+
+        /// <summary>
         /// 父级科室标识
         /// </summary>
-        public string ParentDeptId { get; set; }
+        //public string ParentDeptId { get; set; }
 
 
         ///// <summary>

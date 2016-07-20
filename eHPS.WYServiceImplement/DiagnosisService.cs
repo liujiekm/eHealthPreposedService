@@ -222,6 +222,16 @@ namespace eHPS.WYServiceImplement
             }
         }
 
+
+
+
+        /// <summary>
+        /// 在线诊疗
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="doctorId">医生标识</param>
+        /// <param name="complaint">患者主诉</param>
+        /// <returns></returns>
         public ResponseMessage<string> MakeADiagnosis(string patientId,string doctorId, string complaint)
         {
             throw new NotImplementedException();
