@@ -46,14 +46,27 @@ namespace eHPS.WYServiceImplement
                 {
                     var command = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
                     var condition = new { AreaId=areaId };
-                    depts = con.Query<Department>(command, condition).ToList();
-
-
-                    foreach (var dept in depts)
+                    var parent = con.Query(command, condition).ToList();
+                    foreach (var dept in parent)
                     {
-                        var subCommand = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM="+dept.DeptId+" AND YQDM=:AreaId";
-                        var subDepts = con.Query<Department>(subCommand, condition).ToList();
-                        dept.Subdivision = subDepts;
+                        var department = new Department {
+                             DeptId= (Int32)dept.DeptId+"",
+                             DeptName=(String)dept.BMMC,
+                             Subdivision = new List<Department>()
+                        };
+
+                        var subCommand = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM="+(Int32)dept.DeptId+" AND YQDM=:AreaId";
+                        var subDepts = con.Query(subCommand, condition).ToList();
+                        foreach (var subDept in subDepts)
+                        {
+                            department.Subdivision.Add(new Department {
+                                 DeptId= (Int32)subDept.DeptId+"",
+                                 DeptName=(String)subDept.BMMC
+                            });
+                        }
+                        depts.Add(department);
+
+
                     }
 
                     CacheProvider.Set("ehps_depts", depts);

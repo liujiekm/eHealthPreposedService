@@ -21,6 +21,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Jil;
+
 namespace eHPS.Contract.Model
 {
     /// <summary>
@@ -31,19 +33,35 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 订单金额
         /// </summary>
-        public decimal OrderAmount { get; set; }
+        public decimal OrderAmount {
+
+            get {
+
+                decimal amount = 0;
+                foreach (var item in OrderItems)
+                {
+                    amount += (decimal)item.ItemCount * item.ItemUnitPrice;
+                }
+                return amount;
+
+            } set {
+
+            } }
 
 
         /// <summary>
         /// 订单类型
         /// </summary>
+
+        [JilDirective(TreatEnumerationAs =typeof(Int32))]
         public OrderType OrderType { get; set; }
 
 
         /// <summary>
         /// 医院HIS内部标识订单的标识
         /// 为了支持一张处方内的项目可以单独收费
-        /// 比如一张化验单则取化验单的唯一标识+前缀
+        /// 比如一张化验单则取化验单的唯一标识+前缀(医院标识)
+        /// 如果是担保挂号则取诊疗活动标识
         /// </summary>
         public String HospitalOrderId { get; set; }
 
@@ -75,10 +93,8 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 订单状态
         /// </summary>
-        public String OrderState { get; set; }
-
-
-
+        [JilDirective(TreatEnumerationAs =typeof(Int32))]
+        public OrderState OrderState { get; set; }
 
 
         /// <summary>
@@ -88,6 +104,17 @@ namespace eHPS.Contract.Model
 
     }
 
+
+    /// <summary>
+    /// 订单状态
+    /// </summary>
+    public enum OrderState
+    {
+        /// <summary>
+        /// 未支付
+        /// </summary>
+        Nonpayment=0
+    }
 
 
     public enum OrderType
@@ -115,10 +142,6 @@ namespace eHPS.Contract.Model
         /// 治疗
         /// </summary>
         Cure =4
-
-
-
-
 
     }
 }

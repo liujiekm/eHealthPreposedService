@@ -28,16 +28,23 @@ namespace eHPS.Contract.Model
     /// </summary>
     public class OrderItem
     {
+
+        /// <summary>
+        ///  医嘱标识
+        /// （温附一实现中，附加医嘱不设置项目Id）
+        /// </summary>
+        public String ItemId { get; set; }
+
         /// <summary>
         /// 收费项目名称
         /// </summary>
         public String ItemName { get; set; }
 
 
-        /// <summary>
-        /// 收费项目类型
-        /// </summary>
-        public String  ItemType { get; set; }
+        ///// <summary>
+        ///// 收费项目类型
+        ///// </summary>
+        //public String  ItemType { get; set; }
 
 
         /// <summary>
@@ -46,10 +53,20 @@ namespace eHPS.Contract.Model
         public decimal ItemUnitPrice { get; set; }
 
 
+        /// <summary>
+        /// 项目组号，比如 针剂 需多个项目设为一组来进行收费
+        /// 一些附件项目也放到组里面进行收费
+        /// </summary>
+        public String ItemGroupNO { get; set; }
 
         /// <summary>
         /// 收费项目数量
         /// </summary>
         public double ItemCount { get; set; }
+
+        /// <summary>
+        /// 项目规格
+        /// </summary>
+        public String ItemSpecification { get; set; }
     }
 }
