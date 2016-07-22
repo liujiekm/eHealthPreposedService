@@ -29,6 +29,12 @@ namespace eHPS.API.Models
         /// </summary>
         public String areaId { get; set; }
 
+
+        /// <summary>
+        /// 科室标识
+        /// </summary>
+        public String deptId { get; set; }
+
         /// <summary>
         /// 医生标识
         /// </summary>

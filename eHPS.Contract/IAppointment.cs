@@ -28,11 +28,13 @@ namespace eHPS.Contract
         /// <summary>
         /// 获取医生可预约信息
         /// </summary>
-        /// <param name="deptId">医生标识</param>
+        /// <param name="areaId">院区标识</param>
+        /// <param name="deptId">科室标识</param>
+        /// <param name="doctorId">医生标识</param>
         /// <param name="startTime">排班开始时间</param>
         /// <param name="endTime">排班结束时间</param>
         /// <returns></returns>
-        List<BookableDoctor> GetBookableInfo(String areaId,String doctorId,DateTime? startTime,DateTime? endTime);
+        List<BookableDoctor> GetBookableInfo(String areaId, String deptId, String doctorId,DateTime? startTime,DateTime? endTime);
 
 
         /// <summary>

@@ -170,14 +170,14 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="deptId">科室标识</param>
         /// <returns></returns>
-        public List<BookableDoctor> GetBookableInfo(String areaId,String doctorId, DateTime? startTime, DateTime? endTime)
+        public List<BookableDoctor> GetBookableInfo(String areaId,String deptId,String doctorId, DateTime? startTime, DateTime? endTime)
         {
             var bookableDoctors = new List<BookableDoctor>();
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 //首先取医生排班信息
                 var command = @"SELECT B.PBID,B.YSXM,B.YSYHID,B.RYKID,B.ZKID,R.GZDM2,B.ZLLX,B.SBSJ,B.XBSJ,B.ZKXH,B.YQDM,B.ZBYY 
-                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000'  AND B.YQDM=:AreaId
+                                            FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000'  AND B.YQDM=:AreaId AND B.ZKID=:DeptId
                                             AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.YSYHID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
                 if(null==startTime)
@@ -188,7 +188,7 @@ namespace eHPS.WYServiceImplement
                 {
                     endTime = DateTime.Now.AddDays(14);
                 }
-                var condition = new { AreaId=areaId, DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
+                var condition = new { AreaId=areaId, DeptId=deptId, DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
                 var result = con.Query(command, condition).ToList();
                 var userPhotos = new Dictionary<Int32, Byte[]>();
                 foreach (var item in result)

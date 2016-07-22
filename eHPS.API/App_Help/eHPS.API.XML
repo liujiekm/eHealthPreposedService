@@ -707,6 +707,11 @@
             医院院区代码
             </summary>
         </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.deptId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
         <member name="P:eHPS.API.Models.BookableInfoRequest.doctorId">
             <summary>
             医生标识

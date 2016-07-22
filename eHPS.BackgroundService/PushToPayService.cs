@@ -27,6 +27,8 @@ using System.ServiceProcess;
 using CacheMQService;
 using Thrift.Transport;
 using Thrift.Protocol;
+using Jil;
+using eHPS.Contract.Model;
 
 namespace eHPS.BackgroundService
 {
@@ -35,8 +37,11 @@ namespace eHPS.BackgroundService
 
         private IPayment paymentService;
 
-        private readonly string  baseUrl = ConfigurationManager.AppSettings["baseUrl"];
-        private readonly string  interval = ConfigurationManager.AppSettings["interval"];
+        private static readonly string  baseUrl = ConfigurationManager.AppSettings["baseUrl"];
+        private static readonly string  interval = ConfigurationManager.AppSettings["interval"];
+
+        private static readonly string appid = ConfigurationManager.AppSettings["appId"];
+        private static readonly string appIdSecret = ConfigurationManager.AppSettings["appIdSecret"];
 
 
         public PushToPayService()
@@ -74,17 +79,16 @@ namespace eHPS.BackgroundService
             var patientIds = RequestPatientIds();
             var treatments = paymentService.AwareOrderBooked(patientIds.Result);
             //调用消息队列服务，把treatments推送到消息队列
-
-            //using (TTransport transport = new TSocket("192.168.1.190", 9090))
-            //{
-            //    TProtocol protocol = new TCompactProtocol(transport);
-            //    CacheMQService.Calculator.Client client = new CacheMQService.Calculator.Client(protocol);
-            //    transport.Open();
-            //    var result = client.serverSendMsg(sign, json);//0失败；1成功
-            //    if (result == 0)
-            //    {
-            //    }
-            //}
+            using (TTransport transport = new TSocket("192.168.1.190", 9090))
+            {
+                TProtocol protocol = new TCompactProtocol(transport);
+                CacheMQService.Calculator.Client client = new CacheMQService.Calculator.Client(protocol);
+                transport.Open();
+                var result = client.serverSendMsg("", JSON.Serialize<List<Treatment>>(treatments));//0失败；1成功
+                if (result == 0)
+                {
+                }
+            }
 
         }
 
@@ -98,11 +102,10 @@ namespace eHPS.BackgroundService
                 client.BaseAddress = requestUri;
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await client.GetAsync("api/User/GetHospitalBindingCard/{hID}");
+                var response = await client.GetAsync("api/User/GetHospitalBindingCard/"+appid);
                 if (response.IsSuccessStatusCode)
                 {
                     patientIds = await response.Content.ReadAsAsync<List<String>>();
-                    
                 }
             }
             return patientIds;
