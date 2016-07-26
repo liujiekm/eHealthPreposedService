@@ -49,8 +49,8 @@ namespace eHPS.API.Controllers
         /// </summary>
         /// <param name="areaId">院区标识</param>
         /// <returns></returns>
-        [Route("Depts"), HttpPost,ResponseType(typeof(List<Department>))]
-        public List<Department> GetDepts([FromBody]string areaId)
+        [Route("Depts"), HttpPost,ResponseType(typeof(List<Organization>))]
+        public List<Organization> GetDepts([FromBody]string areaId)
         {
             return basicInfoService.GetDepts(areaId);
         }

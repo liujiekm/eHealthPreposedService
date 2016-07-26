@@ -103,6 +103,7 @@
     <Compile Include="InspectionTest.cs" />
     <Compile Include="DiagnosisTest.cs" />
     <Compile Include="AppointmentTest.cs" />
+    <Compile Include="PaymentTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

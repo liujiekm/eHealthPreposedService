@@ -13,13 +13,13 @@ namespace eHPS.API.Test
         [TestMethod]
         public void Call_From_Client_Use_Digest()
         {
-            var requestUri = new Uri("http://localhost:51797/Test/Dick/"); 
+            var requestUri = new Uri("http://localhost:51797/BasicInfo/Depts"); 
             var credCache = new CredentialCache 
             { 
                 { 
-                    new Uri("http://localhost:51797/Test/Dick/"),  
+                    new Uri("http://localhost:51797/BasicInfo/Depts"),  
                     "Digest",  
-                    new NetworkCredential("lenovo", "3bc4e4a529ab4a88b6e834199e228741","lenovohit.com") 
+                    new NetworkCredential("1", "csy","lenovohit.com") 
                 } 
             }; 
             using (var clientHander = new HttpClientHandler 
@@ -30,9 +30,11 @@ namespace eHPS.API.Test
             using (var httpClient = new HttpClient(clientHander)) 
             {
                 
-                var content = new { v1="jack",v2="rose"};
+                var content = "01";
                 var responseTask = httpClient.PostAsJsonAsync(requestUri.ToString(), content); 
                 responseTask.Result.EnsureSuccessStatusCode();
+
+                Assert.AreEqual("", responseTask.Result.Content.ReadAsStringAsync().Result);
             } 
 
         }
@@ -98,6 +100,34 @@ namespace eHPS.API.Test
             credentialCache.Add(new Uri(sUrl), "Digest", new NetworkCredential("  blackbody  ", "  username password "));
 
             return credentialCache;
+        }
+
+
+
+
+        [TestMethod]
+        public  void Test_WYService()
+        {
+            WYService.n_webserviceSoapClient client = new WYService.n_webserviceSoapClient();
+            String patientId = "0000003001777361";
+            String response = "";
+            
+            var result = client.f_get_data("getmzyz", ref patientId, ref response);
+
+            Assert.IsNotNull("", response);
+        }
+
+
+        [TestMethod]
+        public void Test_WebService()
+        {
+            Test.TestService.Service1SoapClient client = new TestService.Service1SoapClient();
+
+            var result = client.HelloWorld();
+
+            Assert.IsNotNull(result);
+
+
         }
 
     }

@@ -30,6 +30,8 @@ using Thrift.Protocol;
 using Jil;
 using eHPS.Contract.Model;
 
+
+
 namespace eHPS.BackgroundService
 {
     partial class PushToPayService : ServiceBase
@@ -89,6 +91,9 @@ namespace eHPS.BackgroundService
                 {
                 }
             }
+
+
+
 
         }
 

@@ -36,6 +36,22 @@ namespace eHPS.Contract.Model
         public String AppId { get; set; }
 
 
+        #region 平台回传过来的数据，前置机只需读取
+        /// <summary>
+        /// 患者所在平台的标识
+        /// 用户下去绑定的患者标识
+        /// </summary>
+
+        public Int64 PID { get; set; }
+
+
+        /// <summary>
+        /// 平台数据库存储的诊疗标识
+        /// </summary>
+        public Int64 DiagnosticInformationId { get; set; }
+
+        #endregion
+
         /// <summary>
         /// 诊疗活动标识
         /// </summary>

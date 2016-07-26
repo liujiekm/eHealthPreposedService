@@ -28,7 +28,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="areaId">院区标识</param>
         /// <returns></returns>
-        List<Department> GetDepts(string areaId);
+        List<Organization> GetDepts(string areaId);
 
 
 

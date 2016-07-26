@@ -7,5 +7,5 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Con
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\Jil.pdb
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\Jil.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\Sigil.xml
-C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.csprojResolveAssemblyReference.cache
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\bin\Debug\eHPS.Contract.dll.config
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.Contract\obj\Debug\eHPS.Contract.csprojResolveAssemblyReference.cache

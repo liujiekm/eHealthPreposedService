@@ -33,46 +33,43 @@ namespace eHPS.WYServiceImplement
 {
     public class BasicInfoService : IBasicInfo
     {
-        public List<Department> GetDepts(string areaId)
+        public List<Organization> GetDepts(string areaId)
         {
-            var depts = new List<Department>();
-            if(CacheProvider.Exist("ehps_depts"))
+            var depts = new List<Organization>();
+            using (var con = DapperFactory.CrateOracleConnection())
             {
-                depts = (List<Department>)CacheProvider.Get("ehps_depts");
-            }
-            else
-            {
-                using (var con = DapperFactory.CrateOracleConnection())
+                var command = @"SELECT BMID ,BMMC  FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
+                var condition = new { AreaId=areaId };
+                var parent = con.Query(command, condition).ToList();
+                foreach (var dept in parent)
                 {
-                    var command = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM=1 AND YQDM=:AreaId";
-                    var condition = new { AreaId=areaId };
-                    var parent = con.Query(command, condition).ToList();
-                    foreach (var dept in parent)
+                    var organization = new Organization
                     {
-                        var department = new Department {
-                             DeptId= (Int32)dept.DeptId+"",
-                             DeptName=(String)dept.BMMC,
-                             Subdivision = new List<Department>()
-                        };
-
-                        var subCommand = @"SELECT BMID AS DeptId,BMMC AS DeptName FROM XTGL_BMDM WHERE SJBM="+(Int32)dept.DeptId+" AND YQDM=:AreaId";
-                        var subDepts = con.Query(subCommand, condition).ToList();
-                        foreach (var subDept in subDepts)
+                        ParentDept= new Department
                         {
-                            department.Subdivision.Add(new Department {
-                                 DeptId= (Int32)subDept.DeptId+"",
-                                 DeptName=(String)subDept.BMMC
-                            });
-                        }
-                        depts.Add(department);
+                            DeptId = (Int32)dept.BMID + "",
+                            DeptName = (String)dept.BMMC
+                        },
+                        Subdivision = new List<Department>()
+                    };
 
-
+                    var subCommand = @"SELECT BMID ,BMMC  FROM XTGL_BMDM WHERE SJBM="+(Int32)dept.BMID+" AND YQDM=:AreaId";
+                    var subDepts = con.Query(subCommand, condition).ToList();
+                    foreach (var subDept in subDepts)
+                    {
+                        organization.Subdivision.Add(new Department {
+                                DeptId= (Int32)subDept.BMID + "",
+                                DeptName=(String)subDept.BMMC
+                        });
                     }
-
-                    CacheProvider.Set("ehps_depts", depts);
+                    depts.Add(organization);
                 }
+
+
             }
+
             return depts;
+           
         }
 
         /// <summary>
