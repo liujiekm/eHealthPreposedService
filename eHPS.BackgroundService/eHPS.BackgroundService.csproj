@@ -70,7 +70,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -88,6 +90,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ProjectInstaller.Designer.cs">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushToPayService.cs">
       <SubType>Component</SubType>
@@ -95,28 +103,26 @@
     <Compile Include="PushToPayService.Designer.cs">
       <DependentUpon>PushToPayService.cs</DependentUpon>
     </Compile>
-    <Compile Include="Service References\WFService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Service References\WFService\eHPS.BackgroundService.WFService.f_get_dataResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\WFService\n_webservice.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ProjectInstaller.resx">
+      <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PushToPayService.resx">
       <DependentUpon>PushToPayService.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\eHPS.Common\eHPS.Common.csproj">
+      <Project>{ce4be0a7-5e4c-42fe-814c-7899cd060269}</Project>
+      <Name>eHPS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eHPS.Contract\eHPS.Contract.csproj">
       <Project>{9e359af3-a016-4472-b7a1-95a2a9a1ca5e}</Project>
       <Name>eHPS.Contract</Name>
@@ -129,27 +135,6 @@
       <Project>{de3e3252-9409-47de-9a58-d309fd25b9f1}</Project>
       <Name>eHPS.WYServiceImplement</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\WFService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WFService\n_webservice.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WFService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WFService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\WFService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -25,12 +25,9 @@ using System.Net.Http.Headers;
 using System.ServiceProcess;
 
 using CacheMQService;
-using Thrift.Transport;
-using Thrift.Protocol;
-using Jil;
+
 using eHPS.Contract.Model;
-
-
+using eHPS.Common;
 
 namespace eHPS.BackgroundService
 {
@@ -80,19 +77,9 @@ namespace eHPS.BackgroundService
         {
             var patientIds = RequestPatientIds();
             var treatments = paymentService.AwareOrderBooked(patientIds.Result);
-            //调用消息队列服务，把treatments推送到消息队列
-            using (TTransport transport = new TSocket("192.168.1.190", 9090))
-            {
-                TProtocol protocol = new TCompactProtocol(transport);
-                CacheMQService.Calculator.Client client = new CacheMQService.Calculator.Client(protocol);
-                transport.Open();
-                var result = client.serverSendMsg("", JSON.Serialize<List<Treatment>>(treatments));//0失败；1成功
-                if (result == 0)
-                {
-                }
-            }
 
-
+            MessageQueueHelper<List<Treatment>>.PushMessage("", treatments);
+            
 
 
         }

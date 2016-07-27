@@ -37,3 +37,5 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYS
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Jil.pdb
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Jil.xml
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Sigil.xml
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Thrift.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\CacheMQService.dll

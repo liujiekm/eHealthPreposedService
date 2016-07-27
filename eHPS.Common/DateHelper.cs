@@ -31,7 +31,7 @@ namespace eHPS.Common
         public static Int64 GetSeconds(DateTime dt1, DateTime dt2)
         {
             TimeSpan ts = dt2 - dt1;
-            return ts.Seconds;
+            return (Int64)ts.TotalSeconds;
         }
     }
 }

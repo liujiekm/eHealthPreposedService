@@ -25,6 +25,7 @@ using eHPS.Contract.Model;
 
 using Dapper;
 using Oracle.ManagedDataAccess.Client;
+using eHPS.Common;
 
 namespace eHPS.WYServiceImplement
 {
@@ -234,7 +235,13 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public ResponseMessage<string> MakeADiagnosis(string patientId,string doctorId, string complaint)
         {
-            throw new NotImplementedException();
+
+
+
+
+            var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
+            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            return result;
         }
     }
 }

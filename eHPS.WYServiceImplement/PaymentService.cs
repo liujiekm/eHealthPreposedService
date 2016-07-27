@@ -25,6 +25,7 @@ using eHPS.Contract.Model;
 
 using Dapper;
 using Oracle.ManagedDataAccess.Client;
+using eHPS.Common;
 
 namespace eHPS.WYServiceImplement
 {
@@ -440,7 +441,9 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public ResponseMessage<string> Pay(List<string> hospitalOrderId, string hospitalId)
         {
-            throw new NotImplementedException();
+            var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
+            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            return result;
         }
 
 
@@ -453,7 +456,9 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public ResponseMessage<string> PayRegistration(string hospitalId, string appointId)
         {
-            throw new NotImplementedException();
+            var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
+            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            return result;
         }
 
 

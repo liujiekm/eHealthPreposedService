@@ -109,7 +109,7 @@ namespace eHPS.API.Test
         public  void Test_WYService()
         {
             WYService.n_webserviceSoapClient client = new WYService.n_webserviceSoapClient();
-            String patientId = "0000003001777361";
+            String patientId = "$$0000003001777361$$0000003001775739";
             String response = "";
             
             var result = client.f_get_data("getmzyz", ref patientId, ref response);

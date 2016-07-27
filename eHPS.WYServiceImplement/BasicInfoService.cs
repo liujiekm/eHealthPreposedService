@@ -287,10 +287,19 @@ namespace eHPS.WYServiceImplement
                 var result = con.Query(command).ToList();
                 foreach (var item in result)
                 {
+                    String deptId = String.Empty;
+                    String deptName = String.Empty;
+                    //现专科ID可能为空
+                    if(item.XZKID!=null)
+                    {
+                        deptId = (Int32)item.XZKID + "";
+                        deptName = CommonService.GetDeptName((Int32)item.XZKID);
+                    }
+                    
                     var doctor = new Doctor
                     {
-                        DeptId = (Int32)item.XZKID+"",
-                        DeptName = CommonService.GetDeptName((Int32)item.XZKID),
+                        DeptId = deptId,
+                        DeptName = deptName,
                         DoctorId = ((Int64)item.YHID).ToString(),
                         DoctorName = (string)item.XM,
                         Expert = "",

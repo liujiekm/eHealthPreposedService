@@ -520,11 +520,11 @@ namespace eHPS.WYServiceImplement
             }
             if (VerifyAlreadyBookedInThisArrange(appointment.PatientId, appointment.ArrangeId))
             {
-                response.HasError = 1;
+                response.HasError = 2;
                 response.ErrorMessage = "您在此排班已经有预约";
                 return response;
             }
-            if (VerifyAlreadyBookedInThisTime(appointment.PatientId, appointment.AppointTime))
+            if (VerifyAlreadyBookedInThisTime(appointment.ArrangeId, appointment.AppointTime))
             {
                 response.HasError = 1;
                 response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
@@ -558,26 +558,27 @@ namespace eHPS.WYServiceImplement
                 if (!noCard)
                 {
                     #region 有卡预约
-                    insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRBH,BRXM,BRXB,CSRQ,BZ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
-                                                      values(:FZZBH,:BRBH,:BRXM,:BRXB,:CSRQ,:BZ,:LXDH,:SFZ,:LXDZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
+                    insertAppointInfo = @"insert into yyfz_yyxx(FZYYID,FZZBH,BRBH,BRXM,BRXB,CSRQ,BZ,LXDH,SFZ,LXDZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
+                                                      values(:FZYYID,:FZZBH,:BRBH,:BRXM,:BRXB,:CSRQ,:BZ,:LXDH,:SFZ,:LXDZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
 
                     insertAppointList = @"insert into yyfz_yyls(BRBH,FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:BRBH,:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
                     appointInfoCondition = new
                     {
-                        FZZBH = appointId,
+                        FZYYID= appointId,
+                        FZZBH = arrangeInfo.FZZBH==null?"":(String)arrangeInfo.FZZBH,
                         BRBH = appointment.PatientId,
                         BRXM = patient.PatientName,
-                        BRXB = patient.Sex,
+                        BRXB = patient.Sex=="男"?"1":"2",
                         CSRQ = patient.BornDate,
                         BZ = "",
-                        LXDH = patient.Telephone,
+                        LXDH = patient.Telephone==null?"": patient.Telephone,
                         SFZ = patient.IdCode,
-                        LXDZ = patient.ContactAddress,
+                        LXDZ = patient.ContactAddress == null ? "" : patient.ContactAddress,
                         YYXH = appointment.AppointSequence,
                         PDH = appointment.AppointSequence,
                         YYSJ = appointment.AppointTime,
                         PBID = Int64.Parse(appointment.ArrangeId),
-                        GZDM = (string)arrangeInfo.GZDM,
+                        GZDM = arrangeInfo.GZDM==null?"": (string)arrangeInfo.GZDM,
                         ZKID = (Int64)arrangeInfo.ZKID,
                         YSYHID = (Int64)arrangeInfo.YSYHID,
                         YYFS = "8",
@@ -587,7 +588,7 @@ namespace eHPS.WYServiceImplement
                         DJRYID = 19058,
                         CZZID = 19058,
                         XGSJ = DateTime.Now,
-                        ZBYY = (string)arrangeInfo.ZBYY,
+                        ZBYY = arrangeInfo.ZBYY==null?"": (string)arrangeInfo.ZBYY,
                         HJLX = "1",
                         DJSJ = DateTime.Now
                     };
@@ -606,13 +607,14 @@ namespace eHPS.WYServiceImplement
                 {
                     #region 无卡预约
 
-                    insertAppointInfo = @"insert into yyfz_yyxx(FZZBH,BRXM,BZ,LXDH,SFZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
-                                                      values(:FZZBH,:BRXM,:BZ,:LXDH,:SFZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
+                    insertAppointInfo = @"insert into yyfz_yyxx(FZYYID,FZZBH,BRXM,BZ,LXDH,SFZ,YYXH,PDH,YYSJ,PBID,GZDM,ZKID,YSYHID,YYFS,ZTBZ,ZLLX,GHID,DJRYID,CZZID,XGSJ,ZBYY,HJLX,DJSJ) 
+                                                      values(:FZYYID,:FZZBH,:BRXM,:BZ,:LXDH,:SFZ,:YYXH,:PDH,:YYSJ,:PBID,:GZDM,:ZKID,:YSYHID,:YYFS,:ZTBZ,:ZLLX,:GHID,:DJRYID,:CZZID,:XGSJ,:ZBYY,:HJLX,:DJSJ)";
 
                     insertAppointList = @"insert into yyfz_yyls(FZYYID,YYFSSJ,YYJZSJ,YSXM,ZTBZ) values(:FZYYID,:YYFSSJ,:YYJZSJ,:YSXM,:ZTBZ)";
                     appointInfoCondition = new
                     {
-                        FZZBH = appointId,
+                        FZYYID = appointId,
+                        FZZBH = arrangeInfo.FZZBH == null ? "" : (String)arrangeInfo.FZZBH,
                         //BRBH = appointment.PatientId,
                         BRXM = patient.PatientName,
                         //BRXB = patient.Sex,
@@ -689,7 +691,7 @@ namespace eHPS.WYServiceImplement
                     PatientIdCard= patient.IdCode,
                     PatientName= patient.PatientName,
                     PatientMobile= patient.Mobile,
-                    RegisteredAmount=(decimal)arrangeInfo.XMJE,
+                    RegisteredAmount=arrangeInfo.XMJE==null?0: (decimal)arrangeInfo.XMJE,
                     Remark="",
                     DeptId= (Int64)arrangeInfo.ZKID+"",
                     DeptName=basicInfoService.GetDeptName((Int64)arrangeInfo.ZKID + ""),
@@ -713,7 +715,7 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public dynamic GetArrangeInfo(string arrangeId,OracleConnection con)
         {
-            var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,pb.zllx,
+            var command = @"select pb.fjid, pb.ysyhid,pb.bmid ,pb.gzdm ,pb.pbid ,pb.rykid ,pb.sbsj ,pb.xbsj, pb.yqdm,pb.ysxm,pb.zkid,zkxh,pb.zllx,pb.fzzbh,
                                         (select bn.mc from xtgl_ddlbn bn where bn.lb='0051' and bn.dm=pb.zllx) zllxmc,(select count(*) 
                                         from yyfz_yyxx xx where xx.yyxh<=pb.zkxh and xx.ztbz<>'9' and xx.pbid=pb.pbid and xx.yysj>sysdate) as syh,
                                         pb.zbyy ,(select sum(xm.xmje) from  cw_zllxghxm xm where pb.zllx=xm.zllx and pb.gzdm=xm.gzdm) xmje 

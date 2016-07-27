@@ -87,8 +87,18 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public static string GetDeptName(Int32 deptId)
         {
-            var depts = GetDepts();
-            return depts[deptId];
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"SELECT BMID, BMMC FROM XTGL_BMDM WHERE BMID="+deptId+" AND ZTBZ='1'";
+                var result = con.Query(command).FirstOrDefault();
+                if(null!=result)
+                {
+                    return (string)result.BMMC;
+                }
+                return "";
+
+            }
+            
         }
 
         /// <summary>
@@ -96,16 +106,16 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="sequenceName">oracle序列名称</param>
         /// <returns></returns>
-        public static long GetNextValue(string sequenceName)
+        public static Int64 GetNextValue(string sequenceName)
         {
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 
-                var command = string.Format("select {0}.nextval from dual", sequenceName);
+                var command = string.Format("SELECT {0}.NEXTVAL FROM DUAL", sequenceName);
 
-                var result = con.ExecuteScalar(command);
+                var result = con.Query(command).FirstOrDefault();
 
-                return (long)result;
+                return (Int64)result.NEXTVAL;
             }
         }
 
