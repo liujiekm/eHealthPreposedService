@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using Dapper;
 using eHPS.CrossCutting.NetFramework.Caching;
 using Oracle.ManagedDataAccess.Client;
+using eHPS.Contract.Model;
 
 namespace eHPS.WYServiceImplement
 {
@@ -33,6 +34,52 @@ namespace eHPS.WYServiceImplement
     /// </summary>
     public class CommonService
     {
+
+
+
+        /// <summary>
+        /// 从附一的webservice中返回的格式字符串解析出Treamtments
+        /// </summary>
+        /// <param name="content">格式字符串
+        /// 示例  $$brbh@@zh^8|mc^药品|@@zh^7|mc^针管|$$
+        /// </param>
+        /// <returns></returns>
+        public static List<Treatment> RetriveFromString(String content)
+        {
+            var result = new List<Treatment>();
+            //分组出患者
+            var patients = content.Split(new String[] { "$$" },StringSplitOptions.RemoveEmptyEntries);
+            foreach (var patient in patients)
+            {
+                //分离出患者编号与项目信息
+                var patientItem = patient.Split(new String[] { "@@" }, StringSplitOptions.RemoveEmptyEntries);
+                var patientId = patientItem[0];//索引0为病人编号
+                for (int i = 1; i < patientItem.Length; i++)//从索引1 开始为具体项目
+                {
+                    var itemPropertys = patientItem[i].Split(new String[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (var property in itemPropertys)
+                    {
+                        //property 都是以 ^ 来分割名称与值
+                        //var propertyName = 
+                    }
+                }
+
+
+
+
+                
+
+
+
+            }
+
+
+            return result;
+        }
+
+
+
 
         /// <summary>
         /// 获取多值表值

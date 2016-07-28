@@ -203,8 +203,8 @@ namespace eHPS.WYServiceImplement
                     }
                     var bookableDoctor = new BookableDoctor {
                         ArrangeId = ((Int32)item.PBID).ToString(),
-                        ArrangeStartTime = (DateTime)item.SBSJ,
-                        ArrangeEndTime = (DateTime)item.XBSJ,
+                        ArrangeStartTime = ((DateTime)item.SBSJ).ToLocalTime(),
+                        ArrangeEndTime = ((DateTime)item.XBSJ).ToLocalTime(),
                         DeptId = ((Int32)item.ZKID).ToString(),
                         DeptName=CommonService.GetDeptName((Int32)item.ZKID),
                         DocotorId=((Int32)item.YSYHID).ToString(),
@@ -243,6 +243,7 @@ namespace eHPS.WYServiceImplement
                                             from yyfz_yspb pb where pb.pbid=:ArrangeId";
                 var condition = new { ArrangeId=Int64.Parse(arrangeId) };
                 result = con.Query(command, condition).FirstOrDefault();
+
             }
 
             #region 上一个实现版本拷贝
@@ -321,6 +322,7 @@ namespace eHPS.WYServiceImplement
         {
 
             DateTime ldt_yysj = new DateTime();
+            
             xbsj = xbsj.AddMinutes(-10);
             long jzsc = Convert.ToInt64(Math.Floor((Convert.ToDouble(DateHelper.GetSeconds(sbsj, xbsj)) / zkxh + 0.5))); //就诊时长
 
@@ -341,7 +343,7 @@ namespace eHPS.WYServiceImplement
                 //已存在的yysj或yyxh不再插入
                 if (ldt_yysj > DateTime.Now &&! IsTimePointBooked(ldt_yysj, i, pbid.ToString()))
                 {
-                    list.Add(new BookableTimePoint { AppointSequence= i, AppointTime= ldt_yysj });
+                    list.Add(new BookableTimePoint { AppointSequence= i, AppointTime= ldt_yysj.ToLocalTime() });
                 }
 
             }
@@ -510,9 +512,14 @@ namespace eHPS.WYServiceImplement
                 noCard = true;
             }
 
+            var appointTimeAndSequence = appointment.ArrangeIndicate.Split(new String[] { "$" }, StringSplitOptions.RemoveEmptyEntries);
+
+            appointment.AppointSequence = appointTimeAndSequence[0] == null ? 0 : Int32.Parse(appointTimeAndSequence[0]);
+
+            appointment.AppointTime = appointTimeAndSequence[1] == null ? default(DateTime) : DateTime.Parse(appointTimeAndSequence[1]);
 
             //首先查询是否可预约
-            if(VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
+            if (VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
             {
                 response.HasError = 1;
                 response.ErrorMessage = "一个半天限约两个号源";
@@ -524,7 +531,7 @@ namespace eHPS.WYServiceImplement
                 response.ErrorMessage = "您在此排班已经有预约";
                 return response;
             }
-            if (VerifyAlreadyBookedInThisTime(appointment.ArrangeId, appointment.AppointTime))
+            if (VerifyAlreadyBookedInThisTime(appointment.ArrangeId, appointment.AppointTime.Value))
             {
                 response.HasError = 1;
                 response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
@@ -679,9 +686,9 @@ namespace eHPS.WYServiceImplement
                 response.Body = new BookHistory
                 {
                     AppointId = appointId.ToString(),
-                    AppointSequence= appointment.AppointSequence,
+                    AppointSequence= appointment.AppointSequence.Value,
                     AppointState=AppointState.Appointing,
-                    AppointTime=appointment.AppointTime,
+                    AppointTime=appointment.AppointTime.Value,
                     ArrangeId= appointment.ArrangeId,
                     Attention="",
                     CreateTime=DateTime.Now,

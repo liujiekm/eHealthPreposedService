@@ -43,13 +43,13 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 预约时间
         /// </summary>
-        public DateTime AppointTime { get; set; }
+        public DateTime? AppointTime { get; set; }
 
 
         /// <summary>
         /// 预约序号
         /// </summary>
-        public Int32 AppointSequence { get; set; }
+        public Int32? AppointSequence { get; set; }
 
         /// <summary>
         /// 预约号描述

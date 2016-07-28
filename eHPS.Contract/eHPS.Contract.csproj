@@ -70,8 +70,10 @@
     <Compile Include="Model\OrderItem.cs" />
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Patient.cs" />
+    <Compile Include="Model\PatientConsumption.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
     <Compile Include="Model\Treatment.cs" />
+    <Compile Include="Model\TreatmentActivityInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
