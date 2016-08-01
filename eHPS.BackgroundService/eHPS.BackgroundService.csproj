@@ -64,6 +64,10 @@
       <HintPath>..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sigil, Version=4.6.1.0, Culture=neutral, PublicKeyToken=2d06c3494341c8ab, processorArchitecture=MSIL">
       <HintPath>..\packages\Sigil.4.6.1\lib\net45\Sigil.dll</HintPath>
       <Private>True</Private>
@@ -108,6 +112,12 @@
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -131,10 +141,21 @@
       <Project>{98c37512-386b-49fe-a2ce-51980ece5d2a}</Project>
       <Name>eHPS.CrossCutting.NetFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\eHPS.CrossCutting\eHPS.CrossCutting.csproj">
+      <Project>{fb293042-da3d-4686-8790-444cf57c3e08}</Project>
+      <Name>eHPS.CrossCutting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eHPS.MessageQueueContract\eHPS.MessageQueueContract.csproj">
+      <Project>{376fa670-cacd-453b-bcc6-553156d05036}</Project>
+      <Name>eHPS.MessageQueueContract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eHPS.WYServiceImplement\eHPS.WYServiceImplement.csproj">
       <Project>{de3e3252-9409-47de-9a58-d309fd25b9f1}</Project>
       <Name>eHPS.WYServiceImplement</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

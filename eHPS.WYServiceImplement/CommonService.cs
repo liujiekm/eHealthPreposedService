@@ -26,6 +26,7 @@ using Dapper;
 using eHPS.CrossCutting.NetFramework.Caching;
 using Oracle.ManagedDataAccess.Client;
 using eHPS.Contract.Model;
+using System.Dynamic;
 
 namespace eHPS.WYServiceImplement
 {
@@ -38,15 +39,15 @@ namespace eHPS.WYServiceImplement
 
 
         /// <summary>
-        /// 从附一的webservice中返回的格式字符串解析出Treamtments
+        /// 从附一的webservice中返回的格式字符串解析出具体的收费项目
         /// </summary>
         /// <param name="content">格式字符串
         /// 示例  $$brbh@@zh^8|mc^药品|@@zh^7|mc^针管|$$
         /// </param>
         /// <returns></returns>
-        public static List<Treatment> RetriveFromString(String content)
+        public static List<dynamic> RetriveFromString(String content)
         {
-            var result = new List<Treatment>();
+            var result = new List<dynamic>();
             //分组出患者
             var patients = content.Split(new String[] { "$$" },StringSplitOptions.RemoveEmptyEntries);
             foreach (var patient in patients)
@@ -54,30 +55,89 @@ namespace eHPS.WYServiceImplement
                 //分离出患者编号与项目信息
                 var patientItem = patient.Split(new String[] { "@@" }, StringSplitOptions.RemoveEmptyEntries);
                 var patientId = patientItem[0];//索引0为病人编号
-                for (int i = 1; i < patientItem.Length; i++)//从索引1 开始为具体项目
+                if(patientItem.Length>1)
                 {
-                    var itemPropertys = patientItem[i].Split(new String[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
-
-                    foreach (var property in itemPropertys)
+                    for (int i = 1; i < patientItem.Length; i++)
                     {
-                        //property 都是以 ^ 来分割名称与值
-                        //var propertyName = 
-                    }
+                        var itemProperties = patientItem[i].Split(new String[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+                        dynamic item = Map(itemProperties);
+                        item.PatientId = patientId;
+                        result.Add(item);
+                    }                 
+            
                 }
-
-
-
-
                 
-
-
-
             }
-
-
             return result;
         }
 
+
+        /// <summary>
+        /// 根据温附一项目拼音名称赋值动态类型属性
+        /// </summary>
+        /// <param name="propertyItem"></param>
+        /// <param name="result"></param>
+        private static void Aassign(String propertyItem,dynamic result)
+        {
+            var propertyDic = propertyItem.Split(new char[] { '^'});
+            if(propertyDic.Length>1)//名称包含值
+            {
+                switch (propertyDic[0].ToUpperInvariant())
+                {
+                    case "ZLHDID": //诊疗活动标识
+                        result.TreatmentId = propertyDic[1];
+                        break;
+                    case "XMID": //详细项目标识
+                        result.ItemId = propertyDic[1];
+                        break;
+
+                    case "ZH"://详细项目组号
+                        result.ItemGroupNO= propertyDic[1];
+                        break;
+                    case "MC": //详细项目名称
+                        result.ItemName = propertyDic[1];
+                        break;
+
+                    case "SL": //详细项目数量
+                        result.ItemCount = propertyDic[1];
+                        break;
+                    case "DW": //详细项目单位
+                        result.ItemSpecification = propertyDic[1];
+                        break;
+
+                    case "DJ": //详细项目单价
+                        result.ItemUnitPrice = propertyDic[1];
+                        break;
+
+                    case "KDSJ": //详细项目单价
+                        result.OrderTime = propertyDic[1];
+                        break;
+
+                    case "YZLB": //详细项目医嘱类别
+                        result.ItemType = propertyDic[1];
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 根据温附一项目拼音名称赋值动态类型属性，并返回表示一条项目的动态对象
+        /// </summary>
+        /// <param name="itemProperties"></param>
+        /// <returns></returns>
+        private static dynamic Map(String[] itemProperties)
+        {
+            dynamic obj = new ExpandoObject();
+            foreach (var item in itemProperties)
+            {
+                Aassign(item, obj);
+            }
+            return obj;
+        }
 
 
 

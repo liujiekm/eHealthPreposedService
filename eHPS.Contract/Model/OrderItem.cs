@@ -41,10 +41,10 @@ namespace eHPS.Contract.Model
         public String ItemName { get; set; }
 
 
-        ///// <summary>
-        ///// 收费项目类型
-        ///// </summary>
-        //public String  ItemType { get; set; }
+        /// <summary>
+        /// 收费项目类型，医嘱类别
+        /// </summary>
+        public String ItemType { get; set; }
 
 
         /// <summary>
@@ -68,5 +68,11 @@ namespace eHPS.Contract.Model
         /// 项目规格
         /// </summary>
         public String ItemSpecification { get; set; }
+
+
+        /// <summary>
+        /// 项目开单时间
+        /// </summary>
+        public DateTime OrderTime { get; set; }
     }
 }

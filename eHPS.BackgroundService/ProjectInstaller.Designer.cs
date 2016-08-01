@@ -33,6 +33,7 @@
             // 
             // eHPSServiceProcessInstaller
             // 
+            this.eHPSServiceProcessInstaller.Account = System.ServiceProcess.ServiceAccount.LocalService;
             this.eHPSServiceProcessInstaller.Password = null;
             this.eHPSServiceProcessInstaller.Username = null;
             // 

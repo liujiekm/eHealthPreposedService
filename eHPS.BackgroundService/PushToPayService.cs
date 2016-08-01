@@ -28,6 +28,10 @@ using CacheMQService;
 
 using eHPS.Contract.Model;
 using eHPS.Common;
+using eHPS.MessageQueueContract;
+using eHPS.CrossCutting.Logging;
+using eHPS.CrossCutting.NetFramework.Logging;
+using Microsoft.Practices.Unity.Configuration;
 
 namespace eHPS.BackgroundService
 {
@@ -49,13 +53,16 @@ namespace eHPS.BackgroundService
 
             //依赖注入各医院的具体推送实现
             var container = new UnityContainer();
-            container.RegisterType<IPayment, PaymentService>(
-                new Interceptor<InterfaceInterceptor>(),
-                new InterceptionBehavior<LoggingInterceptionBehavior>()
-            );
-            container.AddNewExtension<Interception>();
+            container.LoadConfiguration();
+            //container.RegisterType<IPayment, PaymentService>(
+            //    new Interceptor<InterfaceInterceptor>(),
+            //    new InterceptionBehavior<LoggingInterceptionBehavior>()
+            //);
+            //container.AddNewExtension<Interception>();
             paymentService = container.Resolve<IPayment>();
 
+            //设定日志类
+            LoggerFactory.SetCurrent(new eHPSNLogFactory());
 
         }
 
@@ -75,10 +82,32 @@ namespace eHPS.BackgroundService
         /// <param name="args"></param>
         public void OnPush(object sender, System.Timers.ElapsedEventArgs args)
         {
-            var patientIds = RequestPatientIds();
-            var treatments = paymentService.AwareOrderBooked(patientIds.Result);
 
-            MessageQueueHelper<List<Treatment>>.PushMessage("", treatments);
+
+
+            LoggerFactory.CreateLog().Info("开始推送用户待收费项目");
+            var patientIds =RequestPatientIds();
+            
+            var patientConsumption = paymentService.AwareOrderBooked(patientIds.Result);
+
+            var resultCode = 0;
+            try
+            {
+                resultCode = MessageQueueHelper.PushMessage<List<PatientConsumption>>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
+
+                LoggerFactory.CreateLog().Info("推送"+(resultCode==0?"失败":"成功"),patientIds.Result);
+
+            }
+            catch (Exception ex)
+            {
+                LoggerFactory.CreateLog().Error(String.Format(
+
+                  "方法 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "MessageQueueHelper.PushMessage<List<PatientConsumption>>",
+                  ex.Message,
+                  ex.StackTrace), ex);
+
+                throw;
+            }
             
 
 

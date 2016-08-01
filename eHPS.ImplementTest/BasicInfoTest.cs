@@ -8,6 +8,10 @@ using eHPS.CrossCutting.NetFramework.ExceptionHandler;
 using eHPS.CrossCutting.NetFramework.Logging;
 using eHPS.CrossCutting.Logging;
 using System.Collections.Generic;
+using eHPS.Contract.Model;
+using System.Linq;
+
+using System.Dynamic;
 
 namespace eHPS.ImplementTest
 {
@@ -78,5 +82,61 @@ namespace eHPS.ImplementTest
 
 
         }
+
+
+
+        [TestMethod]
+        public void Test_Dynamic()
+        {
+            dynamic obj = new ExpandoObject();
+
+            obj.item1 = 1;
+            obj.item2 = "1";
+
+
+
+            Assert.AreEqual(1, Int32.Parse((String)obj.item2));
+
+        }
+
+
+
+
+        [TestMethod]
+        public void Test_List()
+        {
+            List<OrderItem> orders = new List<OrderItem>
+            {
+                new OrderItem {
+                     ItemId="1"
+                },
+                new OrderItem {
+                     ItemId="2"
+                },
+                new OrderItem {
+                     ItemId="3"
+                },
+                new OrderItem {
+                     ItemId="4"
+                }
+
+
+            };
+
+
+            var item = orders.FirstOrDefault(p => p.ItemId == "1");
+
+            item.ItemName = "Damn";
+
+
+            Assert.AreEqual("Damn", orders.FirstOrDefault(p => p.ItemId == "1").ItemName);
+
+
+
+
+
+        }
+
+
     }
 }

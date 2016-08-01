@@ -34,19 +34,18 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="patientIds"></param>
         /// <returns></returns>
-        List<Treatment> AwareOrderBooked(List<String> patientIds);
+        List<PatientConsumption> AwareOrderBooked(List<String> patientIds);
 
         /// <summary>
         /// 支付患者的医嘱项目费用
-        /// 支付成功之后，往消息队列发送成功与否的消息
+        /// 支付成功之后，直接返回成功与否信息
         /// </summary>
-        /// <param name="hospitalOrderId">医院订单标识
-        /// 如果是药品，取药品组号
-        /// 如果是检查、检验、治疗 去申请单标识
+        /// <param name="activityId">
+        /// 当前支付的诊疗活动标识
         /// </param>
-        /// <param name="hospitalId">医院标识</param>
+        /// <param name="amount">总金额</param>
         /// <returns></returns>
-        ResponseMessage<String> Pay(List<String> hospitalOrderId, String hospitalId);
+        ResponseMessage<String> Pay(String activityId,String amount);
 
 
         /// <summary>

@@ -235,12 +235,8 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public ResponseMessage<string> MakeADiagnosis(string patientId,string doctorId, string complaint)
         {
-
-
-
-
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
             return result;
         }
     }

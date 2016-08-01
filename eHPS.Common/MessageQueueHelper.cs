@@ -31,7 +31,7 @@ namespace eHPS.Common
     /// <summary>
     /// 消息队列操作控制帮助类
     /// </summary>
-    public class MessageQueueHelper<T> where T:class
+    public class MessageQueueHelper
     {
 
         private static readonly string  address= ConfigurationManager.AppSettings["address"];
@@ -44,7 +44,7 @@ namespace eHPS.Common
         /// </summary>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static Int32 PushMessage(String queueName,T message)
+        public static Int32 PushMessage<T>(String queueName,T message)
         {
             //调用消息队列服务，把treatments推送到消息队列
             using (TTransport transport = new TSocket(address, port))

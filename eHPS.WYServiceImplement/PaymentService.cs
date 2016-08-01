@@ -44,188 +44,193 @@ namespace eHPS.WYServiceImplement
         }
 
 
+
+
+        #region 第一版实现
+
+
         /// <summary>
         /// 主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
         /// 则本方法实现需主动轮询，未支付的收费项目
         /// </summary>
         /// <param name="patientIds"></param>
         /// <returns></returns>
-        public List<Treatment> AwareOrderBooked(List<string> patientIds)
-        {
-            var treatments = new List<Treatment>();
+        //public List<Treatment> AwareOrderBooked(List<string> patientIds)
+        //{
+        //    var treatments = new List<Treatment>();
             
-            using (var con = DapperFactory.CrateOracleConnection())
-            {
-                var patientIdsCondition = String.Join(",", patientIds.Select(p => "'" + p + "'"));
+        //    using (var con = DapperFactory.CrateOracleConnection())
+        //    {
+        //        var patientIdsCondition = String.Join(",", patientIds.Select(p => "'" + p + "'"));
 
-                #region 挂号
-                //首先如果 担保挂号，查询担保挂号记录，查找挂号收费项目
-                var registeredCommand =  @"Select ZLHDID, BRBH,GZDM, ZLLX, JZSJ FROM CW_YGHJL 
-                                                            WHERE GHID IS NULL AND BRBH IN (" + patientIdsCondition + @") 
-                                                            GROUP BY ZLHDID, BRBH,GZDM, ZLLX, JZSJ
-                                                            ORDER BY JZSJ";
-                //根据担保挂号 查询挂号收费项目
-                var registeredItemCommand = @"SELECT B.MC, A.XMJE,A.XMID,A.ZMBS,A.JJRBS FROM CW_ZLLXGHXM A,CW_SFXM B WHERE A.XMID=B.XMID 
-                                                                AND  ZLLX = :DiagnosisType AND GZDM = :JobTitleId 
-                                                                AND ((KSSJ IS NULL OR KSSJ <= :ChargeTime) AND (JSSJ IS NULL OR JSSJ >= :ChargeTime))";
-                var registeredResult = con.Query(registeredCommand).ToList();
-                foreach (var register in registeredResult)
-                {
-                    var treatment = new Treatment {
-                        PatientId = (String)register.BRBH,
-                        TreatmentId = (Int64)register.ZLHDID + "",
-                        Orders = new List<Order>()
-                    };
-                    var condition = new { DiagnosisType = (String)register.ZLLX, JobTitleId = (String)register.GZDM,ChargeTime=(DateTime)register.JZSJ};
-                    var order = new Order {
-                         BookingTime= (DateTime)register.JZSJ,
-                         HospitalOrderId= (Int64)register.ZLHDID + "",
-                         OrderDescribe="挂号",
-                         OrderType=OrderType.Registration,
-                         OrderItems= new List<OrderItem>(),
-                         OrderState=OrderState.Nonpayment,
-                         Remark= "担保挂号",
-                         ExpireTime=default(DateTime)
+        //        #region 挂号
+        //        //首先如果 担保挂号，查询担保挂号记录，查找挂号收费项目
+        //        var registeredCommand =  @"Select ZLHDID, BRBH,GZDM, ZLLX, JZSJ FROM CW_YGHJL 
+        //                                                    WHERE GHID IS NULL AND BRBH IN (" + patientIdsCondition + @") 
+        //                                                    GROUP BY ZLHDID, BRBH,GZDM, ZLLX, JZSJ
+        //                                                    ORDER BY JZSJ";
+        //        //根据担保挂号 查询挂号收费项目
+        //        var registeredItemCommand = @"SELECT B.MC, A.XMJE,A.XMID,A.ZMBS,A.JJRBS FROM CW_ZLLXGHXM A,CW_SFXM B WHERE A.XMID=B.XMID 
+        //                                                        AND  ZLLX = :DiagnosisType AND GZDM = :JobTitleId 
+        //                                                        AND ((KSSJ IS NULL OR KSSJ <= :ChargeTime) AND (JSSJ IS NULL OR JSSJ >= :ChargeTime))";
+        //        var registeredResult = con.Query(registeredCommand).ToList();
+        //        foreach (var register in registeredResult)
+        //        {
+        //            var treatment = new Treatment {
+        //                PatientId = (String)register.BRBH,
+        //                TreatmentId = (Int64)register.ZLHDID + "",
+        //                Orders = new List<Order>()
+        //            };
+        //            var condition = new { DiagnosisType = (String)register.ZLLX, JobTitleId = (String)register.GZDM,ChargeTime=(DateTime)register.JZSJ};
+        //            var order = new Order {
+        //                 BookingTime= (DateTime)register.JZSJ,
+        //                 HospitalOrderId= (Int64)register.ZLHDID + "",
+        //                 OrderDescribe="挂号",
+        //                 OrderType=OrderType.Registration,
+        //                 OrderItems= new List<OrderItem>(),
+        //                 OrderState=OrderState.Nonpayment,
+        //                 Remark= "担保挂号",
+        //                 ExpireTime=default(DateTime)
 
-                    };
-                    var registeredItemResult = con.Query(registeredItemCommand, condition).ToList();
-                    foreach (var item in registeredItemResult)
-                    {
-                        var orderItem = new OrderItem {
-                             ItemId= (Int64)item.XMID+"",
-                             ItemCount=1,
-                             ItemName=(String)item.MC,
-                             ItemUnitPrice=(decimal)item.XMJE,
-                             ItemGroupNO="",
-                             ItemSpecification=""
-                        };
-                        order.OrderItems.Add(orderItem);
-                    }
-                    treatment.Orders.Add(order);
+        //            };
+        //            var registeredItemResult = con.Query(registeredItemCommand, condition).ToList();
+        //            foreach (var item in registeredItemResult)
+        //            {
+        //                var orderItem = new OrderItem {
+        //                     ItemId= (Int64)item.XMID+"",
+        //                     ItemCount=1,
+        //                     ItemName=(String)item.MC,
+        //                     ItemUnitPrice=(decimal)item.XMJE,
+        //                     ItemGroupNO="",
+        //                     ItemSpecification=""
+        //                };
+        //                order.OrderItems.Add(orderItem);
+        //            }
+        //            treatment.Orders.Add(order);
 
-                    treatments.Add(treatment);
+        //            treatments.Add(treatment);
 
-                }
-                #endregion
+        //        }
+        //        #endregion
 
-                #region 药品医嘱
-                var medicineCommand = @"SELECT YZID,ZLHDID,BRBH,YZLB,ZH,YPID,MC,DW,DJ,SL ,YZSJ FROM YL_MZYPYZ 
-                                                         WHERE BRBH IN (" + patientIdsCondition + ")  AND ZTBZ IS NULL AND YZLB > '0' ORDER BY YZLB";
-
-
+        //        #region 药品医嘱
+        //        var medicineCommand = @"SELECT YZID,ZLHDID,BRBH,YZLB,ZH,YPID,MC,DW,DJ,SL ,YZSJ FROM YL_MZYPYZ 
+        //                                                 WHERE BRBH IN (" + patientIdsCondition + ")  AND ZTBZ IS NULL AND YZLB > '0' ORDER BY YZLB";
 
 
-                var medicineResult = con.Query(medicineCommand).ToList();
-                foreach (var item in medicineResult)
-                {
-                    //查找treatments中是否已存在同样的诊疗活动
-                    if (treatments.Any(p=>p.TreatmentId==(Int64)item.ZLHDID+""))
-                    {
-                        var treatment = treatments.FirstOrDefault(p => p.TreatmentId == (Int64)item.ZLHDID + "");
-                        //判断是否已经存在药品项目
-                        if(treatment.Orders.Any(o=>o.OrderType==OrderType.Medicine))
-                        {
-                            var order = treatment.Orders.FirstOrDefault(o => o.OrderType == OrderType.Medicine);
-                            var orderItem = new OrderItem
-                            {
-                                ItemId = (Int64)item.YZID + "",
-                                ItemGroupNO = (Int32)item.ZH + "",
-                                ItemName = (String)item.MC,
-                                ItemCount = (double)item.SL,
-                                ItemUnitPrice = (decimal)item.DJ,
-                                ItemSpecification = (string)item.DW
-                            };
-                            order.OrderItems.Add(orderItem);
-                            AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
+
+
+        //        var medicineResult = con.Query(medicineCommand).ToList();
+        //        foreach (var item in medicineResult)
+        //        {
+        //            //查找treatments中是否已存在同样的诊疗活动
+        //            if (treatments.Any(p=>p.TreatmentId==(Int64)item.ZLHDID+""))
+        //            {
+        //                var treatment = treatments.FirstOrDefault(p => p.TreatmentId == (Int64)item.ZLHDID + "");
+        //                //判断是否已经存在药品项目
+        //                if(treatment.Orders.Any(o=>o.OrderType==OrderType.Medicine))
+        //                {
+        //                    var order = treatment.Orders.FirstOrDefault(o => o.OrderType == OrderType.Medicine);
+        //                    var orderItem = new OrderItem
+        //                    {
+        //                        ItemId = (Int64)item.YZID + "",
+        //                        ItemGroupNO = (Int32)item.ZH + "",
+        //                        ItemName = (String)item.MC,
+        //                        ItemCount = (double)item.SL,
+        //                        ItemUnitPrice = (decimal)item.DJ,
+        //                        ItemSpecification = (string)item.DW
+        //                    };
+        //                    order.OrderItems.Add(orderItem);
+        //                    AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
                             
-                        }
-                        else
-                        {
-                            var order = new Order
-                            {
-                                BookingTime = (DateTime)item.YZSJ,
-                                ExpireTime = default(DateTime),
-                                HospitalOrderId = (Int64)item.ZLHDID + "",
-                                OrderState = OrderState.Nonpayment,
-                                OrderType = OrderType.Medicine,
-                                OrderItems = new List<OrderItem> {
-                                     new OrderItem {
-                                         ItemId= (Int64)item.YZID+"",
-                                         ItemGroupNO=(Int32)item.ZH+"",
-                                         ItemName=(String)item.MC,
-                                         ItemCount=(double)item.SL,
-                                         ItemUnitPrice=(decimal)item.DJ,
-                                         ItemSpecification = (string)item.DW
-                                     }
-                                 },
-                                OrderDescribe = "",
-                                Remark = ""
-                            };
-                            AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
-                            treatment.Orders.Add(order);
+        //                }
+        //                else
+        //                {
+        //                    var order = new Order
+        //                    {
+        //                        BookingTime = (DateTime)item.YZSJ,
+        //                        ExpireTime = default(DateTime),
+        //                        HospitalOrderId = (Int64)item.ZLHDID + "",
+        //                        OrderState = OrderState.Nonpayment,
+        //                        OrderType = OrderType.Medicine,
+        //                        OrderItems = new List<OrderItem> {
+        //                             new OrderItem {
+        //                                 ItemId= (Int64)item.YZID+"",
+        //                                 ItemGroupNO=(Int32)item.ZH+"",
+        //                                 ItemName=(String)item.MC,
+        //                                 ItemCount=(double)item.SL,
+        //                                 ItemUnitPrice=(decimal)item.DJ,
+        //                                 ItemSpecification = (string)item.DW
+        //                             }
+        //                         },
+        //                        OrderDescribe = "",
+        //                        Remark = ""
+        //                    };
+        //                    AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
+        //                    treatment.Orders.Add(order);
                             
-                        }
+        //                }
                         
-                    }
-                    else //不存在则要添加新的treatment
-                    {
-                        var order = new Order
-                        {
-                            BookingTime = (DateTime)item.YZSJ,
-                            ExpireTime = default(DateTime),
-                            HospitalOrderId = (Int64)item.ZLHDID + "",
-                            OrderState = OrderState.Nonpayment,
-                            OrderType = OrderType.Medicine,
-                            OrderItems = new List<OrderItem> {
-                                         new OrderItem {
-                                             ItemId= (Int64)item.YZID+"",
-                                             ItemGroupNO=(Int32)item.ZH+"",
-                                             ItemName=(String)item.MC,
-                                             ItemCount=(double)item.SL,
-                                             ItemUnitPrice=(decimal)item.DJ,
-                                             ItemSpecification = (string)item.DW
-                                         }
-                                     },
-                            OrderDescribe = "",
-                            Remark = ""
-                        };
-                        AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
-                        var treatment = new Treatment {
-                            PatientId = (String)item.BRBH,
-                            TreatmentId = (Int64)item.ZLHDID + "",
-                            Orders = new List<Order> {
-                                order
-                            }
-                        };
+        //            }
+        //            else //不存在则要添加新的treatment
+        //            {
+        //                var order = new Order
+        //                {
+        //                    BookingTime = (DateTime)item.YZSJ,
+        //                    ExpireTime = default(DateTime),
+        //                    HospitalOrderId = (Int64)item.ZLHDID + "",
+        //                    OrderState = OrderState.Nonpayment,
+        //                    OrderType = OrderType.Medicine,
+        //                    OrderItems = new List<OrderItem> {
+        //                                 new OrderItem {
+        //                                     ItemId= (Int64)item.YZID+"",
+        //                                     ItemGroupNO=(Int32)item.ZH+"",
+        //                                     ItemName=(String)item.MC,
+        //                                     ItemCount=(double)item.SL,
+        //                                     ItemUnitPrice=(decimal)item.DJ,
+        //                                     ItemSpecification = (string)item.DW
+        //                                 }
+        //                             },
+        //                    OrderDescribe = "",
+        //                    Remark = ""
+        //                };
+        //                AdditionMedicine(order, (Int64)item.YZID, (Int32)item.ZH, con);
+        //                var treatment = new Treatment {
+        //                    PatientId = (String)item.BRBH,
+        //                    TreatmentId = (Int64)item.ZLHDID + "",
+        //                    Orders = new List<Order> {
+        //                        order
+        //                    }
+        //                };
 
-                        //添加到treatments
-                        treatments.Add(treatment);
-                    }
-                }
+        //                //添加到treatments
+        //                treatments.Add(treatment);
+        //            }
+        //        }
 
-                #endregion
+        //        #endregion
 
-                #region 检查 治疗
-                CureAndInspection(treatments, patientIds, con);
+        //        #region 检查 治疗
+        //        CureAndInspection(treatments, patientIds, con);
 
-                #endregion
+        //        #endregion
 
-                #region 检验
+        //        //#region 检验
 
-                #endregion
-
-
-
-            }
+        //        //#endregion
 
 
+
+        //    }
 
 
 
 
-            TreatmentAuxiliaryData(treatments);
-            return treatments;
-        }
+
+
+        //    TreatmentAuxiliaryData(treatments);
+        //    return treatments;
+        //}
 
 
   
@@ -430,19 +435,193 @@ namespace eHPS.WYServiceImplement
             }
         }
 
+
+        #endregion
+
+
+
+
+        /// <summary>
+        /// 主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
+        /// 则本方法实现需主动轮询，未支付的收费项目
+        /// </summary>
+        /// <param name="patientIds"></param>
+        /// <returns></returns>
+        public List<PatientConsumption> AwareOrderBooked(List<string> patientIds)
+        {
+
+            var patientConsumptions = new List<PatientConsumption>();
+
+            var paramter = String.Join("$$", patientIds);
+
+            //从webservice中返回 包含格式化 具体项目的字符串
+
+
+            HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient();
+
+            String code = "getmzyz";
+            String content = paramter;
+            String serviceReturn = "";
+
+            var serviceReturnCode = client.f_get_data(code,ref content,ref serviceReturn);
+
+            if (serviceReturnCode == 0)
+            {
+                var items = CommonService.RetriveFromString(content);
+                //按患者标识分组归类
+                foreach (var item in items)
+                {
+                    double itemCount = 0.0;
+                    decimal itemUintPrice = 0.0M;
+                    DateTime orderTime = default(DateTime);
+
+                    Double.TryParse((String)item.ItemCount, out itemCount);
+                    Decimal.TryParse((String)item.ItemUnitPrice, out itemUintPrice);
+                    DateTime.TryParse((String)item.OrderTime, out orderTime);
+
+                    if (patientConsumptions.Any(p => p.PatientId == (String)item.PatientId)) //已经存在当前患者的消费项目信息
+                    {
+                        var patientConsumption = patientConsumptions.FirstOrDefault(p => p.PatientId == (String)item.PatientId);
+                        //检查是否存相同的诊疗活动标识
+                        if (patientConsumption.TreatmentActivityInfos.Any(t => t.TreatmentId == (String)item.TreatmentId))
+                        {
+                            //在同样的诊疗活动下面则把项目添加到相关的诊疗活动下面
+                            var treatmentActivityInfo = patientConsumption.TreatmentActivityInfos.FirstOrDefault(t => t.TreatmentId == (String)item.TreatmentId);
+
+                            treatmentActivityInfo.Orders.Add(
+                                   new OrderItem
+                                   {
+                                       ItemId = (String)item.ItemId,
+                                       ItemCount = itemCount,
+                                       ItemGroupNO = item.ItemGroupNO == null ? "" : (String)item.ItemGroupNO,
+                                       ItemName = (String)item.ItemName,
+                                       ItemSpecification = (String)item.ItemSpecification,
+                                       ItemType = (String)item.ItemType,
+                                       ItemUnitPrice = itemUintPrice,
+                                       OrderTime = orderTime
+                                   }
+                                );
+
+                        }
+                        else //不存在相同的诊疗活动标识
+                        {
+                            patientConsumption.TreatmentActivityInfos.Add(new TreatmentActivityInfo {
+                                TreatmentId = (String)item.TreatmentId,
+                                Orders = new List<OrderItem> {
+                                  new OrderItem {
+                                            ItemId=(String)item.ItemId,
+                                            ItemCount=itemCount,
+                                            ItemGroupNO=item.ItemGroupNO==null?"":(String)item.ItemGroupNO,
+                                            ItemName=(String)item.ItemName,
+                                            ItemSpecification=(String)item.ItemSpecification,
+                                            ItemType=(String)item.ItemType,
+                                            ItemUnitPrice=itemUintPrice,
+                                            OrderTime=orderTime
+                                       }
+                             }
+                            });
+                        }
+                    }
+                    else
+                    {
+                        var patientConsumption = new PatientConsumption {
+                            PatientId = (String)item.PatientId,
+                            TreatmentActivityInfos = new List<TreatmentActivityInfo> {
+                            new TreatmentActivityInfo
+                            {
+                                 TreatmentId=(String)item.TreatmentId,
+                                  Orders= new List<OrderItem> {
+                                       new OrderItem {
+                                            ItemId=(String)item.ItemId,
+                                            ItemCount=itemCount,
+                                            ItemGroupNO=item.ItemGroupNO==null?"":(String)item.ItemGroupNO,
+                                            ItemName =(String)item.ItemName,
+                                            ItemSpecification=(String)item.ItemSpecification,
+                                            ItemType=(String)item.ItemType,
+                                            ItemUnitPrice=itemUintPrice,
+                                            OrderTime=orderTime
+                                       }
+                                  }
+                            }
+                        }
+                        };
+                        patientConsumptions.Add(patientConsumption);
+                    }
+                }
+
+                TreatmentAuxiliaryData(patientConsumptions);
+            }
+            return patientConsumptions;
+
+        }
+
+
+
+
+        /// <summary>
+        /// 根据诊疗活动标识以及患者标识补充以下数据
+        /// 科室信息、病人基本信息、医生基本信息、诊断信息
+        /// </summary>
+        /// <param name="treatments"></param>
+        private void TreatmentAuxiliaryData(List<PatientConsumption> patientConsumptions)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                //var treatmentIds = patientConsumptions.Select(p => p.TreatmentActivityInfos.Select(t => t.TreatmentId)).ToList();
+
+
+                var activityCommand = @"SELECT BRXM,JZZKID,JZYSYHID FROM YL_ZLHD WHERE ZLHDID=:ActiveId";
+                //获取患者诊断信息
+                var diagnoseCommand = @"SELECT ICD,LCZD  FROM YL_ZLZD WHERE ZLHDID=:ActiveId";
+
+                foreach (var patientConsumption in patientConsumptions)
+                {
+                    foreach (var treatment in patientConsumption.TreatmentActivityInfos)
+                    {
+                        var condition = new { ActiveId = treatment.TreatmentId };
+
+                        var treatmentResult = con.Query(activityCommand, condition).FirstOrDefault();
+                        treatment.DeptdId = (Int32)treatmentResult.JZZKID + "";
+                        treatment.DeptName = CommonService.GetDeptName((Int32)treatmentResult.JZZKID);
+                        treatment.DoctorId = (Int64)treatmentResult.JZYSYHID + "";
+                        treatment.DoctorName = basicService.GetDoctorById((Int64)treatmentResult.JZYSYHID + "").DoctorName;
+
+                        treatment.Diagnostics = new List<Diagnostics>();
+                        var diagnoseResult = con.Query(diagnoseCommand, condition);
+                        foreach (var diagnose in diagnoseResult)
+                        {
+                            treatment.Diagnostics.Add(new Diagnostics {
+                                 ICD= (String)diagnose.ICD,
+                                 DiagnosisName=(String)diagnose.LCZD
+
+                            });
+                        }
+
+
+                    }
+                }
+
+
+
+            }
+        }
+
+
+
+
         /// <summary>
         /// 支付患者的医嘱项目费用
-        /// 支付成功之后，往消息队列发送成功与否的消息
+        /// 支付成功之后，直接返回成功与否信息
         /// </summary>
-        /// <param name="hospitalOrderId">医院订单标识
-        /// 传递医嘱标识
+        /// <param name="activityId">
+        /// 当前支付的诊疗活动标识
         /// </param>
-        /// <param name="hospitalId">医院标识</param>
+        /// <param name="amount">总金额</param>
         /// <returns></returns>
-        public ResponseMessage<string> Pay(List<string> hospitalOrderId, string hospitalId)
+        public ResponseMessage<string> Pay(String activityId, string amount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            //MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
             return result;
         }
 
@@ -457,7 +636,7 @@ namespace eHPS.WYServiceImplement
         public ResponseMessage<string> PayRegistration(string hospitalId, string appointId)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            MessageQueueHelper<ResponseMessage<String>>.PushMessage("", result);
+            //MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
             return result;
         }
 

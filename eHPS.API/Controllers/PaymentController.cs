@@ -12,6 +12,7 @@
 // 版本号：  V1.0.0.0
 //===================================================================================
 
+using eHPS.API.Models;
 using eHPS.Contract;
 using eHPS.Contract.Model;
 using System;
@@ -57,13 +58,12 @@ namespace eHPS.API.Controllers
         /// 支付患者的医嘱项目费用
         /// 支付成功之后，往消息队列发送成功与否的消息
         /// </summary>
-        /// <param name="hospitalOrderId">医院订单标识</param>
-        /// <param name="hospitalId">医院标识</param>
+        /// <param name="payModel"></param>
         /// <returns></returns>
         [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>))]
-        public ResponseMessage<String> Pay(List<String> hospitalOrderId, String hospitalId)
+        public ResponseMessage<String> Pay(PayModelRequest payModel)
         {
-            return paymentService.Pay(hospitalOrderId, hospitalId);
+            return paymentService.Pay(payModel.ActivityId, payModel.Amount);
         }
 
 

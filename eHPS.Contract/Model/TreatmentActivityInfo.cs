@@ -38,7 +38,16 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 本次诊疗活动所有收费项目的金额
         /// </summary>
-        public Decimal Amount { get; set; }
+        public Decimal Amount { get {
+
+                decimal amount = 0;
+                foreach (var item in Orders)
+                {
+                    amount += item.ItemUnitPrice * Convert.ToDecimal(item.ItemCount);
+                }
+                return amount;
+
+            } }
 
         /// <summary>
         /// 科室标识
