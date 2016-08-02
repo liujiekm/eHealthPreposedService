@@ -45,6 +45,7 @@ namespace eHPS.ImplementTest
         {
             paymentService = container.Resolve<IPayment>();
 
+            //, "0000003001775739", "0000003001779855"
             var result = paymentService.AwareOrderBooked(new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" });
 
             Assert.IsNotNull(result);

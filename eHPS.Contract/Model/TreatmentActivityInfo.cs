@@ -78,24 +78,20 @@ namespace eHPS.Contract.Model
         /// 主诉
         /// </summary>
         public String Complaint { get; set; }
-
-
-
+        
         /// <summary>
         /// 支付诊疗活动项目的过期时间
         /// </summary>
         public DateTime ExpirationTime { get; set; }
-
-
+        
         /// <summary>
         /// 患者诊断信息
         /// </summary>
         public List<Diagnostics> Diagnostics { get; set; }
-
-
+        
         /// <summary>
         /// 患者订单信息
         /// </summary>
         public List<OrderItem> Orders { get; set; }
     }
-}
+} 

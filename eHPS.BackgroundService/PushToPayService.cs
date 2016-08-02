@@ -32,6 +32,7 @@ using eHPS.MessageQueueContract;
 using eHPS.CrossCutting.Logging;
 using eHPS.CrossCutting.NetFramework.Logging;
 using Microsoft.Practices.Unity.Configuration;
+using System.Net.Http.Formatting;
 
 namespace eHPS.BackgroundService
 {
@@ -40,11 +41,11 @@ namespace eHPS.BackgroundService
 
         private IPayment paymentService;
 
-        private static readonly string  baseUrl = ConfigurationManager.AppSettings["baseUrl"];
-        private static readonly string  interval = ConfigurationManager.AppSettings["interval"];
+        private static readonly string  baseUrl = ConfigurationManager.AppSettings["BaseUrl"];
+        private static readonly string  interval = ConfigurationManager.AppSettings["Interval"];
 
-        private static readonly string appid = ConfigurationManager.AppSettings["appId"];
-        private static readonly string appIdSecret = ConfigurationManager.AppSettings["appIdSecret"];
+        private static readonly string appid = ConfigurationManager.AppSettings["AppID"];
+        private static readonly string appIdSecret = ConfigurationManager.AppSettings["AppIDSecret"];
 
 
         public PushToPayService()
@@ -82,13 +83,44 @@ namespace eHPS.BackgroundService
         /// <param name="args"></param>
         public void OnPush(object sender, System.Timers.ElapsedEventArgs args)
         {
-
-
-
             LoggerFactory.CreateLog().Info("开始推送用户待收费项目");
             var patientIds =RequestPatientIds();
+
+            var patientIdList = new List<String>();
+            try
+            {
+                //patientIdList = patientIds.Result;
+                patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
+            }
+            catch (Exception ex)
+            {
+                LoggerFactory.CreateLog().Error(String.Format(
+
+                  "获取用户绑定卡号信息服务{0} 抛出异常 {1}\r\n堆栈信息：{2}", "RequestPatientIds().Result",
+                  ex.Message,
+                  ex.StackTrace), ex);
+                throw;
+            }
             
-            var patientConsumption = paymentService.AwareOrderBooked(patientIds.Result);
+
+
+            LoggerFactory.CreateLog().Info("获得用户平台绑定卡号信息", patientIdList);
+
+            var patientConsumption = new List<PatientConsumption>();
+            try
+            {
+                patientConsumption = paymentService.AwareOrderBooked(patientIdList);
+            }
+            catch (Exception ex)
+            {
+                LoggerFactory.CreateLog().Error(String.Format(
+
+                  "获取患者待支付项目服务 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "paymentService.AwareOrderBooked",
+                  ex.Message,
+                  ex.StackTrace), ex);
+                throw;
+            }
+            
 
             var resultCode = 0;
             try
@@ -102,7 +134,7 @@ namespace eHPS.BackgroundService
             {
                 LoggerFactory.CreateLog().Error(String.Format(
 
-                  "方法 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "MessageQueueHelper.PushMessage<List<PatientConsumption>>",
+                  "推送患者待支付项目到RabbitMQ队列 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "MessageQueueHelper.PushMessage<List<PatientConsumption>>",
                   ex.Message,
                   ex.StackTrace), ex);
 
@@ -117,19 +149,21 @@ namespace eHPS.BackgroundService
         private async System.Threading.Tasks.Task<List<String>> RequestPatientIds()
         {
             var requestUri = new Uri(baseUrl);
-            var patientIds = new List<String>();
+            var patientIds =new  PlatformServiceResponse<List<String>>();
             using (var client = new HttpClient())
             {
                 client.BaseAddress = requestUri;
                 client.DefaultRequestHeaders.Accept.Clear();
+                
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = await client.GetAsync("api/User/GetHospitalBindingCard/"+appid);
+                
+                var response = await client.GetAsync("api/User/GetHospitalBindingCard/" + appid);
                 if (response.IsSuccessStatusCode)
                 {
-                    patientIds = await response.Content.ReadAsAsync<List<String>>();
+                    patientIds = await response.Content.ReadAsAsync<PlatformServiceResponse<List<String>>>(new List<MediaTypeFormatter> { new JilFormatter() });
                 }
             }
-            return patientIds;
+            return patientIds.Data;
         }
 
 

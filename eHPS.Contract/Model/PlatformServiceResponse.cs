@@ -1,14 +1,14 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 推送服务推送的用户待支付项目
+// 平台服务调用返回类型
 //
 //
 //===================================================================================
 // .Net Framework 4.5
 // CLR版本： 4.0.30319.42000
 // 创建人：  Jay
-// 创建时间：2016/7/28 15:51:44
+// 创建时间：2016/8/2 11:00:54
 // 版本号：  V1.0.0.0
 //===================================================================================
 
@@ -17,48 +17,28 @@
 
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
-    /// <summary>
-    /// 推送服务推送的用户待支付项目
-    /// </summary>
-    public class PatientConsumption
+    public class PlatformServiceResponse<T> where T : class
     {
+        /// <summary>
+        /// 命令执行是否哟错误
+        /// 0 正确 1 有问题
+        /// </summary>
+        public Int32 HasError { get; set; }
 
         /// <summary>
-        /// 当前医院在当前平台的医院标识
+        /// 错误信息
         /// </summary>
-        public String AppId { get {
-                return ConfigurationManager.AppSettings["AppID"];
-
-            }
-        }
-
-
-
-        public List<TreatmentActivityInfo> TreatmentActivityInfos { get; set; }
-
-        
+        public string ErrorMessage { get; set; }
 
         /// <summary>
-        /// 患者标识
+        /// 消息体
         /// </summary>
-        public String PatientId { get; set; }
-
-
-        /// <summary>
-        /// 患者姓名
-        /// </summary>
-        public String PatientName { get; set; }
-
-        
-
-
-       
+        public T Data { get; set; }
     }
 }

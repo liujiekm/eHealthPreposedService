@@ -34,8 +34,8 @@ namespace eHPS.Common
     public class MessageQueueHelper
     {
 
-        private static readonly string  address= ConfigurationManager.AppSettings["address"];
-        private static readonly Int32 port = Int32.Parse(ConfigurationManager.AppSettings["port"]);
+        private static readonly string  address= ConfigurationManager.AppSettings["Address"];
+        private static readonly Int32 port = Int32.Parse(ConfigurationManager.AppSettings["Port"]);
         
 
 
@@ -52,7 +52,7 @@ namespace eHPS.Common
                 TProtocol protocol = new TCompactProtocol(transport);
                 CacheMQService.Calculator.Client client = new CacheMQService.Calculator.Client(protocol);
                 transport.Open();
-                var result = client.serverSendMsg("", JSON.Serialize<T>(message));
+                var result = client.serverSendMsg(queueName, JSON.Serialize<T>(message));
                 return result;
 
             }

@@ -452,6 +452,10 @@ namespace eHPS.WYServiceImplement
 
             var patientConsumptions = new List<PatientConsumption>();
 
+            if(patientIds==null)
+            {
+                return patientConsumptions;
+            }
             var paramter = String.Join("$$", patientIds);
 
             //从webservice中返回 包含格式化 具体项目的字符串
@@ -462,7 +466,7 @@ namespace eHPS.WYServiceImplement
             String code = "getmzyz";
             String content = paramter;
             String serviceReturn = "";
-
+            
             var serviceReturnCode = client.f_get_data(code,ref content,ref serviceReturn);
 
             if (serviceReturnCode == 0)
@@ -576,6 +580,8 @@ namespace eHPS.WYServiceImplement
 
                 foreach (var patientConsumption in patientConsumptions)
                 {
+                    //patientConsumption.AppId = "";
+                    patientConsumption.PatientName = basicService.GetPatientInfo(patientConsumption.PatientId).PatientName;
                     foreach (var treatment in patientConsumption.TreatmentActivityInfos)
                     {
                         var condition = new { ActiveId = treatment.TreatmentId };

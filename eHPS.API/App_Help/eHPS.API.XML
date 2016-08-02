@@ -605,13 +605,12 @@
             医嘱收费，挂号收费
             </summary>
         </member>
-        <member name="M:eHPS.API.Controllers.PaymentController.Pay(System.Collections.Generic.List{System.String},System.String)">
+        <member name="M:eHPS.API.Controllers.PaymentController.Pay(eHPS.API.Models.PayModelRequest)">
             <summary>
             支付患者的医嘱项目费用
             支付成功之后，往消息队列发送成功与否的消息
             </summary>
-            <param name="hospitalOrderId">医院订单标识</param>
-            <param name="hospitalId">医院标识</param>
+            <param name="payModel"></param>
             <returns></returns>
         </member>
         <member name="M:eHPS.API.Controllers.PaymentController.PayRegistration(System.String,System.String)">
@@ -760,6 +759,21 @@
         <member name="P:eHPS.API.Models.MakeADiagnosisRequest.Complaint">
             <summary>
             主诉内容
+            </summary>
+        </member>
+        <member name="T:eHPS.API.Models.PayModelRequest">
+            <summary>
+            支付服务的请求对象
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayModelRequest.ActivityId">
+            <summary>
+            诊疗活动标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayModelRequest.Amount">
+            <summary>
+            本次支付的总金额
             </summary>
         </member>
     </members>

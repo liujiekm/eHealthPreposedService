@@ -54,7 +54,7 @@ namespace eHPS.Contract.Model
 
                 if(AppointTime!=null)
                 {
-                    return AppointSequence + "$" + AppointTime.ToString();
+                    return AppointSequence + "$" + AppointTime.ToUniversalTime();
                 }
                 else
                 {

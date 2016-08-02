@@ -39,6 +39,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -71,6 +72,7 @@
     <Compile Include="Model\Organization.cs" />
     <Compile Include="Model\Patient.cs" />
     <Compile Include="Model\PatientConsumption.cs" />
+    <Compile Include="Model\PlatformServiceResponse.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
     <Compile Include="Model\Treatment.cs" />
     <Compile Include="Model\TreatmentActivityInfo.cs" />
