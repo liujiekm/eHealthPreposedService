@@ -40,10 +40,10 @@ namespace eHPS.Contract.Model
         /// </summary>
         public Decimal Amount { get {
 
-                decimal amount = 0;
+                decimal amount = 0.0M;
                 foreach (var item in Orders)
                 {
-                    amount += item.ItemUnitPrice * Convert.ToDecimal(item.ItemCount);
+                    amount += Math.Round(item.ItemUnitPrice * Convert.ToDecimal(item.ItemCount),2, MidpointRounding.AwayFromZero);
                 }
                 return amount;
 

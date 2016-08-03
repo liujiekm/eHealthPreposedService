@@ -63,7 +63,21 @@ namespace eHPS.API.Controllers
         [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>))]
         public ResponseMessage<String> Pay(PayModelRequest payModel)
         {
-            return paymentService.Pay(payModel.ActivityId, payModel.Amount);
+            return paymentService.Pay(payModel.TradingId,payModel.ActivityId, payModel.Amount,payModel.ActualAmount);
+        }
+
+
+
+
+        /// <summary>
+        /// 获取指定患者的医院账户可用金额（预存for温附一）
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <returns></returns>
+        [Route("GetPatientAvaliableAmount"), HttpPost, ResponseType(typeof(TradingAccount))]
+        public TradingAccount GetPatientAvaliableAmount([FromBody]string patientId)
+        {
+            return paymentService.GetPatientAvaliableAmount(patientId);
         }
 
 
@@ -71,13 +85,12 @@ namespace eHPS.API.Controllers
         /// 挂号收费
         /// 收费成功后，往消息队列发送成功与否的消息
         /// </summary>
-        /// <param name="hospitalId">医院标识</param>
-        /// <param name="appointId">预约标识</param>
+        /// <param name="request">院区标识以及预约标识</param>
         /// <returns></returns>
         [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>))]
-        public ResponseMessage<String> PayRegistration(String hospitalId, String appointId)
+        public ResponseMessage<String> PayRegistration([FromBody]PayRegistrationRequest request)
         {
-            return paymentService.PayRegistration(hospitalId, appointId);
+            return paymentService.PayRegistration(request.TradingId,request.AreaId, request.AppointId,request.Amount,request.ActualAmount);
         }
 
     }

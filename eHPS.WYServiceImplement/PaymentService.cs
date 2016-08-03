@@ -619,16 +619,45 @@ namespace eHPS.WYServiceImplement
         /// 支付患者的医嘱项目费用
         /// 支付成功之后，直接返回成功与否信息
         /// </summary>
+        /// <param name="trading">本次交易标识</param>
         /// <param name="activityId">
         /// 当前支付的诊疗活动标识
         /// </param>
         /// <param name="amount">总金额</param>
+        /// <param name="amount">实际交易金额</param>
         /// <returns></returns>
-        public ResponseMessage<string> Pay(String activityId, string amount)
+        public ResponseMessage<string> Pay(String tradingId ,String activityId, String amount,String actualAmount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
+            //if(String.IsNullOrEmpty(trading) ||String.IsNullOrEmpty(activityId)||String.IsNullOrEmpty(amount))
+            //{
+            //    result.HasError = 1;
+            //    result.ErrorMessage = "诊疗活动标识或者总金额不可为空";
+            //    return result;
+            //}
+            
+            //var requestMessage = String.Join("$$", trading, activityId, amount)
+            var requestMessage = String.Join("$$", activityId, amount);
+            var returnCode = "";
+            using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
+            {
+                 var resultCode = client.f_get_data("zljs", ref requestMessage, ref returnCode);
+
+                if(resultCode==0)
+                {
+                    result.HasError = 0;
+                    result.ErrorMessage = "支付成功";
+                    result.Body = requestMessage;
+                }
+                else
+                {
+                    result.HasError = 1;
+                    result.ErrorMessage = "支付失败 错误信息："+returnCode;
+                }
+            }
             //MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
             return result;
+
         }
 
 
@@ -636,10 +665,10 @@ namespace eHPS.WYServiceImplement
         /// 挂号收费
         /// 收费成功后，往消息队列发送成功与否的消息
         /// </summary>
-        /// <param name="hospitalId">医院标识</param>
+        /// <param name="hospitalId">院区标识</param>
         /// <param name="appointId">预约标识</param>
         /// <returns></returns>
-        public ResponseMessage<string> PayRegistration(string hospitalId, string appointId)
+        public ResponseMessage<string> PayRegistration(string tradingId,string hospitalId, string appointId,string amount,string actualAmount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
             //MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
@@ -647,5 +676,53 @@ namespace eHPS.WYServiceImplement
         }
 
 
+
+
+
+
+        /// <summary>
+        /// 获取指定患者的医院账户可用金额（预存for温附一）
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <returns></returns>
+        public TradingAccount GetPatientAvaliableAmount(string patientId)
+        {
+            var accountInfo = new TradingAccount();
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var accountAvaliableCommand = @"SELECT ZTBZ INTO :YC_S_YCZT FROM CW_YCZH WHERE BRBH =:PatientId";
+                var condition = new { PatientId=patientId };
+
+                var accountAvaliable = con.Query(accountAvaliableCommand, condition).FirstOrDefault();
+                if(accountAvaliable!=null&&(String)accountAvaliable.ZTBZ=="1")//预存账户可用
+                {
+                    var accountAmountCommand = @"SELECT A.YCDM,B.MZKY,B.TJKY,A.KYJE,A.KYJE - A.XFJE - A.MZDJJE  AS YE
+                                                                        FROM CW_YCJE A,CW_YCDM B  WHERE A.BRBH = :PatientId  AND  A.YCDM = B.YCDM 
+                                                                        AND A.YXSJ >= SYSDATE AND (A.KSSJ IS NULL OR A.KSSJ <= SYSDATE) 
+                                                                        AND B.ZTBZ = '1' AND A.ZTBZ = '1' AND A.KYJE - A.XFJE >= 0 AND B.MZKY='1' ORDER BY A.YXJ";
+
+                    var accountAmountResult = con.Query(accountAmountCommand,condition).ToList();
+                    decimal amount = 0.0M;
+                    foreach (var item in accountAmountResult)
+                    {
+                        amount += (decimal)item.YE;
+                    }
+
+                    accountInfo.Avaliable = true;
+                    accountInfo.PatientId = patientId;
+                    accountInfo.Amount = amount;
+                    
+                }
+                else
+                {
+                    accountInfo.Avaliable = false;
+                    accountInfo.PatientId = patientId;
+                    
+                }
+                return accountInfo;
+
+
+            }
+        }
     }
 }

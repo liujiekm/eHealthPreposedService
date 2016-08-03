@@ -613,13 +613,19 @@
             <param name="payModel"></param>
             <returns></returns>
         </member>
-        <member name="M:eHPS.API.Controllers.PaymentController.PayRegistration(System.String,System.String)">
+        <member name="M:eHPS.API.Controllers.PaymentController.GetPatientAvaliableAmount(System.String)">
+            <summary>
+            获取指定患者的医院账户可用金额（预存for温附一）
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:eHPS.API.Controllers.PaymentController.PayRegistration(eHPS.API.Models.PayRegistrationRequest)">
             <summary>
             挂号收费
             收费成功后，往消息队列发送成功与否的消息
             </summary>
-            <param name="hospitalId">医院标识</param>
-            <param name="appointId">预约标识</param>
+            <param name="request">院区标识以及预约标识</param>
             <returns></returns>
         </member>
         <member name="F:eHPS.API.Filter.StandardAuthorizationFilterAttributeBase._issueChallenge">
@@ -766,6 +772,11 @@
             支付服务的请求对象
             </summary>
         </member>
+        <member name="P:eHPS.API.Models.PayModelRequest.TradingId">
+            <summary>
+            交易标识
+            </summary>
+        </member>
         <member name="P:eHPS.API.Models.PayModelRequest.ActivityId">
             <summary>
             诊疗活动标识
@@ -774,6 +785,41 @@
         <member name="P:eHPS.API.Models.PayModelRequest.Amount">
             <summary>
             本次支付的总金额
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayModelRequest.ActualAmount">
+            <summary>
+            本次支付的实际金额
+            </summary>
+        </member>
+        <member name="T:eHPS.API.Models.PayRegistrationRequest">
+            <summary>
+            挂号支付服务的请求对象
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.AreaId">
+            <summary>
+            院区标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.AppointId">
+            <summary>
+            预约标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.TradingId">
+            <summary>
+            交易标识
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.Amount">
+            <summary>
+            交易金额
+            </summary>
+        </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.ActualAmount">
+            <summary>
+            实际交易金额
             </summary>
         </member>
     </members>

@@ -89,7 +89,11 @@ namespace eHPS.BackgroundService
             var patientIdList = new List<String>();
             try
             {
-                //patientIdList = patientIds.Result;
+                if(patientIds.IsCompleted)
+                {
+                    patientIdList = patientIds.Result;
+                }
+
                 patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
             }
             catch (Exception ex)
@@ -106,10 +110,10 @@ namespace eHPS.BackgroundService
 
             LoggerFactory.CreateLog().Info("获得用户平台绑定卡号信息", patientIdList);
 
-            var patientConsumption = new List<PatientConsumption>();
+            var patientConsumptions = new List<PatientConsumption>();
             try
             {
-                patientConsumption = paymentService.AwareOrderBooked(patientIdList);
+                patientConsumptions = paymentService.AwareOrderBooked(patientIdList);
             }
             catch (Exception ex)
             {
@@ -125,9 +129,15 @@ namespace eHPS.BackgroundService
             var resultCode = 0;
             try
             {
-                resultCode = MessageQueueHelper.PushMessage<List<PatientConsumption>>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
 
-                LoggerFactory.CreateLog().Info("推送"+(resultCode==0?"失败":"成功"),patientIds.Result);
+                //按患者来推送收费项目
+                foreach (var patientConsumption in patientConsumptions)
+                {
+                    resultCode = MessageQueueHelper.PushMessage<PatientConsumption>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
+                    LoggerFactory.CreateLog().Info("推送患者: "+patientConsumption.PatientName+"待支付项目" + (resultCode == 0 ? "失败" : "成功"));
+                }
+
+                
 
             }
             catch (Exception ex)

@@ -1,7 +1,7 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 支付服务的请求对象
+// 挂号支付服务的请求对象
 // 
 //
 //===================================================================================
@@ -19,33 +19,37 @@ using System.Web;
 
 namespace eHPS.API.Models
 {
-
     /// <summary>
-    /// 支付服务的请求对象
+    /// 挂号支付服务的请求对象
     /// </summary>
-    public class PayModelRequest
+    public class PayRegistrationRequest
     {
 
+        /// <summary>
+        /// 院区标识
+        /// </summary>
+
+        public String AreaId { get; set; }
+
+        /// <summary>
+        /// 预约标识
+        /// </summary>
+        public String AppointId { get; set; }
 
         /// <summary>
         /// 交易标识
         /// </summary>
+
         public String TradingId { get; set; }
 
 
-
         /// <summary>
-        /// 诊疗活动标识
-        /// </summary>
-        public String ActivityId { get; set; }
-
-        /// <summary>
-        /// 本次支付的总金额
+        /// 交易金额
         /// </summary>
         public String Amount { get; set; }
 
         /// <summary>
-        /// 本次支付的实际金额
+        /// 实际交易金额
         /// </summary>
         public String ActualAmount { get; set; }
     }

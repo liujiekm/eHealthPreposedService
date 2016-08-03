@@ -74,6 +74,7 @@
     <Compile Include="Model\PatientConsumption.cs" />
     <Compile Include="Model\PlatformServiceResponse.cs" />
     <Compile Include="Model\ResponseMessage.cs" />
+    <Compile Include="Model\TradingAccount.cs" />
     <Compile Include="Model\Treatment.cs" />
     <Compile Include="Model\TreatmentActivityInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

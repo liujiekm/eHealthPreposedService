@@ -46,9 +46,26 @@ namespace eHPS.ImplementTest
             paymentService = container.Resolve<IPayment>();
 
             //, "0000003001775739", "0000003001779855"
-            var result = paymentService.AwareOrderBooked(new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" });
+            var result = paymentService.AwareOrderBooked(new List<String> { "0000003001777361"});
 
             Assert.IsNotNull(result);
+        }
+
+
+        [TestMethod]
+        public void Verify_Pay_Functional()
+        {
+            paymentService = container.Resolve<IPayment>();
+
+            var activityId = "284472";
+            var amount = "242.18";
+
+            var actualAmount = "6";
+
+            var result = paymentService.Pay("", activityId, amount,actualAmount);
+
+            Assert.AreEqual(0, result.HasError);
+            Assert.IsNotNull(result.Body);
         }
     }
 }

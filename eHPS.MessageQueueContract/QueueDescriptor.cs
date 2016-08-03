@@ -33,7 +33,7 @@ namespace eHPS.MessageQueueContract
         /// <summary>
         /// 患者待收费项目队列描述
         /// </summary>
-        public static readonly Tuple<String,Type> AwareOrderBooked = new Tuple<String, Type>("AwareOrderBooked",typeof(List<PatientConsumption>));
+        public static readonly Tuple<String,Type> AwareOrderBooked = new Tuple<String, Type>("AwareOrderBooked",typeof(PatientConsumption));
 
 
     }

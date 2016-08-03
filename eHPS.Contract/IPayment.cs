@@ -40,12 +40,14 @@ namespace eHPS.Contract
         /// 支付患者的医嘱项目费用
         /// 支付成功之后，直接返回成功与否信息
         /// </summary>
+        /// <param name="tradingId">本次交易标识</param>
         /// <param name="activityId">
         /// 当前支付的诊疗活动标识
         /// </param>
-        /// <param name="amount">总金额</param>
+        /// <param name="amount">应付金额</param>
+        /// <param name="actualAmount">实际应付金额</param>
         /// <returns></returns>
-        ResponseMessage<String> Pay(String activityId,String amount);
+        ResponseMessage<String> Pay(String tradingId,String activityId,String amount, String actualAmount);//
 
 
         /// <summary>
@@ -54,8 +56,22 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="hospitalId">医院标识</param>
         /// <param name="appointId">预约标识</param>
+        /// <param name="tradingId">本次交易标识</param>
+   
+        /// <param name="amount">交易金额</param>
+        /// <param name="actualAmount">实际交易金额</param>
         /// <returns></returns>
-        ResponseMessage<String> PayRegistration(String hospitalId, String appointId);
+        ResponseMessage<String> PayRegistration(String tradingId,String hospitalId, String appointId,String amount,String actualAmount);
+
+
+
+        /// <summary>
+        /// 获取指定患者的医院账户可用金额（预存for温附一）
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <returns></returns>
+        TradingAccount GetPatientAvaliableAmount(String patientId);
+
 
 
     }

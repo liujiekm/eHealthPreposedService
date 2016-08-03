@@ -100,6 +100,19 @@ namespace eHPS.ImplementTest
         }
 
 
+        [TestMethod]
+        public void Test_MathRound()
+        {
+            var para1 = 45.014;
+
+            var roundPara1=Math.Round(para1, 2, MidpointRounding.AwayFromZero);
+
+            Assert.AreEqual(45.01, roundPara1);
+        }
+
+
+
+
 
 
         [TestMethod]
