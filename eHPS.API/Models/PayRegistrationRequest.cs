@@ -25,11 +25,7 @@ namespace eHPS.API.Models
     public class PayRegistrationRequest
     {
 
-        /// <summary>
-        /// 院区标识
-        /// </summary>
 
-        public String AreaId { get; set; }
 
         /// <summary>
         /// 预约标识
@@ -43,14 +39,5 @@ namespace eHPS.API.Models
         public String TradingId { get; set; }
 
 
-        /// <summary>
-        /// 交易金额
-        /// </summary>
-        public String Amount { get; set; }
-
-        /// <summary>
-        /// 实际交易金额
-        /// </summary>
-        public String ActualAmount { get; set; }
     }
 }

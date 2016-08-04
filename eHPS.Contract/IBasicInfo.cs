@@ -86,7 +86,12 @@ namespace eHPS.Contract
         List<Patient> GetPatientInfoByMobile(string mobile);
 
 
-        
+        /// <summary>
+        /// 获取挂号费用
+        /// </summary>
+        /// <param name="diagnosisType">诊疗类型</param>
+        /// <param name="jobTitle">挂牌工种</param>
+        decimal GetRegisteredAmount(string diagnosisTypeId, string jobTitleId);
 
     }
 }

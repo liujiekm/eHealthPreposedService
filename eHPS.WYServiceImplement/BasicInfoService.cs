@@ -191,6 +191,7 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public Patient GetPatientInfo(string patientId)
         {
+
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 var command = @"SELECT BRBH,DWDM,KNSJ,BRXM,BRXB,GJDM,HYZK,ZYDM,JGDM,
@@ -216,7 +217,7 @@ namespace eHPS.WYServiceImplement
                 }
                 else
                 {
-                    return default(Patient);
+                    return new Patient();
                 }
 
            
@@ -224,7 +225,32 @@ namespace eHPS.WYServiceImplement
         }
 
 
+        /// <summary>
+        /// 获取挂号费用
+        /// </summary>
+        /// <param name="diagnosisType">诊疗类型</param>
+        /// <param name="jobTitle">挂牌工种</param>
+        public  decimal GetRegisteredAmount(string diagnosisTypeId, string jobTitleId)
+        {
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var command = @"select zllx,gzdm,xmid,xmje from cw_zllxghxm";
+                //var result = new Tuple<String,String,Int32,decimal>()
+                var result = con.Query(command).ToList();
 
+                var amount = default(decimal);
+                foreach (var item in result)
+                {
+                    if ((string)item.ZLLX == diagnosisTypeId && (string)item.GZDM == jobTitleId)
+                    {
+                        amount += (decimal)item.XMJE;
+                    }
+                }
+
+                return amount;
+
+            }
+        }
 
 
         /// <summary>

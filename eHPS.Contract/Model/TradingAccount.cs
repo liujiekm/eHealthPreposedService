@@ -42,6 +42,9 @@ namespace eHPS.Contract.Model
         public String PatientId
         { get; set; }
 
+
+        public String PatientName { get; set; }
+
         /// <summary>
         /// 当前账号可用余额
         /// </summary>

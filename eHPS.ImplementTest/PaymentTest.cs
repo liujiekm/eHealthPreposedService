@@ -53,16 +53,31 @@ namespace eHPS.ImplementTest
 
 
         [TestMethod]
-        public void Verify_Pay_Functional()
+        public void Verify_GetPatientAvaliableAmount_Functional()
         {
             paymentService = container.Resolve<IPayment>();
 
-            var activityId = "284472";
-            var amount = "242.18";
+            var patientId = "0000003001777361";
+            var result = paymentService.GetPatientAvaliableAmount(patientId);
 
-            var actualAmount = "6";
+            Assert.IsNotNull(result.Amount);
+        }
 
-            var result = paymentService.Pay("", activityId, amount,actualAmount);
+
+
+
+
+        [TestMethod]
+        public void Verify_Pay_Functional()
+        {
+            paymentService = container.Resolve<IPayment>(); ;
+
+            var activityId = "284492";
+            var amount = "703.56";
+
+            var actualAmount = "100";
+
+            var result = paymentService.Pay("111", activityId, amount,actualAmount);
 
             Assert.AreEqual(0, result.HasError);
             Assert.IsNotNull(result.Body);

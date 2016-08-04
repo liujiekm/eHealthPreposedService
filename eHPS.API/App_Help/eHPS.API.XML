@@ -605,14 +605,7 @@
             医嘱收费，挂号收费
             </summary>
         </member>
-        <member name="M:eHPS.API.Controllers.PaymentController.Pay(eHPS.API.Models.PayModelRequest)">
-            <summary>
-            支付患者的医嘱项目费用
-            支付成功之后，往消息队列发送成功与否的消息
-            </summary>
-            <param name="payModel"></param>
-            <returns></returns>
-        </member>
+        <!-- Badly formed XML comment ignored for member "M:eHPS.API.Controllers.PaymentController.Pay(eHPS.API.Models.PayModelRequest)" -->
         <member name="M:eHPS.API.Controllers.PaymentController.GetPatientAvaliableAmount(System.String)">
             <summary>
             获取指定患者的医院账户可用金额（预存for温附一）
@@ -623,10 +616,13 @@
         <member name="M:eHPS.API.Controllers.PaymentController.PayRegistration(eHPS.API.Models.PayRegistrationRequest)">
             <summary>
             挂号收费
-            收费成功后，往消息队列发送成功与否的消息
             </summary>
             <param name="request">院区标识以及预约标识</param>
-            <returns></returns>
+            <returns>
+            HasError :0 充值成功
+            HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
+            HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
+            </returns>
         </member>
         <member name="F:eHPS.API.Filter.StandardAuthorizationFilterAttributeBase._issueChallenge">
             <summary>
@@ -797,11 +793,6 @@
             挂号支付服务的请求对象
             </summary>
         </member>
-        <member name="P:eHPS.API.Models.PayRegistrationRequest.AreaId">
-            <summary>
-            院区标识
-            </summary>
-        </member>
         <member name="P:eHPS.API.Models.PayRegistrationRequest.AppointId">
             <summary>
             预约标识
@@ -810,16 +801,6 @@
         <member name="P:eHPS.API.Models.PayRegistrationRequest.TradingId">
             <summary>
             交易标识
-            </summary>
-        </member>
-        <member name="P:eHPS.API.Models.PayRegistrationRequest.Amount">
-            <summary>
-            交易金额
-            </summary>
-        </member>
-        <member name="P:eHPS.API.Models.PayRegistrationRequest.ActualAmount">
-            <summary>
-            实际交易金额
             </summary>
         </member>
     </members>

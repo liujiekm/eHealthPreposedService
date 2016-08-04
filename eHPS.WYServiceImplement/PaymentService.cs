@@ -625,19 +625,24 @@ namespace eHPS.WYServiceImplement
         /// </param>
         /// <param name="amount">总金额</param>
         /// <param name="amount">实际交易金额</param>
-        /// <returns></returns>
+        /// <returns>
+        /// HasError：0 支付成功
+        /// HasError：1 交易标识、诊疗活动标识、总金额、实际交易金额不可为空
+        /// HasError：2 预存充值失败
+        /// HasError：3 充值成功，结算失败，余额存入医院预存账户
+        /// </returns>
         public ResponseMessage<string> Pay(String tradingId ,String activityId, String amount,String actualAmount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            //if(String.IsNullOrEmpty(trading) ||String.IsNullOrEmpty(activityId)||String.IsNullOrEmpty(amount))
-            //{
-            //    result.HasError = 1;
-            //    result.ErrorMessage = "诊疗活动标识或者总金额不可为空";
-            //    return result;
-            //}
-            
+            if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(activityId) || String.IsNullOrEmpty(amount)||String.IsNullOrEmpty(actualAmount))
+            {
+                result.HasError = 1;
+                result.ErrorMessage = "交易标识、诊疗活动标识、总金额、实际交易金额不可为空";
+                return result;
+            }
+
             //var requestMessage = String.Join("$$", trading, activityId, amount)
-            var requestMessage = String.Join("$$", activityId, amount);
+            var requestMessage = String.Join("$$", tradingId,activityId, amount, actualAmount);
             var returnCode = "";
             using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
             {
@@ -646,13 +651,22 @@ namespace eHPS.WYServiceImplement
                 if(resultCode==0)
                 {
                     result.HasError = 0;
-                    result.ErrorMessage = "支付成功";
+                    result.ErrorMessage = requestMessage;
+                    result.Body = requestMessage;
+                }
+                else if (resultCode==-100)
+                {
+                    //充值失败
+                    result.HasError = 2;
+                    result.ErrorMessage = "预存充值失败";
                     result.Body = requestMessage;
                 }
                 else
                 {
-                    result.HasError = 1;
-                    result.ErrorMessage = "支付失败 错误信息："+returnCode;
+                    //充值成功，结算失败，余额存入医院预存账户
+                    result.HasError = 3;
+                    result.ErrorMessage = "充值成功，结算失败，余额存入医院预存账户  错误信息：" + returnCode;
+                    result.Body = requestMessage;
                 }
             }
             //MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
@@ -690,7 +704,7 @@ namespace eHPS.WYServiceImplement
             var accountInfo = new TradingAccount();
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var accountAvaliableCommand = @"SELECT ZTBZ INTO :YC_S_YCZT FROM CW_YCZH WHERE BRBH =:PatientId";
+                var accountAvaliableCommand = @"SELECT ZTBZ  FROM CW_YCZH WHERE BRBH =:PatientId";
                 var condition = new { PatientId=patientId };
 
                 var accountAvaliable = con.Query(accountAvaliableCommand, condition).FirstOrDefault();
@@ -719,10 +733,89 @@ namespace eHPS.WYServiceImplement
                     accountInfo.PatientId = patientId;
                     
                 }
+
+                accountInfo.PatientName = basicService.GetPatientInfo(accountInfo.PatientId).PatientName;
                 return accountInfo;
 
 
             }
+        }
+
+
+
+        /// <summary>
+        /// 预存充值（温付一预存挂号其实就是充值呢）
+        /// </summary>
+        /// <param name="tradingId">交易标识</param>
+        /// <param name="appointId">预约标识</param>
+        /// <returns>
+        /// HasError :0 充值成功
+        /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
+        /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
+        /// </returns>
+        public ResponseMessage<string> Recharge(string tradingId, string appointId)
+        {
+            var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
+            if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(appointId))
+            {
+                result.HasError = 1;
+                result.ErrorMessage = "交易标识、预约不能为空";
+                return result;
+            }
+
+            //根据预约标识获取患者标识以及挂号金额
+            var command = @"SELECT BRBH ,ZLLX, GZDM FROM YYFZ_YYXX  WHERE FZYYID=" + Int64.Parse(appointId);
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var queryResult = con.Query(command).FirstOrDefault();
+                if(queryResult!=null)
+                {
+                    if (queryResult.BRBH!=null)//如果病人编号不为空
+                    {
+
+                        var patientId = (String)queryResult.BRBH;
+                        var diagnosisTypeId = (String)queryResult.ZLLX;
+                        var jobTitleId = (String)queryResult.GZDM;
+
+                        var amount = basicService.GetRegisteredAmount(diagnosisTypeId, jobTitleId);
+
+                        var requestMessage = String.Join("$$", patientId, tradingId, amount);
+                        var returnCode = "";
+                        using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
+                        {
+                            var resultCode = client.f_get_data("yccz", ref requestMessage, ref returnCode);
+
+                            if (resultCode == 0)
+                            {
+                                result.HasError = 0;
+                                result.ErrorMessage = "充值成功";
+                                result.Body = "充值成功";
+                            }
+                            else
+                            {
+                                //挂号充值失败
+                                result.HasError = 2;
+                                result.ErrorMessage = returnCode;
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        result.HasError = 1;
+                        result.ErrorMessage = "患者未用就诊卡预约，无法挂号";
+                    }
+                    return result;
+                }
+                else
+                {
+                    result.HasError = 1;
+                    result.ErrorMessage = "不存在预约记录";
+                    return result;
+                }
+                 
+            }
+
         }
     }
 }

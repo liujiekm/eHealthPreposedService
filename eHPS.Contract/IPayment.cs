@@ -74,5 +74,14 @@ namespace eHPS.Contract
 
 
 
+        /// <summary>
+        /// 预存充值
+        /// </summary>
+        /// <param name="patientId">患者标识</param>
+        /// <param name="tradingId">交易标识</param>
+        /// <returns></returns>
+        ResponseMessage<String> Recharge(String patientId,String tradingId);
+
+
     }
 }

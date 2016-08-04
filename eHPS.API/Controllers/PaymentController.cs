@@ -56,12 +56,16 @@ namespace eHPS.API.Controllers
 
         /// <summary>
         /// 支付患者的医嘱项目费用
-        /// 支付成功之后，往消息队列发送成功与否的消息
         /// </summary>
         /// <param name="payModel"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// HasError：0 支付成功
+        /// HasError：1 交易标识、诊疗活动标识、总金额、实际交易金额不可为空
+        /// HasError：2 预存充值失败
+        /// HasError：3 充值成功，结算失败，余额存入医院预存账户
+        /// </returns>
         [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>))]
-        public ResponseMessage<String> Pay(PayModelRequest payModel)
+        public ResponseMessage<String> Pay([FromBody]PayModelRequest payModel)
         {
             return paymentService.Pay(payModel.TradingId,payModel.ActivityId, payModel.Amount,payModel.ActualAmount);
         }
@@ -81,17 +85,27 @@ namespace eHPS.API.Controllers
         }
 
 
+
+
+
         /// <summary>
         /// 挂号收费
-        /// 收费成功后，往消息队列发送成功与否的消息
         /// </summary>
         /// <param name="request">院区标识以及预约标识</param>
-        /// <returns></returns>
+        /// <returns>
+        /// HasError :0 充值成功
+        /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
+        /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
+        /// </returns>
         [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>))]
         public ResponseMessage<String> PayRegistration([FromBody]PayRegistrationRequest request)
         {
-            return paymentService.PayRegistration(request.TradingId,request.AreaId, request.AppointId,request.Amount,request.ActualAmount);
+            return paymentService.Recharge(request.TradingId,request.AppointId);
         }
+
+
+
+
 
     }
 }
