@@ -605,7 +605,18 @@
             医嘱收费，挂号收费
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:eHPS.API.Controllers.PaymentController.Pay(eHPS.API.Models.PayModelRequest)" -->
+        <member name="M:eHPS.API.Controllers.PaymentController.Pay(eHPS.API.Models.PayModelRequest)">
+            <summary>
+            支付患者的医嘱项目费用
+            </summary>
+            <param name="payModel"></param>
+            <returns>
+            HasError：0 支付成功
+            HasError：1 交易标识、诊疗活动标识、总金额、实际交易金额不可为空
+            HasError：2 预存充值失败
+            HasError：3 充值成功，结算失败，余额存入医院预存账户
+            </returns>
+        </member>
         <member name="M:eHPS.API.Controllers.PaymentController.GetPatientAvaliableAmount(System.String)">
             <summary>
             获取指定患者的医院账户可用金额（预存for温附一）

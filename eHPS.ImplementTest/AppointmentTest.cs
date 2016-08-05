@@ -66,7 +66,9 @@ namespace eHPS.ImplementTest
         {
             var appointmentService = container.Resolve<IAppointment>();
             var makeAnAppointment = new MakeAnAppointment {
-                 
+                 ArrangeId = "457542",
+                 ArrangeIndicate= "8$$2016/8/7 7:53:20",
+                 PatientId= "330382-0000107350"
 
             };
             var response = appointmentService.MakeAnAppointment(makeAnAppointment);
@@ -84,6 +86,17 @@ namespace eHPS.ImplementTest
             var result = appointmentService.GetAppointmentHistory(patientId,mobile);
 
             Assert.IsNotNull(result);
+        }
+
+
+
+        [TestMethod]
+        public void Veriry_AppointState_Convert_Between_Int()
+        {
+            Int32 i = 3;
+            var appointState = (AppointState)i;
+
+            Assert.AreEqual(AppointState.WaitingForCall, appointState);
         }
     }
 }

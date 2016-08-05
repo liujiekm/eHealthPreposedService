@@ -460,7 +460,6 @@ namespace eHPS.WYServiceImplement
 
             //从webservice中返回 包含格式化 具体项目的字符串
 
-
             HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient();
 
             String code = "getmzyz";
@@ -572,8 +571,6 @@ namespace eHPS.WYServiceImplement
             using (var con = DapperFactory.CrateOracleConnection())
             {
                 //var treatmentIds = patientConsumptions.Select(p => p.TreatmentActivityInfos.Select(t => t.TreatmentId)).ToList();
-
-
                 var activityCommand = @"SELECT BRXM,JZZKID,JZYSYHID FROM YL_ZLHD WHERE ZLHDID=:ActiveId";
                 //获取患者诊断信息
                 var diagnoseCommand = @"SELECT ICD,LCZD  FROM YL_ZLZD WHERE ZLHDID=:ActiveId";
@@ -606,9 +603,6 @@ namespace eHPS.WYServiceImplement
 
                     }
                 }
-
-
-
             }
         }
 

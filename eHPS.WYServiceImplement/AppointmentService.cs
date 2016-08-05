@@ -420,16 +420,54 @@ namespace eHPS.WYServiceImplement
         /// <param name="patientId">患者标识</param>
         /// <param name="arrangeId">排班标识</param>
         /// <returns></returns>
-        private bool VerifyAlreadyBookedInThisArrange(String patientId, String arrangeId)
+        private bool VerifyAlreadyBookedInThisArrange(String patientId, String arrangeId,BookHistory bookHistory)
         {
             using (var con = DapperFactory.CrateOracleConnection())
             {
-                var command = @"select count(brbh) yyxh from yyfz_yyxx where ztbz<>'9' and brbh=:PatientId and pbid=:ArrangeId";
-                var condition = new { PatientId = patientId, ArrangeId = arrangeId };
+                var command = @"SELECT FZYYID,YYXH,ZTBZ,YYSJ,XGSJ,YSYHID,SFZ,BRXM,LXDH,GZDM,ZKID,ZLLX
+                                            FROM YYFZ_YYXX WHERE ZTBZ<>'9' AND BRBH=:PatientId and pbid=:ArrangeId";
+                var condition = new { PatientId = patientId, ArrangeId = Int64.Parse(arrangeId) };
                 var result = con.Query(command, condition).FirstOrDefault();
 
-                if((Int32)result.YYXH>0)
+                if(result!=null)
                 {
+                    //返回预约信息
+
+                    //获取排班信息
+                    var arrangeInfo = GetArrangeInfo(arrangeId, con);
+                    var doctor = basicInfoService.GetDoctorById((Int64)arrangeInfo.YSYHID + "");
+
+                    //转换预约状态
+                    var appointState = (String)result.ZTBZ;
+                    var outAppointState = 0;
+                    AppointState enumAppointState = AppointState.Appointing;
+                    if(Int32.TryParse(appointState, out outAppointState))
+                    {
+                        enumAppointState = (AppointState)outAppointState;
+                    }
+
+                    bookHistory.AppointId = (Int64)result.FZYYID+"";
+                    bookHistory.AppointSequence = result.YYXH == null ? 0 : (Int32)result.YYXH;
+                    bookHistory.AppointState = enumAppointState;
+                    bookHistory.AppointTime = result.YYSJ == null ? default(DateTime) : (DateTime)result.YYSJ;
+                    bookHistory.ArrangeId = arrangeId;
+                    bookHistory.Attention = "";
+                    bookHistory.CreateTime = result.XGSJ == null ? default(DateTime) : (DateTime)result.XGSJ;
+                    bookHistory.DoctorId = (Int64)arrangeInfo.YSYHID + "";
+                    bookHistory.DoctorName = (String)arrangeInfo.YSXM;
+                    bookHistory.PatientId = patientId;
+                    bookHistory.PatientIdCard = result.SFZ==null?"":(String)result.SFZ;
+                    bookHistory.PatientName = result.BRXM == null ? "" : (String)result.BRXM;
+                    bookHistory.PatientMobile = result.LXDH == null ? "" : (String)result.LXDH;
+                    bookHistory.RegisteredAmount = arrangeInfo.XMJE == null ? 0 : (decimal)arrangeInfo.XMJE;
+                    bookHistory.Remark = "";
+                    bookHistory.DeptId = (Int64)arrangeInfo.ZKID + "";
+                    bookHistory.DeptName = basicInfoService.GetDeptName((Int64)arrangeInfo.ZKID + "");
+                    bookHistory.DoctorJobTitle = doctor.JobTitle;
+                    bookHistory.DiagnosisType = (string)arrangeInfo.ZLLX == "04" ? "2" : "1";
+                    bookHistory.DoctorSex = doctor.Sex;
+
+
                     return true;
                 }
                 else
@@ -504,39 +542,12 @@ namespace eHPS.WYServiceImplement
         public ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment)
         {
             var response = new ResponseMessage<BookHistory>();
-
-            //判断是否无卡预约
-            var noCard = false;
-            if(String.IsNullOrEmpty(appointment.PatientId))
-            {
-                noCard = true;
-            }
+            response.Body = new BookHistory();
 
             var appointTimeAndSequence = appointment.ArrangeIndicate.Split(new String[] { "$" }, StringSplitOptions.RemoveEmptyEntries);
-
             appointment.AppointSequence = appointTimeAndSequence[0] == null ? 0 : Int32.Parse(appointTimeAndSequence[0]);
-
             appointment.AppointTime = appointTimeAndSequence[1] == null ? default(DateTime) : DateTime.Parse(appointTimeAndSequence[1]);
 
-            //首先查询是否可预约
-            if (VerifyAppointCountExceed(appointment.PatientId,appointment.ArrangeId))
-            {
-                response.HasError = 1;
-                response.ErrorMessage = "一个半天限约两个号源";
-                return response;
-            }
-            if (VerifyAlreadyBookedInThisArrange(appointment.PatientId, appointment.ArrangeId))
-            {
-                response.HasError = 2;
-                response.ErrorMessage = "您在此排班已经有预约";
-                return response;
-            }
-            if (VerifyAlreadyBookedInThisTime(appointment.ArrangeId, appointment.AppointTime.Value))
-            {
-                response.HasError = 1;
-                response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
-                return response;
-            }
             if (VerifyArrangeFunctional(appointment.ArrangeId))
             {
                 response.HasError = 1;
@@ -544,7 +555,33 @@ namespace eHPS.WYServiceImplement
                 return response;
             }
 
+            if (VerifyAlreadyBookedInThisTime(appointment.ArrangeId, appointment.AppointTime.Value))
+            {
+                response.HasError = 1;
+                response.ErrorMessage = "该时间点已被其他人预约，请返回刷新";
 
+                if (!String.IsNullOrEmpty(appointment.PatientId)&& VerifyAlreadyBookedInThisArrange(appointment.PatientId, appointment.ArrangeId, response.Body))
+                {
+                    response.HasError = 2;
+                    response.ErrorMessage = "您在此排班已经有预约";
+                }
+
+                return response;
+            }
+
+            if (!String.IsNullOrEmpty(appointment.PatientId) && VerifyAppointCountExceed(appointment.PatientId, appointment.ArrangeId))
+            {
+                response.HasError = 1;
+                response.ErrorMessage = "一个半天限约两个号源";
+                return response;
+            }
+
+            //判断是否无卡预约
+            var noCard = false;
+            if(String.IsNullOrEmpty(appointment.PatientId))
+            {
+                noCard = true;
+            }
 
             var patient = basicInfoService.GetPatientInfo(appointment.PatientId);
 
