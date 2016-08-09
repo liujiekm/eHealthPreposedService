@@ -229,14 +229,34 @@ namespace eHPS.WYServiceImplement
         /// <summary>
         /// 在线诊疗
         /// </summary>
-        /// <param name="patientId">患者标识</param>
+        /// <param name="patientId">患者医院标识</param>
+        /// <param name="pId">患者在互联网医院平台的标识</param>
         /// <param name="doctorId">医生标识</param>
+        /// <param name="deptId">科室标识</param>
         /// <param name="complaint">患者主诉</param>
         /// <returns></returns>
-        public ResponseMessage<string> MakeADiagnosis(string patientId,string doctorId, string complaint)
+        public ResponseMessage<string> MakeADiagnosis(string patientId,string pId,string doctorId,string deptId, string complaint)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            MessageQueueHelper.PushMessage<ResponseMessage<String>>("", result);
+            using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
+            {
+                var requestMessage = String.Join("$$", patientId, pId, doctorId, deptId,complaint);
+                var returnCode = "";
+
+                var resultCode = client.f_get_data("zxzl", ref requestMessage, ref returnCode);
+                if(resultCode==0)
+                {
+                    result.HasError = 0;
+
+                }
+                else
+                {
+                    result.HasError = 1;
+                    result.ErrorMessage = returnCode;
+                }
+
+            }
+
             return result;
         }
     }

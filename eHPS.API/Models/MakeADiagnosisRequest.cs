@@ -33,9 +33,21 @@ namespace eHPS.API.Models
         /// </summary>
         public String DoctorId { get; set; }
 
+
+        /// <summary>
+        /// 科室标识
+        /// </summary>
+
+        public String DeptId { get; set; }
+
         /// <summary>
         /// 主诉内容
         /// </summary>
         public String Complaint { get; set; }
+
+        /// <summary>
+        /// 患者在互联网医院平台的标识
+        /// </summary>
+        public String PId { get; set; }
     }
 }

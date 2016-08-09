@@ -33,15 +33,19 @@ namespace eHPS.Contract
 
 
 
+
         /// <summary>
         /// 发起在线诊疗
         /// 操作挂号信息
         /// 挂号收费后置
         /// </summary>
-        /// <param name="patientId">患者标识</param>
+        /// <param name="patientId">医院内部患者标识</param>
+        /// <param name="pId">患者在互联网医院平台的标识</param>
+        /// <param name="doctorId">医生标识</param>
+        /// <param name="deptId">科室标识</param>
         /// <param name="complaint">患者主诉</param>
         /// <returns></returns>
-        ResponseMessage<string> MakeADiagnosis(String patientId,String doctorId, String complaint);
+        ResponseMessage<string> MakeADiagnosis(String patientId,String pId,String doctorId, String deptId,String complaint);
 
 
 

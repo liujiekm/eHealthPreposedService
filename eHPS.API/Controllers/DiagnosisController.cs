@@ -64,7 +64,7 @@ namespace eHPS.API.Controllers
         [Route("MakeADiagnosis"), HttpPost, ResponseType(typeof(ResponseMessage<string>))]
         public ResponseMessage<string> MakeADiagnosis([FromBody]MakeADiagnosisRequest request)
         {
-            return diagnosisService.MakeADiagnosis(request.PatientId, request.DoctorId,request.Complaint);
+            return diagnosisService.MakeADiagnosis(request.PatientId, request.PId,request.DoctorId,request.DeptId,request.Complaint);
         }
     }
 }
