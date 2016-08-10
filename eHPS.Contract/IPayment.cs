@@ -79,8 +79,9 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="patientId">患者标识</param>
         /// <param name="tradingId">交易标识</param>
+        /// <param name="amount">实际的交易金额</param>
         /// <returns></returns>
-        ResponseMessage<String> Recharge(String patientId,String tradingId);
+        ResponseMessage<String> Recharge(String patientId,String tradingId,decimal amount);
 
 
     }

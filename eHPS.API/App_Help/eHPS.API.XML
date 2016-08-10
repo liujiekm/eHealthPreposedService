@@ -824,5 +824,10 @@
             交易标识
             </summary>
         </member>
+        <member name="P:eHPS.API.Models.PayRegistrationRequest.Amount">
+            <summary>
+            实际的充值金额
+            </summary>
+        </member>
     </members>
 </doc>

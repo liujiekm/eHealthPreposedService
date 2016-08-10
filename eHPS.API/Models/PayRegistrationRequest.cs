@@ -38,6 +38,11 @@ namespace eHPS.API.Models
 
         public String TradingId { get; set; }
 
+        /// <summary>
+        /// 实际的充值金额
+        /// </summary>
+        public decimal Amount { get; set; }
+
 
     }
 }

@@ -84,7 +84,11 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 是否支持在线诊疗
         /// </summary>
-        public bool IfOnlineDiagnosis { get; set; }
+        public bool IfOnlineDiagnosis { get {
+
+                return true;
+            }
+        }
         /// <summary>
         /// 联系电话
         /// </summary>

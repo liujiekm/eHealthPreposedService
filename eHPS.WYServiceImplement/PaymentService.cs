@@ -742,12 +742,13 @@ namespace eHPS.WYServiceImplement
         /// </summary>
         /// <param name="tradingId">交易标识</param>
         /// <param name="appointId">预约标识</param>
+        /// <param name="amount">实际充值金额</param>
         /// <returns>
         /// HasError :0 充值成功
         /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
         /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
         /// </returns>
-        public ResponseMessage<string> Recharge(string tradingId, string appointId)
+        public ResponseMessage<string> Recharge(string tradingId, string appointId,decimal amount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
             if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(appointId))
@@ -771,7 +772,7 @@ namespace eHPS.WYServiceImplement
                         var diagnosisTypeId = (String)queryResult.ZLLX;
                         var jobTitleId = (String)queryResult.GZDM;
 
-                        var amount = basicService.GetRegisteredAmount(diagnosisTypeId, jobTitleId);
+                        //var amount = basicService.GetRegisteredAmount(diagnosisTypeId, jobTitleId);
 
                         var requestMessage = String.Join("$$", patientId, tradingId, amount);
                         var returnCode = "";

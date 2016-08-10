@@ -100,7 +100,7 @@ namespace eHPS.API.Controllers
         [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>))]
         public ResponseMessage<String> PayRegistration([FromBody]PayRegistrationRequest request)
         {
-            return paymentService.Recharge(request.TradingId,request.AppointId);
+            return paymentService.Recharge(request.TradingId,request.AppointId,request.Amount);
         }
 
 

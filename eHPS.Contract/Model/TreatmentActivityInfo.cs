@@ -36,10 +36,7 @@ namespace eHPS.Contract.Model
         /// 诊疗活动标识
         /// </summary>
         public String TreatmentId { get; set; }
-        /// <summary>
-        /// 创建时间
-        /// </summary>
-        public DateTime CreateTime { get; set; }
+
 
         /// <summary>
         /// 诊疗活动创建时间
