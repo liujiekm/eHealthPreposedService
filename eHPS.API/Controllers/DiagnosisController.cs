@@ -60,7 +60,10 @@ namespace eHPS.API.Controllers
         /// 挂号收费后置
         /// </summary>
         /// <param name="request">发起在线诊疗请求包装对象</param>
-        /// <returns></returns>
+        /// <returns>
+        /// HasError = 0 : 在线诊疗发起成功
+        /// HasError = 1 : 在线诊疗发起失败
+        /// </returns>
         [Route("MakeADiagnosis"), HttpPost, ResponseType(typeof(ResponseMessage<string>))]
         public ResponseMessage<string> MakeADiagnosis([FromBody]MakeADiagnosisRequest request)
         {

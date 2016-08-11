@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace eHPS.API.Models
 {
@@ -30,6 +31,7 @@ namespace eHPS.API.Models
         /// <summary>
         /// 交易标识
         /// </summary>
+        [Required(AllowEmptyStrings =false,ErrorMessage = "交易标识不允许为空")]
         public String TradingId { get; set; }
 
 
@@ -37,16 +39,19 @@ namespace eHPS.API.Models
         /// <summary>
         /// 诊疗活动标识
         /// </summary>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "诊疗活动标识不允许为空")]
         public String ActivityId { get; set; }
 
         /// <summary>
         /// 本次支付的总金额
         /// </summary>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "本次支付的总金额不允许为空")]
         public String Amount { get; set; }
 
         /// <summary>
         /// 本次支付的实际金额
         /// </summary>
+        [Required(AllowEmptyStrings = false, ErrorMessage = "本次支付的实际金额不允许为空")]
         public String ActualAmount { get; set; }
     }
 }

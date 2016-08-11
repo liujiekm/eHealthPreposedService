@@ -585,7 +585,10 @@
             挂号收费后置
             </summary>
             <param name="request">发起在线诊疗请求包装对象</param>
-            <returns></returns>
+            <returns>
+            HasError = 0 : 在线诊疗发起成功
+            HasError = 1 : 在线诊疗发起失败
+            </returns>
         </member>
         <member name="T:eHPS.API.Controllers.InspectionController">
             <summary>
@@ -827,6 +830,11 @@
         <member name="P:eHPS.API.Models.PayRegistrationRequest.Amount">
             <summary>
             实际的充值金额
+            </summary>
+        </member>
+        <member name="T:eHPS.API.ValidAttribute.ValidateModelAttribute">
+            <summary>
+            对API 请求的对象模型进行验证
             </summary>
         </member>
     </members>

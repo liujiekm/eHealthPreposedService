@@ -13,6 +13,7 @@
 //===================================================================================
 
 using eHPS.API.Models;
+using eHPS.API.ValidAttribute;
 using eHPS.Contract;
 using eHPS.Contract.Model;
 using System;
@@ -64,7 +65,7 @@ namespace eHPS.API.Controllers
         /// HasError：2 预存充值失败
         /// HasError：3 充值成功，结算失败，余额存入医院预存账户
         /// </returns>
-        [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>))]
+        [Route("Pay"),HttpPost, ResponseType(typeof(ResponseMessage<String>)), ValidateModel]
         public ResponseMessage<String> Pay([FromBody]PayModelRequest payModel)
         {
             return paymentService.Pay(payModel.TradingId,payModel.ActivityId, payModel.Amount,payModel.ActualAmount);
@@ -97,9 +98,10 @@ namespace eHPS.API.Controllers
         /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
         /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
         /// </returns>
-        [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>))]
-        public ResponseMessage<String> PayRegistration([FromBody]PayRegistrationRequest request)
+        [Route("PayRegistration"), HttpPost, ResponseType(typeof(ResponseMessage<String>)),ValidateModel]
+        public ResponseMessage<String> PayRegistration(PayRegistrationRequest request)
         {
+
             return paymentService.Recharge(request.TradingId,request.AppointId,request.Amount);
         }
 

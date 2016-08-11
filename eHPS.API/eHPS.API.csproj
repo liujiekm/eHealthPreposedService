@@ -303,6 +303,7 @@
     <Compile Include="Resolver\UnityResolver.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ValidAttribute\ValidateModelAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Help\eHPS.API.XML" />

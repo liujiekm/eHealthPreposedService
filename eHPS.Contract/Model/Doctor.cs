@@ -89,6 +89,27 @@ namespace eHPS.Contract.Model
                 return true;
             }
         }
+
+        /// <summary>
+        /// 是否可预约
+        /// </summary>
+        public bool IfAppointment { get
+            {
+
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// 是否可挂号
+        /// </summary>
+        public bool IfRegister {
+            get
+            {
+
+                return true;
+            }
+         }
         /// <summary>
         /// 联系电话
         /// </summary>

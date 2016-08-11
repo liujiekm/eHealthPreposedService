@@ -748,7 +748,7 @@ namespace eHPS.WYServiceImplement
         /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
         /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
         /// </returns>
-        public ResponseMessage<string> Recharge(string tradingId, string appointId,decimal amount)
+        public ResponseMessage<string> Recharge(string tradingId, string appointId,string amount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
             if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(appointId))

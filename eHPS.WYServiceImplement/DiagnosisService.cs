@@ -247,7 +247,7 @@ namespace eHPS.WYServiceImplement
                 if(resultCode==0)
                 {
                     result.HasError = 0;
-
+                    result.ErrorMessage = "诊疗发起成功";
                 }
                 else
                 {
