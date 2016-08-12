@@ -110,6 +110,19 @@ namespace eHPS.Contract.Model
                 return true;
             }
          }
+
+
+        /// <summary>
+        /// 在线诊疗金额
+        /// </summary>
+        public decimal OnlineTreatmentAmount { get {
+
+                return 50;
+            }
+        }
+
+
+
         /// <summary>
         /// 联系电话
         /// </summary>

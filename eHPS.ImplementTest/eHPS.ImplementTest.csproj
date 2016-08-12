@@ -104,12 +104,17 @@
     <Compile Include="DiagnosisTest.cs" />
     <Compile Include="AppointmentTest.cs" />
     <Compile Include="PaymentTest.cs" />
+    <Compile Include="CommonTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\eHPS.Common\eHPS.Common.csproj">
+      <Project>{ce4be0a7-5e4c-42fe-814c-7899cd060269}</Project>
+      <Name>eHPS.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\eHPS.Contract\eHPS.Contract.csproj">
       <Project>{9e359af3-a016-4472-b7a1-95a2a9a1ca5e}</Project>
       <Name>eHPS.Contract</Name>

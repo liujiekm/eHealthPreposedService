@@ -109,9 +109,17 @@ namespace eHPS.ImplementTest
 
             Assert.AreEqual(45.01, roundPara1);
         }
+        enum BindingProtocol
+        {
+            HTTP = 0,
+            HTTPS = 1
+        }
 
-
-
+        [TestMethod]
+        public void Display_Enum()
+        {
+            Assert.AreEqual("HTTP", BindingProtocol.HTTP.ToString());
+        }
 
 
 
