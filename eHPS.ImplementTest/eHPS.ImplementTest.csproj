@@ -81,6 +81,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <Choose>
@@ -126,6 +127,10 @@
     <ProjectReference Include="..\eHPS.CrossCutting\eHPS.CrossCutting.csproj">
       <Project>{fb293042-da3d-4686-8790-444cf57c3e08}</Project>
       <Name>eHPS.CrossCutting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\eHPS.SomeImplement\eHPS.SomeImplement.csproj">
+      <Project>{2b3f83ae-2bd1-473a-9221-b8c38eed687e}</Project>
+      <Name>eHPS.SomeImplement</Name>
     </ProjectReference>
     <ProjectReference Include="..\eHPS.WYServiceImplement\eHPS.WYServiceImplement.csproj">
       <Project>{de3e3252-9409-47de-9a58-d309fd25b9f1}</Project>

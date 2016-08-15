@@ -23,6 +23,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
+
+using eHPS.Contract;
+using System.Reflection;
+using Microsoft.Practices.Unity.InterceptionExtension;
+using eHPS.CrossCutting.NetFramework.ExceptionHandler;
+
 namespace eHPS.Common
 {
     /// <summary>
@@ -31,18 +39,136 @@ namespace eHPS.Common
     public class ConfigHelper
     {
 
+
+
         public static void GetPath()
         {
-            var url = Environment.CurrentDirectory;
+            
         }
 
-        private void Modify()
+        private void Modify(String configUrl)
         {
+            //获取当前安装工具的执行目录
+            //var url = Environment.CurrentDirectory;
+            var configuration = WebConfigurationManager.OpenWebConfiguration(configUrl);
+            if(configuration!=null)
+            {
+                var section = (ConnectionStringsSection)configuration.GetSection("connectionStrings");
+                section.ConnectionStrings["MyConnectionString"].ConnectionString = "Data Source=...";
+                configuration.Save();
+            }
+
+        }
+
+
+        /// <summary>
+        /// 验证具体实现类是否都实现了eHPS.Contract类库中的接口
+        /// </summary>
+        /// <returns></returns>
+        //public  Tuple<String,String,String,String,String> VerifyImplement(String implementAssemblyUrl)
+        //{
+
+        //    return false;
+        //}
+
+
+        public static  void ConfigUnityConfig(String configUrl,String implementAssemblyUrl)
+        {
+            Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+
+            //C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API
+            //var webconfigUrl = @"\eHPS.API\web.config";
+            //var webconfiguration = WebConfigurationManager.OpenWebConfiguration(webconfigUrl);
+            var container = GetContainer(configUrl, configuration);
+
+            //动态加载实现类库
+            Assembly assembly = Assembly.LoadFile(implementAssemblyUrl);
+            //检测实现类是否都实现了Contract
+
             
-            var configuration = WebConfigurationManager.OpenWebConfiguration("~");
-            var section = (ConnectionStringsSection)configuration.GetSection("connectionStrings");
-            section.ConnectionStrings["MyConnectionString"].ConnectionString = "Data Source=...";
-            configuration.Save();
+            var contractTypes = new List<Type> { typeof(IBasicInfo), typeof(IAppointment), typeof(IDiagnosis), typeof(IInspection), typeof(IPayment) };
+
+            var impCount = 0;
+            foreach (var contractType in contractTypes)
+            {
+                foreach (var impAssembly in assembly.GetExportedTypes())
+                {
+                    if (contractType.IsAssignableFrom(impAssembly))
+                    {
+                        impCount++;
+                        break;
+                    }
+                }
+                        
+            }
+            if(contractTypes.Count==impCount)//实现类库都实现了定义的接口库eHPS.Contract
+            {
+
+            }
+
+
+            var implementTypes = assembly.GetExportedTypes();
+            var basicImplement = implementTypes.Where(t => typeof(IBasicInfo).IsAssignableFrom(t)).FirstOrDefault();
+
+           
+            var section = (UnityConfigurationSection)configuration.GetSection("unity");
+
+
+            #region 移除已实现的服务，增加自己实现的服务类库
+            var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
+            var ignoreNamesapces = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework", "eHPS.CrossCutting.NetFramework.ExceptionHandler" };
+
+            var currentAssemblies = section.Assemblies;
+            for (int i = 0; i < currentAssemblies.Count; i++)
+            {
+                if(!ignoreAssembilies.Contains(currentAssemblies[i].Name))
+                {
+                    section.Assemblies.RemoveAt(i);
+                    currentAssemblies = section.Assemblies;
+                }
+            }
+
+            var currentNamespaces = section.Namespaces;
+            for (int i = 0; i < currentNamespaces.Count; i++)
+            {
+                if (!ignoreNamesapces.Contains(currentNamespaces[i].Name))
+                {
+                    section.Namespaces.RemoveAt(i);
+                    currentNamespaces = section.Namespaces;
+                }
+            }
+
+            section.Assemblies.Add(new AssemblyElement() { Name= basicImplement.AssemblyQualifiedName });
+            section.Namespaces.Add(new NamespaceElement() { Name= basicImplement.Namespace });
+            #endregion
+
+
+            foreach (var c in section.Containers)
+            {
+                c.Registrations.FirstOrDefault(r => r.TypeName == typeof(IBasicInfo).Name).MapToName = basicImplement.Name;
+            }
+            section.CurrentConfiguration.Save();
+            
+        }
+
+        private static  IUnityContainer GetContainer(String configUrl,Configuration configuration)
+        {
+            //var map = new ExeConfigurationFileMap();
+            //map.ExeConfigFilename = "web.config";
+            //var config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+
+            
+            //var configuration = WebConfigurationManager.OpenWebConfiguration(configUrl);
+            var section = (UnityConfigurationSection)configuration.GetSection("unity");
+            var container = new UnityContainer();
+            container.LoadConfiguration(section);
+            //section.Containers["container"].Configure(container);
+
+            
+            return container;
+
+            
         }
     }
 }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E359AF3-A016-4472-B7A1-95A2A9A1CA5E}</ProjectGuid>
+    <ProjectGuid>{2B3F83AE-2BD1-473A-9221-B8C38EED687E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>eHPS.Contract</RootNamespace>
-    <AssemblyName>eHPS.Contract</AssemblyName>
+    <RootNamespace>eHPS.SomeImplement</RootNamespace>
+    <AssemblyName>eHPS.SomeImplement</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,18 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Jil, Version=2.14.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\eHealthPlatformService\packages\Jil.2.14.3\lib\net45\Jil.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Sigil, Version=4.7.0.0, Culture=neutral, PublicKeyToken=2d06c3494341c8ab, processorArchitecture=MSIL">
-      <HintPath>..\..\eHealthPlatformService\packages\Sigil.4.7.0\lib\net45\Sigil.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,37 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAppointment.cs" />
-    <Compile Include="IBasicInfo.cs" />
-    <Compile Include="IDiagnosis.cs" />
-    <Compile Include="IInspection.cs" />
-    <Compile Include="IPayment.cs" />
-    <Compile Include="Model\BookableDoctor.cs" />
-    <Compile Include="Model\BookableTimePoint.cs" />
-    <Compile Include="Model\BookHistory.cs" />
-    <Compile Include="Model\Department.cs" />
-    <Compile Include="Model\DiagnosisRecord.cs" />
-    <Compile Include="Model\Diagnostics.cs" />
-    <Compile Include="Model\Doctor.cs" />
-    <Compile Include="Model\InspectionReport.cs" />
-    <Compile Include="Model\InspectionReportDetail.cs" />
-    <Compile Include="Model\LaboratoryItemDetail.cs" />
-    <Compile Include="Model\MakeAnAppointment.cs" />
-    <Compile Include="Model\Order.cs" />
-    <Compile Include="Model\OrderItem.cs" />
-    <Compile Include="Model\Organization.cs" />
-    <Compile Include="Model\Patient.cs" />
-    <Compile Include="Model\PatientConsumption.cs" />
-    <Compile Include="Model\PlatformServiceResponse.cs" />
-    <Compile Include="Model\ResponseMessage.cs" />
-    <Compile Include="Model\TradingAccount.cs" />
-    <Compile Include="Model\Treatment.cs" />
-    <Compile Include="Model\TreatmentActivityInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SomeBasicService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <ProjectReference Include="..\eHPS.Contract\eHPS.Contract.csproj">
+      <Project>{9e359af3-a016-4472-b7a1-95a2a9a1ca5e}</Project>
+      <Name>eHPS.Contract</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

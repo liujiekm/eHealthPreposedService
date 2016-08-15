@@ -12,6 +12,9 @@ using eHPS.Contract.Model;
 using System.Linq;
 
 using System.Dynamic;
+using eHPS.Common;
+
+using System.Configuration;
 
 namespace eHPS.ImplementTest
 {
@@ -38,6 +41,19 @@ namespace eHPS.ImplementTest
 
 
         }
+
+
+
+        [TestMethod]
+        public void Verify_ConfigHelper_Functional()
+        {
+            //eHPS.ImplementTest.dll.config
+            var baseUrl = Environment.CurrentDirectory;
+            var configUrl = baseUrl + @"\eHPS.ImplementTest.dll.config";
+            var implementAssemblyUrl = baseUrl+ @"\eHPS.SomeImplement.dll";
+            ConfigHelper.ConfigUnityConfig(configUrl, implementAssemblyUrl);
+        }
+
 
 
 
