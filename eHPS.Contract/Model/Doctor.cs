@@ -61,6 +61,13 @@ namespace eHPS.Contract.Model
 
         /// <summary>
         /// 职称 主任医师 等
+        ///11	主任医师
+        ///12	副主任医师
+        ///13	主治医师
+        ///14	住院医师
+        ///15	医士
+        ///16	检验医师
+        ///17	未确定医师
         /// </summary>
         public string JobTitle { get; set; }
         /// <summary>

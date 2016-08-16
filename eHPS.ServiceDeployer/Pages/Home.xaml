@@ -8,7 +8,7 @@
     <Grid Style="{StaticResource ContentRoot}">
         <ScrollViewer>
             <StackPanel MinWidth="200">
-                <TextBlock Text="前置服务部署工具" />
+                <TextBlock />
             </StackPanel>
         </ScrollViewer>
     </Grid>

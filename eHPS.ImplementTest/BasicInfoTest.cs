@@ -14,6 +14,8 @@ using System.Linq;
 using System.Dynamic;
 using eHPS.Common;
 
+using System.IO;
+
 using System.Configuration;
 
 namespace eHPS.ImplementTest
@@ -51,7 +53,14 @@ namespace eHPS.ImplementTest
             var baseUrl = Environment.CurrentDirectory;
             var configUrl = baseUrl + @"\eHPS.ImplementTest.dll.config";
             var implementAssemblyUrl = baseUrl+ @"\eHPS.SomeImplement.dll";
-            ConfigHelper.ConfigUnityConfig(configUrl, implementAssemblyUrl);
+            var contractAssemblyUrl = baseUrl + @"\eHPS.Contract.dll";
+            var configFileUrl = "./Web.config";
+
+
+            //var configFileUrl = baseUrl + "\\Web.config";
+            var fileExits = File.Exists(configFileUrl);
+
+            ConfigHelper.ConfigUnityConfig(configFileUrl, contractAssemblyUrl, implementAssemblyUrl);
         }
 
 
