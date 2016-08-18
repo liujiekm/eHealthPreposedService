@@ -32,6 +32,8 @@ using Microsoft.Practices.Unity.InterceptionExtension;
 using eHPS.CrossCutting.NetFramework.ExceptionHandler;
 using System.Xml.Linq;
 
+using System.IO;
+
 namespace eHPS.Common
 {
     /// <summary>
@@ -48,20 +50,26 @@ namespace eHPS.Common
         /// <summary>
         /// 验证具体实现类是否都实现了eHPS.Contract类库中的接口
         /// </summary>
-        /// <returns></returns>
-        public static bool VerifyImplement(String contractAssemblyUrl,String implementAssemblyUrl)
+        /// <returns>
+        /// 接口与实现类的键值对，可能有的接口没有实现类（当然调用方法会控制）
+        /// </returns>
+        public static bool VerifyImplement(IEnumerable<Type> contractTypes, IEnumerable<Type> implementTypes, out Dictionary<String, String> contractImp)
         {
-            var contractAssembly = Assembly.LoadFile(contractAssemblyUrl);
-            var implementAssembly = Assembly.LoadFile(implementAssemblyUrl);
-            var contractTypes = contractAssembly.GetExportedTypes().Where(t=>t.IsInterface); ;
-            var implementTypes = implementAssembly.GetExportedTypes();
+
+            contractImp = new Dictionary<String, String>();
+            //var contractAssembly = Assembly.LoadFile(contractAssemblyUrl);
+            //var implementAssembly = Assembly.LoadFile(implementAssemblyUrl);
+            //var contractTypes = contractAssembly.GetExportedTypes().Where(t=>t.IsInterface);
+            //var implementTypes = implementAssembly.GetExportedTypes();
             var impCount = 0;
             foreach (var contractType in contractTypes)
             {
-                foreach (var impAssembly in implementTypes)
+                contractImp.Add(contractType.Name, "");
+                foreach (var impType in implementTypes)
                 {
-                    if (contractType.IsAssignableFrom(impAssembly))
+                    if (contractType.IsAssignableFrom(impType))
                     {
+                        contractImp[contractType.Name]=impType.Name;
                         impCount++;
                         break;
                     }
@@ -79,74 +87,76 @@ namespace eHPS.Common
         /// 跟新Unity Config配置信息为当前最新实现
         /// </summary>
         /// <param name="configUrl">API中的webconfig或者windows
-        /// service中的App.config 相对地址
+        /// service中的App.config 地址 http://192.168.1.233/webservice/n_webservice.asmx
         /// </param>
         /// <param name="contractAssemblyUrl">接口类库地址</param>
         /// <param name="implementAssemblyUrl">实现类库地址</param>
-        public static  void ConfigUnityConfig(String configUrl, String contractAssemblyUrl,String implementAssemblyUrl)
+        /// <param name="webserviceUrl">HIS暴露的webservice服务地址</param>
+        public static  void ConfigUnityConfig(String configUrl, String contractAssemblyUrl,String implementAssemblyUrl,String webserviceUrl)
         {
             //Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             //var webconfigUrl = @"\App.config";
-            var configuration = WebConfigurationManager.OpenWebConfiguration(configUrl) as Configuration;
+            //var configuration = WebConfigurationManager.OpenWebConfiguration(configUrl) as Configuration;
             //var container = GetContainer(configUrl, configuration);
-
-            var root = XElement.Load(configUrl);
-
-            
-
 
             var contractAssembly = Assembly.LoadFile(contractAssemblyUrl);
             var implementAssembly = Assembly.LoadFile(implementAssemblyUrl);
-            var contractTypes = contractAssembly.GetExportedTypes();
+            var contractTypes = contractAssembly.GetExportedTypes().Where(t => t.IsInterface);
             var implementTypes = implementAssembly.GetExportedTypes();
+            //接口与实现类的键值对
+            Dictionary<String, String> contractImp;
             //检测实现类是否都实现了Contract
-            VerifyImplement(contractAssemblyUrl, implementAssemblyUrl);
-            //if (VerifyImplement(contractAssemblyUrl,implementAssemblyUrl))
-            //{
-                var section = (UnityConfigurationSection)configuration.GetSection("unity");
-                #region 移除已实现的服务，增加自己实现的服务类库
+            if (VerifyImplement(contractTypes, implementTypes, out contractImp))
+            {
+                //var section = (UnityConfigurationSection)configuration.GetSection("unity");
                 var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
                 var ignoreNamesapces = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework", "eHPS.CrossCutting.NetFramework.ExceptionHandler" };
-
-                var currentAssemblies = section.Assemblies;
-                for (int i = 0; i < currentAssemblies.Count; i++)
+                if (File.Exists(configUrl))
                 {
-                    if (!ignoreAssembilies.Contains(currentAssemblies[i].Name))
-                    {
-                        section.Assemblies.RemoveAt(i);
-                        currentAssemblies = section.Assemblies;
-                    }
-                }
+                    var root = XElement.Load(configUrl);
+                    //config 文件中unity标签
+                    var unityElement = root.Element("unity");
+                    //config 文件中unity标签下的assembly 标签
+                    var assemblyElements = unityElement.Elements("assembly");
+                    //config 文件中unity标签下的namespace 标签
+                    var namespaceElements = unityElement.Elements("namespace");
+                    //config 文件中unity标签下的container 标签
+                    var containerElement = unityElement.Element("container");
+                    //config 文件中unity标签下的container 标签中的register
+                    var registerElements = containerElement.Elements("register");
 
-                var currentNamespaces = section.Namespaces;
-                for (int i = 0; i < currentNamespaces.Count; i++)
-                {
-                    if (!ignoreNamesapces.Contains(currentNamespaces[i].Name))
-                    {
-                        section.Namespaces.RemoveAt(i);
-                        currentNamespaces = section.Namespaces;
-                    }
-                }
+                    //删除config中存在的实现类的assembly以及namespace
+                    assemblyElements.Where(a => !ignoreAssembilies.Contains((String)a.Attribute("name"))).Remove();
+                    namespaceElements.Where(r => !ignoreNamesapces.Contains((String)r.Attribute("name"))).Remove();
+                    //增加现有实现类的assembly以及namespace
+                    var currentAssembly = new XElement("assembly", new XAttribute("name", implementAssembly.FullName));
+                    var currentNamespace = new XElement("namespace", new XAttribute("name", implementAssembly.FullName));
 
-                section.Assemblies.Add(new AssemblyElement() { Name = implementAssembly.FullName });
-                section.Namespaces.Add(new NamespaceElement() { Name = implementAssembly.FullName });
-                #endregion
-
-                #region 增加Registry至Container
-                var containers = section.Containers;
-                foreach (var container in containers)
-                {
-                    foreach (var contractType in contractTypes)
+                    containerElement.AddBeforeSelf(currentAssembly);
+                    containerElement.AddBeforeSelf(currentNamespace);
+                    //替换 register mapTo attribute
+                    foreach (var element in registerElements)
                     {
-                        if(container.Registrations.Any(t=>t.TypeName==contractType.Name))
+                        foreach (var contractType in contractTypes)
                         {
-                            container.Registrations.FirstOrDefault(t => t.TypeName == contractType.Name).MapToName = contractType.Name;
+                            if ((String)element.Attribute("type") == contractType.Name)
+                            {
+                                element.Attribute("mapTo").SetValue(contractImp[contractType.Name]);
+                                break;
+                            }
                         }
                     }
+
+                    //修改web service引用地址
+                    if(!String.IsNullOrEmpty(webserviceUrl))
+                    {
+                        root.Element("system.serviceModel").Element("client").Element("endpoint").SetAttributeValue("address", webserviceUrl);
+                    }
+
+                    root.Save(configUrl);
                 }
-                #endregion
-                section.CurrentConfiguration.Save();
-            //}          
+
+            }
         }
 
 

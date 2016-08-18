@@ -45,6 +45,19 @@ namespace eHPS.ImplementTest
         }
 
 
+        [TestMethod]
+        public void Verify_File_Copy()
+        {
+            var sourceUrl = "./Web.config";
+            var destUrl = "./Web1.config";
+
+            File.Copy(sourceUrl, destUrl);
+
+            Assert.AreEqual(true,File.Exists(destUrl));
+        }
+
+
+
 
         [TestMethod]
         public void Verify_ConfigHelper_Functional()
@@ -56,11 +69,11 @@ namespace eHPS.ImplementTest
             var contractAssemblyUrl = baseUrl + @"\eHPS.Contract.dll";
             var configFileUrl = "./Web.config";
 
-
+            var serviceUrl = "http://192.168.1.232/webservice/n_webservice.asmx";
             //var configFileUrl = baseUrl + "\\Web.config";
             var fileExits = File.Exists(configFileUrl);
 
-            ConfigHelper.ConfigUnityConfig(configFileUrl, contractAssemblyUrl, implementAssemblyUrl);
+            ConfigHelper.ConfigUnityConfig(configFileUrl, contractAssemblyUrl, implementAssemblyUrl,serviceUrl);
         }
 
 
