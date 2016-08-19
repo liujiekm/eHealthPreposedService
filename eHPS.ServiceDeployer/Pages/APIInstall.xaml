@@ -4,35 +4,34 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Style="{StaticResource ContentRoot}">
+             mc:Ignorable="d"  Height="650" Width="700" 
+             d:DesignHeight="650" d:DesignWidth="700">
+    <Canvas Style="{StaticResource ContentRoot}" Margin="5">
+        <TextBox Height="32" HorizontalAlignment="Left" x:Name="FileNameTextBox"  Width="467"
+        		VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="35"  />
+        <Button x:Name="OpenFile" Content="打开" Height="32" HorizontalAlignment="Right" Width="88"  Click="OpenFile_OnClick"
+                 VerticalAlignment="Top" Canvas.Left="482" Canvas.Top="35" Background="#FF006FFF" Foreground="White"/>
+        <ListView x:Name="FileView" HorizontalAlignment="Left" Height="138"  VerticalAlignment="Top" Width="560"
+                   BorderThickness="1" Canvas.Left="10" Canvas.Top="108">
 
-        <!--定义行-->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25" ></RowDefinition>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <!--定义列-->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBox Height="32" HorizontalAlignment="Left" Name="FileNameTextBox"  Width="500"
-                         VerticalAlignment="Top" Grid.ColumnSpan="2" Margin="0,-7,0,0" />
-        <Button x:Name="OpenFile" Content="打开" Height="32" HorizontalAlignment="Right" Margin="0,-7,0,0" Width="88"  Click="OpenFile_OnClick"
-                Grid.Row="0" Grid.Column="1" VerticalAlignment="Top"/>
-        <ListView x:Name="FileView" HorizontalAlignment="Left" Height="100" Grid.Row="1" VerticalAlignment="Top" Width="180" Grid.ColumnSpan="2"
-                  Grid.Column="0">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
         </ListView>
+        <GroupBox x:Name="Step3" Header="验证实现类库" Canvas.Top="250" Height="83" Width="560" Canvas.Left="10" FontSize="14">
+            <StackPanel HorizontalAlignment="Left" Height="42" Margin="10,10,-2,0" VerticalAlignment="Top" Width="540" Orientation="Horizontal">
+                <Label x:Name="VerifyInfo" Content="" Width="462" VerticalAlignment="Center" Height="42"/>
+                <Button x:Name="Verify" Content="验证" Width="75" Margin="0,0,0,5" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Background="#FF006FFF" Foreground="White" Click="Verify_Click"/>
+            </StackPanel>
+        </GroupBox>
+        <Label x:Name="Step1" Content="选择实现文件夹" Canvas.Left="10" Width="105" FontSize="14" Canvas.Top="12"/>
+        <Label x:Name="Step2" Content="选择实现类库" Canvas.Left="10" Width="82" FontSize="14" Canvas.Top="85"/>
+        <GroupBox x:Name="Step4" Header="嵌入项目" Canvas.Left="10" Canvas.Top="335" Height="77" Width="560" FontSize="14">
+            <StackPanel HorizontalAlignment="Left" Height="42" Margin="10,10,-2,0" VerticalAlignment="Top" Width="540" Orientation="Horizontal">
+                <Label x:Name="BuildInfo" Content="" Width="462" VerticalAlignment="Center" Height="42"/>
+                <Button x:Name="Build" Content="编译" Width="75" Margin="0,0,0,5" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Background="#FF006FFF" Foreground="White" Click="Build_Click" />
+            </StackPanel>
+        </GroupBox>
+        <Button x:Name="DeployApi" Content="部署" Canvas.Left="420" Canvas.Top="525" Width="150" Height="40" Background="#FF006FFF" Foreground="White" Click="DeployApi_Click"/>
+        <GroupBox x:Name="Step5" Header="API 部署" Canvas.Left="10" Canvas.Top="417" Height="103" Width="560"/>
 
-    </Grid>
+
+    </Canvas>
 </UserControl>

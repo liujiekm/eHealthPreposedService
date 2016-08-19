@@ -92,24 +92,26 @@ namespace eHPS.Common
         /// <param name="contractAssemblyUrl">接口类库地址</param>
         /// <param name="implementAssemblyUrl">实现类库地址</param>
         /// <param name="webserviceUrl">HIS暴露的webservice服务地址</param>
-        public static  void ConfigUnityConfig(String configUrl, String contractAssemblyUrl,String implementAssemblyUrl,String webserviceUrl)
+        public static  String ConfigUnityConfig(String configUrl, String contractAssemblyUrl,String implementAssemblyUrl,String webserviceUrl)
         {
+            var indicate = String.Empty;
             //Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             //var webconfigUrl = @"\App.config";
             //var configuration = WebConfigurationManager.OpenWebConfiguration(configUrl) as Configuration;
             //var container = GetContainer(configUrl, configuration);
 
-            var contractAssembly = Assembly.LoadFile(contractAssemblyUrl);
-            var implementAssembly = Assembly.LoadFile(implementAssemblyUrl);
+            var contractAssembly = Assembly.LoadFrom(contractAssemblyUrl);
+            var implementAssembly = Assembly.LoadFrom(implementAssemblyUrl);
             var contractTypes = contractAssembly.GetExportedTypes().Where(t => t.IsInterface);
             var implementTypes = implementAssembly.GetExportedTypes();
             //接口与实现类的键值对
             Dictionary<String, String> contractImp;
             //检测实现类是否都实现了Contract
-            if (VerifyImplement(contractTypes, implementTypes, out contractImp))
-            {
-                //var section = (UnityConfigurationSection)configuration.GetSection("unity");
-                var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
+            VerifyImplement(contractTypes, implementTypes, out contractImp);
+            //if (VerifyImplement(contractTypes, implementTypes, out contractImp))
+            //{
+            //var section = (UnityConfigurationSection)configuration.GetSection("unity");
+            var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
                 var ignoreNamesapces = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework", "eHPS.CrossCutting.NetFramework.ExceptionHandler" };
                 if (File.Exists(configUrl))
                 {
@@ -155,8 +157,18 @@ namespace eHPS.Common
 
                     root.Save(configUrl);
                 }
+                else
+                {
+                    indicate = "API配置文件未发现！";
+                }
 
-            }
+            //}
+            //else
+            //{
+            //    indicate = "类库验证未通过！";
+            //}
+
+            return indicate;
         }
 
 

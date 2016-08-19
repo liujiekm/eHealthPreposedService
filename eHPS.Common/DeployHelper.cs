@@ -96,7 +96,7 @@ namespace eHPS.Common
         /// 获取当前服务器IIS下面的网站
         /// </summary>
         /// <returns></returns>
-        private List<String> GetCurrentIISSite()
+        private List<String> GetCurrentIisSite()
         {
             ServerManager iisManager = new ServerManager();
             return iisManager.Sites.Select(s => s.Name).ToList();

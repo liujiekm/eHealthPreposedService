@@ -94,7 +94,7 @@ namespace eHPS.BackgroundService
                     patientIdList = patientIds.Result;
                 }
 
-                patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
+                //patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
             }
             catch (Exception ex)
             {
