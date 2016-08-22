@@ -238,13 +238,15 @@ namespace eHPS.WYServiceImplement
         public ResponseMessage<string> MakeADiagnosis(string patientId,string pId,string doctorId,string deptId, string complaint)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
+
+            try
             {
-                var requestMessage = String.Join("$$", patientId, pId, doctorId, deptId,complaint);
+                HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient();
+                var requestMessage = String.Join("$$", patientId, pId, doctorId, deptId, complaint);
                 var returnCode = "";
 
                 var resultCode = client.f_get_data("zxzl", ref requestMessage, ref returnCode);
-                if(resultCode==0)
+                if (resultCode == 0)
                 {
                     result.HasError = 0;
                     result.ErrorMessage = "诊疗发起成功";
@@ -255,7 +257,15 @@ namespace eHPS.WYServiceImplement
                     result.ErrorMessage = returnCode;
                 }
 
+                
             }
+            catch (Exception ex)
+            {
+                result.HasError = 1;
+                result.ErrorMessage = ex.Message;
+                return result;
+            }
+           
 
             return result;
         }

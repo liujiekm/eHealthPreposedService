@@ -1,17 +1,17 @@
-﻿<UserControl x:Class="eHPS.ServiceDeployer.Pages.APIInstall"
+﻿<UserControl x:Class="eHPS.ServiceDeployer.Pages.BSInstall"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d"  Height="680" Width="700" 
+             mc:Ignorable="d" 
+             Height="680" Width="700" 
              d:DesignHeight="680" d:DesignWidth="700">
 
 
-    
     <Canvas Style="{StaticResource ContentRoot}" Margin="5">
-        
-        
+
+
         <TextBox Height="32" HorizontalAlignment="Left" x:Name="FileNameTextBox"  Width="467"
         		VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="35"  />
         <Button x:Name="OpenFile" Content="打开" Height="32" HorizontalAlignment="Right" Width="88"  Click="OpenFile_OnClick"
@@ -32,8 +32,8 @@
             <StackPanel HorizontalAlignment="Left" Height="42" Margin="10,10,-2,0" VerticalAlignment="Top" Width="540" Orientation="Horizontal">
                 <Label x:Name="BuildInfo" Content="" Width="462" VerticalAlignment="Center" Height="42"/>
                 <Button x:Name="Build" Content="编译" Width="75" Margin="0,0,0,5" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Background="Gray" Foreground="White" Click="Build_Click" IsEnabled="False" Cursor="Hand" >
-                    
-                    
+
+
                 </Button>
             </StackPanel>
         </GroupBox>

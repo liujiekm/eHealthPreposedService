@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System.IO;
+using Microsoft.Web.Administration;
 using Microsoft.Win32;
 
 namespace eHPS.Common
@@ -113,5 +114,27 @@ namespace eHPS.Common
             return indicate;
 
         }
+
+        /// <summary>
+        /// 创建应用程序池
+        /// </summary>
+        /// <param name="poolname"></param>
+        /// <param name="enable32bitOn64"></param>
+        /// <param name="mode"></param>
+        /// <param name="runtimeVersion"></param>
+        public  static void CreateAppPool(string poolname, bool enable32bitOn64, ManagedPipelineMode mode, string runtimeVersion = "v4.0")
+        {
+            using (ServerManager serverManager = new ServerManager())
+            {
+                ApplicationPool newPool = serverManager.ApplicationPools.Add(poolname);
+                newPool.ManagedRuntimeVersion = runtimeVersion;
+                newPool.Enable32BitAppOnWin64 = enable32bitOn64;
+                newPool.ManagedPipelineMode = mode;
+                serverManager.CommitChanges();
+            }
+        }
+
+
+
     }
 }

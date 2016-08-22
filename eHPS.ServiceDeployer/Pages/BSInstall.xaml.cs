@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,20 +14,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using System.IO;
-using System.Reflection;
 using eHPS.Common;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
-using System.Drawing;
 namespace eHPS.ServiceDeployer.Pages
 {
     /// <summary>
-    /// Interaction logic for APIInstall.xaml
+    /// Interaction logic for BSInstall.xaml
     /// </summary>
-    public partial class APIInstall : UserControl
+    public partial class BSInstall : UserControl
     {
-
         /// <summary>
         /// 实现类库是否验证通过
         /// </summary>
@@ -39,7 +36,7 @@ namespace eHPS.ServiceDeployer.Pages
         private bool IsConfigured = false;
 
 
-        public APIInstall()
+        public BSInstall()
         {
             InitializeComponent();
 
@@ -49,7 +46,7 @@ namespace eHPS.ServiceDeployer.Pages
             {
                 MessageBox.Show(netFrameworkIndicate);
 
-                
+
                 return;
             }
             var iisIndicate = IISHelper.LocateIIS();
@@ -63,7 +60,7 @@ namespace eHPS.ServiceDeployer.Pages
 
 
 
-            
+
 
 
         }
@@ -75,7 +72,7 @@ namespace eHPS.ServiceDeployer.Pages
             {
                 IsFolderPicker = true,
                 Multiselect = false
-                
+
             };
             CommonFileDialogResult result = dialog.ShowDialog();
 
@@ -91,9 +88,9 @@ namespace eHPS.ServiceDeployer.Pages
 
             }
 
-            
+
             Window wid = Window.GetWindow(this);
-            
+
             //MessageBox.Show(wid.ToString());
 
             #region OpenFileDialog
@@ -135,25 +132,25 @@ namespace eHPS.ServiceDeployer.Pages
             {
                 if (impDll.ToString().EndsWith(".dll"))
                 {
-                    var contractUrl = Environment.CurrentDirectory+@"\Contract\eHPS.Contract.dll";
+                    var contractUrl = Environment.CurrentDirectory + @"\Contract\eHPS.Contract.dll";
 
                     if (File.Exists(contractUrl))
                     {
-                        var contractTypes = Assembly.LoadFrom(contractUrl).GetExportedTypes().Where(t=>t.IsInterface);
+                        var contractTypes = Assembly.LoadFrom(contractUrl).GetExportedTypes().Where(t => t.IsInterface);
                         var impTypes = Assembly.LoadFrom(impDll.ToString()).GetExportedTypes();
-                        var contractImp = new Dictionary<String,String>();
-                        if (ConfigHelper.VerifyImplement(contractTypes, impTypes,out contractImp))
+                        var contractImp = new Dictionary<String, String>();
+                        if (ConfigHelper.VerifyImplement(contractTypes, impTypes, out contractImp))
                         {
                             validInfo = "验证通过！";
 
                             this.Build.IsEnabled = true;
-                            this.Build.Background = new SolidColorBrush(Color.FromArgb(100,0,111,255));
+                            this.Build.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
                             IsImplementValid = true;
                         }
                         else
                         {
                             var unImps = contractImp.Where((item) => String.IsNullOrEmpty(item.Value)).Select(p => p.Key).ToList();
-                            validInfo = String.Join(",",unImps)+" 未实现！";
+                            validInfo = String.Join(",", unImps) + " 未实现！";
                             IsImplementValid = false;
                             this.Build.IsEnabled = false;
                             this.Build.Background = new SolidColorBrush(Colors.Gray);
@@ -197,7 +194,7 @@ namespace eHPS.ServiceDeployer.Pages
             var impDll = this.FileView.SelectedItem;
             var configUrl = Environment.CurrentDirectory + @"\APIDeploy\Web.config";
             var webserviceUrl = "";
-            var result = ConfigHelper.ConfigUnityConfig(configUrl,contractUrl,impDll.ToString(),webserviceUrl);
+            var result = ConfigHelper.ConfigUnityConfig(configUrl, contractUrl, impDll.ToString(), webserviceUrl);
             if (result == "")
             {
                 //拷贝实现文件夹中的类库到API 的bin目录
@@ -209,7 +206,7 @@ namespace eHPS.ServiceDeployer.Pages
                                    file.ToString()
                                        .Substring(file.ToString().LastIndexOf("\\", StringComparison.Ordinal) + 1);
 
-                        File.Copy(file.ToString(), destFile,true);
+                        File.Copy(file.ToString(), destFile, true);
                     }
                 }
 
@@ -237,7 +234,7 @@ namespace eHPS.ServiceDeployer.Pages
 
         private void SiteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-           
+
             //部署界面逻辑
             //如果选择 现有网站  则端口设置禁用
             if (this.SiteComboBox.SelectedItem.ToString() != "新建网站")
@@ -280,13 +277,13 @@ namespace eHPS.ServiceDeployer.Pages
                         {
                             var result = DeployHelper.DeploySite(this.ApiServiceName.Text, DeployHelper.BindingProtocol.HTTP, sitePort, deploySoutionUrl);
                             indicate = result;
-                            MessageBox.Show(indicate==""?"部署成功":indicate);
-                            
+                            MessageBox.Show(indicate == "" ? "部署成功" : indicate);
+
                         }
                         catch (Exception ex)
                         {
 
-                            indicate = "内部错误：Deploy "+ex.Message;
+                            indicate = "内部错误：Deploy " + ex.Message;
                             MessageBox.Show(indicate);
                         }
                     }
@@ -296,7 +293,7 @@ namespace eHPS.ServiceDeployer.Pages
                         MessageBox.Show(indicate);
                         return;
                     }
-                    
+
 
                 }
                 else
@@ -313,7 +310,7 @@ namespace eHPS.ServiceDeployer.Pages
                     {
 
                         var siteName =
-                            siteComboBoxValue.Split(new[] {'：'}, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
+                            siteComboBoxValue.Split(new[] { '：' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
                         var result = DeployHelper.DeployApplication(siteName, this.ApiServiceName.Text, deploySoutionUrl);
                         indicate = result;
                         MessageBox.Show(indicate == "" ? "部署成功" : indicate);
@@ -332,7 +329,7 @@ namespace eHPS.ServiceDeployer.Pages
                 MessageBox.Show(indicate);
                 return;
             }
-            
+
         }
     }
 }

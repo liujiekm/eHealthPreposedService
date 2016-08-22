@@ -4,15 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d" Width="700" Height="650" Padding="0,0,0,0"
-             d:DesignHeight="650" d:DesignWidth="700">
+             mc:Ignorable="d" Width="700" Height="680" Padding="0,0,0,0"
+             d:DesignHeight="680" d:DesignWidth="700">
     <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
-        <mui:ModernTab Layout="Tab">
+        <mui:ModernTab Layout="Tab" SelectedSource="/Pages/BSInstall.xaml">
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
-                <mui:Link DisplayName="本地实现安装" />
-                <mui:Link DisplayName="自定义设置" />
+                <mui:Link DisplayName="本地实现安装"  Source="/Pages/BSInstall.xaml"/>
+                <!--<mui:Link DisplayName="自定义设置" />-->
             </mui:ModernTab.Links>
         </mui:ModernTab>
     </Grid>

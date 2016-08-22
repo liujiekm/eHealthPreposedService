@@ -269,7 +269,13 @@ namespace eHPS.WYServiceImplement
             if (CacheProvider.Exist("ehps_jobTitles"))
             {
                 var titles = (Dictionary<String, String>)CacheProvider.Get("ehps_jobTitles");
-                return titles[jobTitleId];
+                var title = String.Empty;
+                if (titles.TryGetValue(jobTitleId, out title))
+                {
+                    return title;
+                }
+                return title;
+
             }
             else
             {

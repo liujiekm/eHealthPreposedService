@@ -78,28 +78,86 @@ namespace eHPS.Common
         /// <param name="protocol">绑定协议</param>
         /// <param name="port">端口</param>
         /// <param name="deployFolderUrl">部署文件夹路径</param>
-        public static void DeploySite(String siteName, BindingProtocol protocol,Int32 port, String deployFolderUrl)
+        public static String DeploySite(String siteName, BindingProtocol protocol,Int32 port, String deployFolderUrl)
         {
-            ServerManager iisManager = new ServerManager();
-            iisManager.Sites.Add(siteName, protocol.ToString(), "*:"+port+":", deployFolderUrl);//"d:\\MySite"
-            iisManager.CommitChanges();
+            var indicate = String.Empty;
+            using (ServerManager iisManager = new ServerManager())
+            {
+                if (!IsSiteExist(siteName))
+                {
+                    var site = iisManager.Sites.Add(siteName, protocol.ToString(), "*:" + port + ":", deployFolderUrl);
+                    //"d:\\MySite"
+                    //创建应用程序池
+                    ApplicationPool newPool = iisManager.ApplicationPools.Add(siteName);
+                    newPool.ManagedRuntimeVersion = "v4.0";
+                    newPool.Enable32BitAppOnWin64 = false;
+                    newPool.ManagedPipelineMode = ManagedPipelineMode.Integrated;
+                    site.ApplicationDefaults.ApplicationPoolName = siteName;
+                    //网站下所有应用程序的应用程序池都设置为新创建的newPool
+
+                    foreach (var item in site.Applications)
+                    {
+                        item.ApplicationPoolName = siteName;
+                    }
+
+                    iisManager.CommitChanges();
+                }
+                else
+                {
+                    indicate = "该网站已存在，请重新输入网站名称";
+                }
+            }
+
+            return indicate;
         }
 
-        public static void DeployApplication(String siteName,String applicationName,String deployFolderUrl)
+        public static String DeployApplication(String siteName,String applicationName,String deployFolderUrl)
         {
-            ServerManager iisManager = new ServerManager();
-            iisManager.Sites[siteName].Applications.Add("/"+applicationName, deployFolderUrl);//"d:\\MyApp"
-            iisManager.CommitChanges();
+            var indicate = String.Empty;
+            using (ServerManager iisManager = new ServerManager())
+            {
+                if (IsSiteExist(siteName))
+                {
+                    if (!IsApplicationExist(siteName, applicationName))
+                    {
+                        var application = iisManager.Sites[siteName].Applications.Add("/" + applicationName, deployFolderUrl);
+                        //"d:\\MyApp"
+
+                        //创建应用程序池
+                        ApplicationPool newPool = iisManager.ApplicationPools.Add(applicationName);
+                        newPool.ManagedRuntimeVersion = "v4.0";
+                        newPool.Enable32BitAppOnWin64 = false;
+                        newPool.ManagedPipelineMode = ManagedPipelineMode.Integrated;
+                        application.ApplicationPoolName = applicationName;
+
+                        iisManager.CommitChanges();
+                    }
+                    else
+                    {
+                        indicate = "该网站下应用程序已存在！";
+                    }
+
+                }
+                else
+                {
+                    indicate = "该网站不存在！";
+                }
+            }
+
+            return indicate;
         }
 
         /// <summary>
         /// 获取当前服务器IIS下面的网站
         /// </summary>
         /// <returns></returns>
-        private List<String> GetCurrentIisSite()
+        public static  List<String> GetCurrentIisSite()
         {
-            ServerManager iisManager = new ServerManager();
-            return iisManager.Sites.Select(s => s.Name).ToList();
+            using (ServerManager iisManager = new ServerManager())
+            {
+                return iisManager.Sites.Select(s => s.Name + " ：" + s.Bindings.Select(b => b.EndPoint.Port.ToString()).FirstOrDefault()).ToList();
+            }
+                
         }
 
 
@@ -108,10 +166,13 @@ namespace eHPS.Common
         /// </summary>
         /// <param name="siteName"></param>
         /// <returns></returns>
-        private bool IsSiteExist(String siteName)
+        public  static bool IsSiteExist(String siteName)
         {
-            ServerManager iisManager = new ServerManager();
-            return iisManager.Sites.Any(s => s.Name == siteName);
+            using (ServerManager iisManager = new ServerManager())
+            {
+                return iisManager.Sites.Any(s => s.Name == siteName);
+            }
+                
         }
 
 
@@ -122,17 +183,18 @@ namespace eHPS.Common
         /// <param name="siteName">网站名称</param>
         /// <param name="applicationName">应用程序名称</param>
         /// <returns></returns>
-        private bool IsApplicationExist(String siteName,String applicationName)
+        private static bool IsApplicationExist(String siteName,String applicationName)
         {
-            ServerManager iisManager = new ServerManager();
-
-            if(IsSiteExist(siteName))
+            using (ServerManager iisManager = new ServerManager())
             {
-                return iisManager.Sites[siteName].Applications.Any(a => a.Path == "/" + applicationName);
-            }
-            else
-            {
-                return false;
+                if (IsSiteExist(siteName))
+                {
+                    return iisManager.Sites[siteName].Applications.Any(a => a.Path == "/" + applicationName);
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             

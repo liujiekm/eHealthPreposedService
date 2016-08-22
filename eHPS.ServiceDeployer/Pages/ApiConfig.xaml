@@ -4,21 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mui="http://firstfloorsoftware.com/ModernUI"
-             mc:Ignorable="d" Height="650" Width="700" Padding="0,0,0,0" 
-             d:DesignHeight="650" d:DesignWidth="700">
+             mc:Ignorable="d" Height="680" Width="700" Padding="0,0,0,0" 
+             d:DesignHeight="680" d:DesignWidth="700">
     <Grid Style="{StaticResource ContentRoot}">
         <!-- TODO: set @SelectedSource -->
         <mui:ModernTab Layout="Tab" SelectedSource="/Pages/APIInstall.xaml">
             <mui:ModernTab.Links>
                 <!-- TODO: set @Source -->
                 <mui:Link DisplayName="本地实现安装" Source="/Pages/APIInstall.xaml" />
-                <mui:Link DisplayName="自定义设置" Source="/Pages/APIConfigItem.xaml" />
+                <!--<mui:Link DisplayName="自定义设置" Source="/Pages/APIConfigItem.xaml" />-->
             </mui:ModernTab.Links>
         </mui:ModernTab>
-
-        <Button x:Name="Deploy" Content="部署" Margin="0,0,0,-30" Width="150" Background="#FFCD6666" 
-                HorizontalContentAlignment="Center" FlowDirection="RightToLeft" Padding="0" 
-                VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="30"
-/>
     </Grid>
 </UserControl>
