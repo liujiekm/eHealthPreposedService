@@ -131,8 +131,8 @@ namespace eHPS.Common
                     assemblyElements.Where(a => !ignoreAssembilies.Contains((String)a.Attribute("name"))).Remove();
                     namespaceElements.Where(r => !ignoreNamesapces.Contains((String)r.Attribute("name"))).Remove();
                     //增加现有实现类的assembly以及namespace
-                    var currentAssembly = new XElement("assembly", new XAttribute("name", implementAssembly.FullName));
-                    var currentNamespace = new XElement("namespace", new XAttribute("name", implementAssembly.FullName));
+                    var currentAssembly = new XElement("assembly", new XAttribute("name", implementAssembly.GetName().Name));
+                    var currentNamespace = new XElement("namespace", new XAttribute("name", implementAssembly.GetName().Name));
 
                     containerElement.AddBeforeSelf(currentAssembly);
                     containerElement.AddBeforeSelf(currentNamespace);

@@ -92,7 +92,7 @@ namespace eHPS.ServiceDeployer.Pages
             }
 
             
-            Window wid = Window.GetWindow(this);
+            
             
             //MessageBox.Show(wid.ToString());
 
@@ -147,7 +147,7 @@ namespace eHPS.ServiceDeployer.Pages
                             validInfo = "验证通过！";
 
                             this.Build.IsEnabled = true;
-                            this.Build.Background = new SolidColorBrush(Color.FromArgb(100,0,111,255));
+                            this.Build.Background = new SolidColorBrush(Color.FromArgb(100,27,161,226));
                             IsImplementValid = true;
                         }
                         else
@@ -214,7 +214,7 @@ namespace eHPS.ServiceDeployer.Pages
                 }
 
                 this.BuildInfo.Content = "配置成功！";
-                this.BuildInfo.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
+                this.Deploy.Background = new SolidColorBrush(Color.FromArgb(100, 27, 161, 226));
                 this.Deploy.IsEnabled = true;
 
                 this.IsConfigured = true;
@@ -230,7 +230,7 @@ namespace eHPS.ServiceDeployer.Pages
                 this.BuildInfo.Content = result;
                 this.IsConfigured = false;
                 this.Deploy.IsEnabled = false;
-                this.BuildInfo.Background = new SolidColorBrush(Colors.Gray);
+                this.Deploy.Background = new SolidColorBrush(Colors.Gray);
             }
 
         }
@@ -281,7 +281,12 @@ namespace eHPS.ServiceDeployer.Pages
                             var result = DeployHelper.DeploySite(this.ApiServiceName.Text, DeployHelper.BindingProtocol.HTTP, sitePort, deploySoutionUrl);
                             indicate = result;
                             MessageBox.Show(indicate==""?"部署成功":indicate);
+
                             
+                            Window wid = Window.GetWindow(this);
+                            wid.Close();
+
+
                         }
                         catch (Exception ex)
                         {

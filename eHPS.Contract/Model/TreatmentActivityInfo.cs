@@ -32,10 +32,22 @@ namespace eHPS.Contract.Model
     /// </summary>
     public class TreatmentActivityInfo
     {
+
+
+
+
+
         /// <summary>
         /// 诊疗活动标识
         /// </summary>
         public String TreatmentId { get; set; }
+
+
+        /// <summary>
+        /// 患者在平台上对应的在线诊疗唯一标识
+        /// </summary>
+        public String  PId { get; set; }      
+
 
 
         /// <summary>

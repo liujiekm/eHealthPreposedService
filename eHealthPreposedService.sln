@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.ServiceDeployer", "eHP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.SomeImplement", "eHPS.SomeImplement\eHPS.SomeImplement.csproj", "{2B3F83AE-2BD1-473A-9221-B8C38EED687E}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "eHPS.Contract.Document", "eHPS.Contract.Document\eHPS.Contract.Document.shfbproj", "{499890C6-29E7-4550-B971-5A157DAD3208}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +111,10 @@ Global
 		{2B3F83AE-2BD1-473A-9221-B8C38EED687E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B3F83AE-2BD1-473A-9221-B8C38EED687E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B3F83AE-2BD1-473A-9221-B8C38EED687E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{499890C6-29E7-4550-B971-5A157DAD3208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{499890C6-29E7-4550-B971-5A157DAD3208}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{499890C6-29E7-4550-B971-5A157DAD3208}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{499890C6-29E7-4550-B971-5A157DAD3208}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +141,7 @@ Global
 		{376FA670-CACD-453B-BCC6-553156D05036} = {29AA3994-8998-4709-BEF2-EE2531D61495}
 		{1EFEB59C-31B8-47BE-A3B4-22A0A8FCA205} = {9D77536F-7419-4A62-B687-970850CBF0AB}
 		{2B3F83AE-2BD1-473A-9221-B8C38EED687E} = {9D77536F-7419-4A62-B687-970850CBF0AB}
+		{499890C6-29E7-4550-B971-5A157DAD3208} = {29AA3994-8998-4709-BEF2-EE2531D61495}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45

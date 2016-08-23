@@ -771,10 +771,6 @@ namespace eHPS.WYServiceImplement
        
 
 
-        public List<BookableDoctor> PushBookableDoctors()
-        {
-            throw new NotImplementedException();
-        }
 
 
 

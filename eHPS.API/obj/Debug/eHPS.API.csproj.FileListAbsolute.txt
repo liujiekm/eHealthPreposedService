@@ -148,3 +148,4 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Thrift.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\CacheMQService.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\Microsoft.Web.Administration.dll
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.API\bin\eHPS.Contract.xml

@@ -15,7 +15,7 @@
         <TextBox Height="32" HorizontalAlignment="Left" x:Name="FileNameTextBox"  Width="467"
         		VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="35"  />
         <Button x:Name="OpenFile" Content="打开" Height="32" HorizontalAlignment="Right" Width="88"  Click="OpenFile_OnClick"
-                 VerticalAlignment="Top" Canvas.Left="482" Canvas.Top="35" Background="#FF006FFF" Foreground="White" Cursor="Hand"/>
+                 VerticalAlignment="Top" Canvas.Left="482" Canvas.Top="35" Background="#FF1BA1E2" Foreground="White" Cursor="Hand"/>
         <ListView x:Name="FileView" HorizontalAlignment="Left" Height="138"  VerticalAlignment="Top" Width="560"
                    BorderThickness="1" Canvas.Left="10" Canvas.Top="108"  >
 
@@ -23,7 +23,7 @@
         <GroupBox x:Name="Step3" Header="验证实现类库" Canvas.Top="250" Height="83" Width="560" Canvas.Left="10" FontSize="14">
             <StackPanel HorizontalAlignment="Left" Height="42" Margin="10,10,-2,0" VerticalAlignment="Top" Width="540" Orientation="Horizontal">
                 <Label x:Name="VerifyInfo" Content="" Width="462" VerticalAlignment="Center" Height="42"/>
-                <Button x:Name="Verify" Content="验证" Width="75" Margin="0,0,0,5" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Background="#FF006FFF" Foreground="White" Click="Verify_Click" Cursor="Hand"/>
+                <Button x:Name="Verify" Content="验证" Width="75" Margin="0,0,0,5" HorizontalAlignment="Center" Height="30" VerticalAlignment="Bottom" Background="#FF1BA1E2" Foreground="White" Click="Verify_Click" Cursor="Hand"/>
             </StackPanel>
         </GroupBox>
         <Label x:Name="Step1" Content="选择实现文件夹" Canvas.Left="10" Width="105" FontSize="14" Canvas.Top="12"/>

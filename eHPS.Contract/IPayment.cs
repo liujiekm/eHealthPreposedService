@@ -30,10 +30,10 @@ namespace eHPS.Contract
 
         /// <summary>
         /// 主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
-        /// 则本方法实现需主动轮询，未支付的收费项目
+        /// 则本方法实现需主动轮询未支付的收费项目
         /// </summary>
-        /// <param name="patientIds"></param>
-        /// <returns></returns>
+        /// <param name="patientIds">多个患者标识</param>
+        /// <returns>患者们待支付项目清单</returns>
         List<PatientConsumption> AwareOrderBooked(List<String> patientIds);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace eHPS.Contract
         /// </param>
         /// <param name="amount">应付金额</param>
         /// <param name="actualAmount">实际应付金额</param>
-        /// <returns></returns>
+        /// <returns>支付命令返回消息体</returns>
         ResponseMessage<String> Pay(String tradingId,String activityId,String amount, String actualAmount);//
 
 
@@ -57,10 +57,9 @@ namespace eHPS.Contract
         /// <param name="hospitalId">医院标识</param>
         /// <param name="appointId">预约标识</param>
         /// <param name="tradingId">本次交易标识</param>
-   
         /// <param name="amount">交易金额</param>
         /// <param name="actualAmount">实际交易金额</param>
-        /// <returns></returns>
+        /// <returns>挂号收费执行后返回消息体</returns>
         ResponseMessage<String> PayRegistration(String tradingId,String hospitalId, String appointId,String amount,String actualAmount);
 
 
@@ -69,7 +68,7 @@ namespace eHPS.Contract
         /// 获取指定患者的医院账户可用金额（预存for温附一）
         /// </summary>
         /// <param name="patientId">患者标识</param>
-        /// <returns></returns>
+        /// <returns>患者账号信息</returns>
         TradingAccount GetPatientAvaliableAmount(String patientId);
 
 
@@ -80,7 +79,7 @@ namespace eHPS.Contract
         /// <param name="patientId">患者标识</param>
         /// <param name="tradingId">交易标识</param>
         /// <param name="amount">实际的交易金额</param>
-        /// <returns></returns>
+        /// <returns>预存充值执行后返回消息体</returns>
         ResponseMessage<String> Recharge(String patientId,String tradingId, String amount);
 
 

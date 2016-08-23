@@ -197,5 +197,21 @@ namespace eHPS.ImplementTest
         }
 
 
+
+        [TestMethod]
+        public void Verify_ServieControl_GetService_Avaliable()
+        {
+            var result =
+            DeployHelper.IsServiceExist("PushToPayService");
+
+
+            Assert.AreEqual(true,result);
+        }
+
+
+
+
+
+
     }
 }

@@ -266,30 +266,60 @@ namespace eHPS.WYServiceImplement
         /// <returns></returns>
         public static  string GetJobTitle(String jobTitleId)
         {
-            if (CacheProvider.Exist("ehps_jobTitles"))
+
+            var map = new Dictionary<Int32, String>()
             {
-                var titles = (Dictionary<String, String>)CacheProvider.Get("ehps_jobTitles");
-                var title = String.Empty;
-                if (titles.TryGetValue(jobTitleId, out title))
+                {1,"主任医师"},
+                {2,"副主任医师"},
+                {3,"主治医师"},
+                {4,"住院医师"},
+                {5,"医士"},
+                //{6, "检验医师"},
+                {9,"未确定医师"}
+            };
+
+            using (var con = DapperFactory.CrateOracleConnection())
+            {
+                var jobTitlesCommand = @"select DM,MC,JB from s_gz_zwdm where DM!='0000' AND DM='" + jobTitleId + "'";
+                var result = con.Query(jobTitlesCommand).FirstOrDefault();
+                var jobTitle = String.Empty;
+                if (result != null)
                 {
-                    return title;
+                    var jobLevel = (Int32)result.JB;
+                    if (map.TryGetValue(jobLevel, out jobTitle))
+                    {
+                        return jobTitle;
+                    }
                 }
-                return title;
+                return jobTitle;
+                
 
             }
-            else
-            {
-                using (var con = DapperFactory.CrateOracleConnection())
-                {
-                    var jobTitlesCommand = @"select DM,MC from s_gz_zwdm where DM!='0000'";
 
-                    var result = con.Query(jobTitlesCommand).ToDictionary(k => (string)k.DM, v => (string)v.MC);
+            //if (CacheProvider.Exist("ehps_jobTitles"))
+            //{
+            //    var titles = (Dictionary<String, String>)CacheProvider.Get("ehps_jobTitles");
+            //    var title = String.Empty;
+            //    if (titles.TryGetValue(jobTitleId, out title))
+            //    {
+            //        return title;
+            //    }
+            //    return title;
 
-                    CacheProvider.Set("ehps_jobTitles", result);
+            //}
+            //else
+            //{
+            //    using (var con = DapperFactory.CrateOracleConnection())
+            //    {
+            //        var jobTitlesCommand = @"select DM,MC from s_gz_zwdm where DM!='0000'";
 
-                    return result[jobTitleId];
-                }
-            }
+            //        var result = con.Query(jobTitlesCommand).ToDictionary(k => (string)k.DM, v => (string)v.MC);
+
+            //        CacheProvider.Set("ehps_jobTitles", result);
+
+            //        return result[jobTitleId];
+            //    }
+            //}
         }
 
 

@@ -37,14 +37,10 @@
                 </Button>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="Step5" Header="API 部署" Canvas.Left="10" Canvas.Top="417" Height="103" Width="560">
+        <GroupBox x:Name="Step5" Header="Windows Service 部署" Canvas.Left="10" Canvas.Top="417" Height="103" Width="560">
             <StackPanel HorizontalAlignment="Left" Height="78" Margin="0,0,-2,0" VerticalAlignment="Top" Width="550" Orientation="Horizontal">
-                <Label x:Name="SiteLabel" Content="网站" Height="20" Margin="5,0,0,0"/>
-                <ComboBox x:Name="SiteComboBox" Width="150" Margin="10,10,5,10" Height="30" SelectionChanged="SiteComboBox_SelectionChanged" />
-                <Label x:Name="NameLabel" Content="名称" Height="20" Margin="5,0,0,0" />
-                <TextBox x:Name="ApiServiceName" TextWrapping="Wrap"  Text="" Width="120" Margin="10,10,5,10" Height="30" />
-                <Label x:Name="PortLabel" Content="端口" Height="20" Margin="5,0,0,0" />
-                <TextBox x:Name="SitePort" TextWrapping="Wrap" Text="" Width="60" Margin="10,10,5,10" Height="30"/>
+                <Label x:Name="NameLabel" Content="服务名称" Height="20" Margin="5,0,0,0" />
+                <TextBox x:Name="WindowsServiceName" TextWrapping="Wrap"  Text="" Width="395" Margin="10,24,5,24" Height="30" />
                 <Button x:Name="Deploy" Content="部署" Width="75" Margin="3,10,5,10" Background="Gray" Foreground="White" Height="30" Click="Deploy_Click" IsEnabled="False" Cursor="Hand"/>
 
             </StackPanel>

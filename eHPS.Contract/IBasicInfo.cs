@@ -21,13 +21,17 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract
 {
+    /// <summary>
+    /// 医院基础数据
+    /// 科室、院区、人员信息等
+    /// </summary>
     public interface IBasicInfo
     {
         /// <summary>
         /// 获得医院内的科室组织结构
         /// </summary>
         /// <param name="areaId">院区标识</param>
-        /// <returns></returns>
+        /// <returns>当前院区内的科室组织结构</returns>
         List<Organization> GetDepts(string areaId);
 
 
@@ -36,7 +40,7 @@ namespace eHPS.Contract
         /// 获得科室下医生信息
         /// </summary>
         /// <param name="deptId">科室标识</param>
-        /// <returns></returns>
+        /// <returns>科室下医生信息清单</returns>
         List<Doctor> GetDoctors(string deptId);
 
 
@@ -47,7 +51,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="name">姓名</param>
         /// <param name="spelling">拼音</param>
-        /// <returns></returns>
+        /// <returns>查询获取的医生信息清单</returns>
         List<Doctor> GetDoctors(string name, string spelling);
 
 
@@ -56,8 +60,8 @@ namespace eHPS.Contract
         /// <summary>
         /// 获取科室名称
         /// </summary>
-        /// <param name="deptId"></param>
-        /// <returns></returns>
+        /// <param name="deptId">科室标识</param>
+        /// <returns>科室名称</returns>
         string GetDeptName(string deptId);
 
 
@@ -66,7 +70,7 @@ namespace eHPS.Contract
         ///  根据医生标示获取医生信息
         /// </summary>
         /// <param name="doctorId">医生标识</param>
-        /// <returns></returns>
+        /// <returns>医生信息</returns>
         Doctor GetDoctorById(String doctorId);
 
 
@@ -75,22 +79,23 @@ namespace eHPS.Contract
         /// 根据患者就诊卡获取患者基本信息
         /// </summary>
         /// <param name="patientId">患者标识</param>
-        /// <returns></returns>
+        /// <returns>患者信息</returns>
         Patient GetPatientInfo(string patientId);
 
         /// <summary>
         /// 根据患者注册的手机号码获取患者基本信息
         /// </summary>
         /// <param name="mobile">手机号码</param>
-        /// <returns></returns>
+        /// <returns>患者信息清单</returns>
         List<Patient> GetPatientInfoByMobile(string mobile);
 
 
         /// <summary>
         /// 获取挂号费用
         /// </summary>
-        /// <param name="diagnosisType">诊疗类型</param>
-        /// <param name="jobTitle">挂牌工种</param>
+        /// <param name="diagnosisTypeId">诊疗类型</param>
+        /// <param name="jobTitleId">挂牌工种</param>
+        /// <returns>挂号费用</returns>
         decimal GetRegisteredAmount(string diagnosisTypeId, string jobTitleId);
 
     }

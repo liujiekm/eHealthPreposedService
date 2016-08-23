@@ -19,8 +19,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+
 namespace eHPS.Contract
 {
+    /// <summary>
+    /// 预约服务接口
+    /// </summary>
     public interface IAppointment
     {
 
@@ -33,7 +39,7 @@ namespace eHPS.Contract
         /// <param name="doctorId">医生标识</param>
         /// <param name="startTime">排班开始时间</param>
         /// <param name="endTime">排班结束时间</param>
-        /// <returns></returns>
+        /// <returns>医生可预约信息</returns>
         List<BookableDoctor> GetBookableInfo(String areaId, String deptId, String doctorId,DateTime? startTime,DateTime? endTime);
 
 
@@ -42,7 +48,7 @@ namespace eHPS.Contract
         /// </summary>
         /// <param name="patientId">患者标识</param>
         /// <param name="mobile">患者手机</param>
-        /// <returns></returns>
+        /// <returns>患者的预约历史</returns>
         List<BookHistory> GetAppointmentHistory(String patientId, String mobile);
 
 
@@ -51,7 +57,7 @@ namespace eHPS.Contract
         /// 预约之前的判断条件，验证是否可以预约
         /// 进行预约操作
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="appointment">发起预约对象模型</param>
         ResponseMessage<BookHistory> MakeAnAppointment(MakeAnAppointment appointment);
 
 
@@ -62,7 +68,7 @@ namespace eHPS.Contract
         /// 获得指定排班下面的可预约时间点清单
         /// </summary>
         /// <param name="arrangeId">排班标识</param>
-        /// <returns></returns>
+        /// <returns>排班区间内的时间点划分</returns>
         List<BookableTimePoint> GetBookableTimePoint(String arrangeId);
 
 
@@ -73,7 +79,7 @@ namespace eHPS.Contract
         /// <param name="bookTime">预约时间点</param>
         /// <param name="bookSequence">预约序号</param>
         /// <param name="arrangeId">排班标识</param>
-        /// <returns></returns>
+        /// <returns>当前时间点是否可预约</returns>
         bool IsTimePointBooked(DateTime? bookTime, Int32? bookSequence, string arrangeId);
 
 
@@ -85,15 +91,12 @@ namespace eHPS.Contract
         /// 取消指定预约
         /// </summary>
         /// <param name="apponintId">预约标识</param>
+        /// <returns>取消预约操作的返回消息体</returns>
         ResponseMessage<string> CancelTheAppointment(String apponintId);
 
 
 
-        /// <summary>
-        /// 推送可预约的医生信息
-        /// </summary>
-        /// <returns></returns>
-        List<BookableDoctor> PushBookableDoctors();
+
 
 
     }

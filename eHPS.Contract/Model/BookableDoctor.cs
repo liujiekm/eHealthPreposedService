@@ -157,7 +157,6 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 医生可预约状态
         /// </summary>       
-        /// 
         [JilDirective(TreatEnumerationAs =typeof(Int32))]
         public AppointmentState AppointmentState {
             get {

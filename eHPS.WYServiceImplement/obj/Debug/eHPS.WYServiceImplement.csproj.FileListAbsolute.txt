@@ -42,3 +42,4 @@ C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYS
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Web.Administration.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Practices.Unity.Configuration.dll
 C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\Microsoft.Practices.Unity.Configuration.xml
+C:\Jay\Workstation\Team\Projects\fangxin_eHealth\eHealthPreposedService\eHPS.WYServiceImplement\bin\Debug\eHPS.Contract.xml

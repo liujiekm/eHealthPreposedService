@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,7 +88,7 @@ namespace eHPS.ServiceDeployer.Pages
                 this.FileView.ItemsSource = files;
 
             }
-
+            
 
             Window wid = Window.GetWindow(this);
 
@@ -192,7 +193,7 @@ namespace eHPS.ServiceDeployer.Pages
         {
             var contractUrl = Environment.CurrentDirectory + @"\Contract\eHPS.Contract.dll";
             var impDll = this.FileView.SelectedItem;
-            var configUrl = Environment.CurrentDirectory + @"\APIDeploy\Web.config";
+            var configUrl = Environment.CurrentDirectory + @"\BSDeploy\App.config";
             var webserviceUrl = "";
             var result = ConfigHelper.ConfigUnityConfig(configUrl, contractUrl, impDll.ToString(), webserviceUrl);
             if (result == "")
@@ -202,7 +203,7 @@ namespace eHPS.ServiceDeployer.Pages
                 {
                     if (file.ToString().EndsWith(".dll"))
                     {
-                        var destFile = Environment.CurrentDirectory + @"\APIDeploy\bin\" +
+                        var destFile = Environment.CurrentDirectory + @"\BSDeploy\" +
                                    file.ToString()
                                        .Substring(file.ToString().LastIndexOf("\\", StringComparison.Ordinal) + 1);
 
@@ -211,15 +212,10 @@ namespace eHPS.ServiceDeployer.Pages
                 }
 
                 this.BuildInfo.Content = "配置成功！";
-                this.BuildInfo.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
+                this.Deploy.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
                 this.Deploy.IsEnabled = true;
 
                 this.IsConfigured = true;
-
-                //加载当前服务器现有网站信息
-                var sites = DeployHelper.GetCurrentIisSite();
-                sites.Add("新建网站");
-                this.SiteComboBox.ItemsSource = sites;
 
             }
             else
@@ -227,25 +223,11 @@ namespace eHPS.ServiceDeployer.Pages
                 this.BuildInfo.Content = result;
                 this.IsConfigured = false;
                 this.Deploy.IsEnabled = false;
-                this.BuildInfo.Background = new SolidColorBrush(Colors.Gray);
+                this.Deploy.Background = new SolidColorBrush(Colors.Gray);
             }
 
         }
 
-        private void SiteComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-            //部署界面逻辑
-            //如果选择 现有网站  则端口设置禁用
-            if (this.SiteComboBox.SelectedItem.ToString() != "新建网站")
-            {
-                this.SitePort.IsEnabled = false;
-            }
-            else
-            {
-                this.SitePort.IsEnabled = true;
-            }
-        }
 
 
         /// <summary>
@@ -255,81 +237,15 @@ namespace eHPS.ServiceDeployer.Pages
         /// <param name="e"></param>
         private void Deploy_Click(object sender, RoutedEventArgs e)
         {
-            var indicate = String.Empty;
-            if (this.SiteComboBox.SelectedItem != null)
+            var serviceName = this.WindowsServiceName.Text;
+            if (!Regex.IsMatch(serviceName, @"[a-zA-Z]"))
             {
-                var siteComboBoxValue = this.SiteComboBox.SelectedItem.ToString();
-
-                var deploySoutionUrl = Environment.CurrentDirectory + @"\APIDeploy";
-
-                if (siteComboBoxValue == "新建网站")
-                {
-                    if (String.IsNullOrEmpty(this.ApiServiceName.Text) || String.IsNullOrEmpty(this.SitePort.Text))
-                    {
-                        indicate = "请输入网站名称、网站端口！";
-                        MessageBox.Show(indicate);
-                        return;
-                    }
-                    var sitePort = 0;
-                    if (Int32.TryParse(this.SitePort.Text, out sitePort))
-                    {
-                        try
-                        {
-                            var result = DeployHelper.DeploySite(this.ApiServiceName.Text, DeployHelper.BindingProtocol.HTTP, sitePort, deploySoutionUrl);
-                            indicate = result;
-                            MessageBox.Show(indicate == "" ? "部署成功" : indicate);
-
-                        }
-                        catch (Exception ex)
-                        {
-
-                            indicate = "内部错误：Deploy " + ex.Message;
-                            MessageBox.Show(indicate);
-                        }
-                    }
-                    else
-                    {
-                        indicate = "请输入正确的端口！";
-                        MessageBox.Show(indicate);
-                        return;
-                    }
-
-
-                }
-                else
-                {
-                    if (String.IsNullOrEmpty(this.ApiServiceName.Text))
-                    {
-                        indicate = "请输入应用程序名称！";
-                        MessageBox.Show(indicate);
-                        return;
-                    }
-
-
-                    try
-                    {
-
-                        var siteName =
-                            siteComboBoxValue.Split(new[] { '：' }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
-                        var result = DeployHelper.DeployApplication(siteName, this.ApiServiceName.Text, deploySoutionUrl);
-                        indicate = result;
-                        MessageBox.Show(indicate == "" ? "部署成功" : indicate);
-                    }
-                    catch (Exception ex)
-                    {
-                        indicate = "内部错误：Deploy " + ex.Message;
-                        MessageBox.Show(indicate);
-                    }
-
-                }
-            }
-            else
-            {
-                indicate = "请选择网站名称，或新建网站！";
-                MessageBox.Show(indicate);
+                MessageBox.Show("请输入英文字符！");
                 return;
             }
-
+            var serviceUrl = Environment.CurrentDirectory + @"\BSDeploy\eHPS.BackgroundService.exe";
+            var result = DeployHelper.InstallWindowService(serviceUrl, serviceName, serviceName);
+            MessageBox.Show(result == "" ? "部署成功" : result);
         }
     }
 }

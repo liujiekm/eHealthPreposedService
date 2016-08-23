@@ -1,7 +1,7 @@
 ﻿//===================================================================================
 // 北京联想智慧医疗信息技术有限公司 & 上海研发中心
 //===================================================================================
-// 诊疗服务契约
+// 诊疗服务接口
 //
 //
 //===================================================================================
@@ -21,14 +21,17 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract
 {
+    /// <summary>
+    /// 诊疗服务接口
+    /// </summary>
     public interface IDiagnosis
     {
 
         /// <summary>
         /// 根据用户标识，获取用户诊疗记录
         /// </summary>
-        /// <param name="patientId"></param>
-        /// <returns></returns>
+        /// <param name="patientId">患者标识</param>
+        /// <returns>患者诊疗信息清单</returns>
         List<DiagnosisRecord> GetDiagnosisHistory(String patientId);
 
 
@@ -44,7 +47,7 @@ namespace eHPS.Contract
         /// <param name="doctorId">医生标识</param>
         /// <param name="deptId">科室标识</param>
         /// <param name="complaint">患者主诉</param>
-        /// <returns></returns>
+        /// <returns>发起在线诊疗命令的返回消息体信息</returns>
         ResponseMessage<string> MakeADiagnosis(String patientId,String pId,String doctorId, String deptId,String complaint);
 
 

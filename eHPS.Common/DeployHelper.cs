@@ -22,6 +22,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.ServiceProcess;
+
 namespace eHPS.Common
 {
     /// <summary>
@@ -203,20 +205,77 @@ namespace eHPS.Common
         /// <summary>
         /// 安装部署服务项目（Windows Service）
         /// </summary>
-        public static void InstallWindowService(String servicePath,String serviceName,String serviceDisplayName)
+        public static string InstallWindowService(String servicePath,String serviceName,String serviceDisplayName)
         {
-            ServiceInstaller installer = new ServiceInstaller();
-            installer.InstallService(servicePath, serviceName, serviceDisplayName);
+            var indicate = String.Empty;
+            if (!IsServiceExist(serviceName))
+            {
+                try
+                {
+                    ServiceInstaller installer = new ServiceInstaller();
+                    installer.InstallService(servicePath, serviceName, serviceDisplayName);
+                    
+                }
+                catch (Exception ex)
+                {
+                    indicate = ex.Message;
+                }
+
+            }
+            else
+            {
+                indicate = "此服务名已经存在";
+            }
+
+            return indicate;
+
         }
 
         /// <summary>
         /// 卸载windows service服务
         /// </summary>
         /// <param name="serviceName"></param>
-        public static void UninstallWindowService(String serviceName)
+        public static string UninstallWindowService(String serviceName)
         {
-            ServiceInstaller installer = new ServiceInstaller();
-            installer.UnInstallService(serviceName);
+            var indicate = String.Empty;
+            if (IsServiceExist(serviceName))
+            {
+                try
+                {
+                    ServiceInstaller installer = new ServiceInstaller();
+                    installer.UnInstallService(serviceName);
+                }
+                catch (Exception ex)
+                {
+                    indicate = ex.Message;
+                }
+            }
+            else
+            {
+                indicate = "此服务名不存在";
+            }
+            return indicate;
+        }
+
+
+        /// <summary>
+        /// 验证windows 服务是否存在
+        /// </summary>
+        /// <param name="serviceName">服务名称</param>
+        /// <returns></returns>
+        public static bool IsServiceExist(String serviceName)
+        {
+            var machineName = Environment.MachineName;
+            var services = ServiceController.GetServices(machineName);
+            foreach (var service in services)
+            {
+                if (service.ServiceName.Equals(serviceName))
+                {
+                    return true;
+                    
+                }
+            }
+            return false;
         }
     }
 }
