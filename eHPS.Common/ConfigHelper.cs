@@ -107,11 +107,11 @@ namespace eHPS.Common
             //接口与实现类的键值对
             Dictionary<String, String> contractImp;
             //检测实现类是否都实现了Contract
-            VerifyImplement(contractTypes, implementTypes, out contractImp);
-            //if (VerifyImplement(contractTypes, implementTypes, out contractImp))
-            //{
-            //var section = (UnityConfigurationSection)configuration.GetSection("unity");
-            var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
+            //VerifyImplement(contractTypes, implementTypes, out contractImp);
+            if (VerifyImplement(contractTypes, implementTypes, out contractImp))
+            {
+                //var section = (UnityConfigurationSection)configuration.GetSection("unity");
+                var ignoreAssembilies = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework" };
                 var ignoreNamesapces = new List<String> { "eHPS.Contract", "eHPS.CrossCutting.NetFramework", "eHPS.CrossCutting.NetFramework.ExceptionHandler" };
                 if (File.Exists(configUrl))
                 {
@@ -162,11 +162,11 @@ namespace eHPS.Common
                     indicate = "API配置文件未发现！";
                 }
 
-            //}
-            //else
-            //{
-            //    indicate = "类库验证未通过！";
-            //}
+            }
+            else
+            {
+                indicate = "类库验证未通过！";
+            }
 
             return indicate;
         }

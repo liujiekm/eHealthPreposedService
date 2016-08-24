@@ -127,9 +127,19 @@ namespace eHPS.Common
             using (ServerManager serverManager = new ServerManager())
             {
                 ApplicationPool newPool = serverManager.ApplicationPools.Add(poolname);
+
                 newPool.ManagedRuntimeVersion = runtimeVersion;
                 newPool.Enable32BitAppOnWin64 = enable32bitOn64;
                 newPool.ManagedPipelineMode = mode;
+
+                newPool.AutoStart = true;
+
+                newPool.StartMode=StartMode.AlwaysRunning;
+
+                newPool.QueueLength = 65535;
+                newPool.ProcessModel.ShutdownTimeLimit=new TimeSpan(110);
+                newPool.ProcessModel.MaxProcesses = 100;
+
                 serverManager.CommitChanges();
             }
         }

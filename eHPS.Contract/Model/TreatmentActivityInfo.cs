@@ -123,5 +123,10 @@ namespace eHPS.Contract.Model
         /// 患者订单信息
         /// </summary>
         public List<OrderItem> Orders { get; set; }
+
+        /// <summary>
+        /// 是否需要收获地址
+        /// </summary>
+        public bool IfNeedDeliveryAddress { get; set; }
     }
 } 

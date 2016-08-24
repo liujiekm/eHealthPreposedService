@@ -145,7 +145,7 @@ namespace eHPS.ServiceDeployer.Pages
                             validInfo = "验证通过！";
 
                             this.Build.IsEnabled = true;
-                            this.Build.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
+                            this.Build.Background = new SolidColorBrush(Color.FromArgb(255, 26, 161, 226));
                             IsImplementValid = true;
                         }
                         else
@@ -193,7 +193,7 @@ namespace eHPS.ServiceDeployer.Pages
         {
             var contractUrl = Environment.CurrentDirectory + @"\Contract\eHPS.Contract.dll";
             var impDll = this.FileView.SelectedItem;
-            var configUrl = Environment.CurrentDirectory + @"\BSDeploy\App.config";
+            var configUrl = Environment.CurrentDirectory + @"\BSDeploy\eHPS.BackgroundService.exe.config";
             var webserviceUrl = "";
             var result = ConfigHelper.ConfigUnityConfig(configUrl, contractUrl, impDll.ToString(), webserviceUrl);
             if (result == "")
@@ -212,8 +212,9 @@ namespace eHPS.ServiceDeployer.Pages
                 }
 
                 this.BuildInfo.Content = "配置成功！";
-                this.Deploy.Background = new SolidColorBrush(Color.FromArgb(100, 0, 111, 255));
                 this.Deploy.IsEnabled = true;
+                this.Deploy.Background = new SolidColorBrush(Color.FromArgb(255, 26, 161, 226));
+                
 
                 this.IsConfigured = true;
 

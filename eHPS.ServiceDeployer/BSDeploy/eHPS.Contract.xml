@@ -1,0 +1,1227 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>eHPS.Contract</name>
+    </assembly>
+    <members>
+        <member name="T:eHPS.Contract.IAppointment">
+            <summary>
+            预约服务接口
+            </summary>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.GetBookableInfo(System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime})">
+            <summary>
+            获取医生可预约信息
+            </summary>
+            <param name="areaId">院区标识</param>
+            <param name="deptId">科室标识</param>
+            <param name="doctorId">医生标识</param>
+            <param name="startTime">排班开始时间</param>
+            <param name="endTime">排班结束时间</param>
+            <returns>医生可预约信息</returns>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.GetAppointmentHistory(System.String,System.String)">
+            <summary>
+            获取患者的预约历史
+            </summary>
+            <param name="patientId">患者标识</param>
+            <param name="mobile">患者手机</param>
+            <returns>患者的预约历史</returns>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.MakeAnAppointment(eHPS.Contract.Model.MakeAnAppointment)">
+            <summary>
+            预约 ,需包含如下逻辑
+            预约之前的判断条件，验证是否可以预约
+            进行预约操作
+            </summary>
+            <param name="appointment">发起预约对象模型</param>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.GetBookableTimePoint(System.String)">
+            <summary>
+            如果预约无需预约到精确时间点则无需实现改方法
+            获得指定排班下面的可预约时间点清单
+            </summary>
+            <param name="arrangeId">排班标识</param>
+            <returns>排班区间内的时间点划分</returns>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.IsTimePointBooked(System.Nullable{System.DateTime},System.Nullable{System.Int32},System.String)">
+            <summary>
+            如果预约无需预约到精确时间点则无需实现改方法
+            检查当前时间点或者预约序号是否被占用
+            </summary>
+            <param name="bookTime">预约时间点</param>
+            <param name="bookSequence">预约序号</param>
+            <param name="arrangeId">排班标识</param>
+            <returns>当前时间点是否可预约</returns>
+        </member>
+        <member name="M:eHPS.Contract.IAppointment.CancelTheAppointment(System.String)">
+            <summary>
+            取消指定预约
+            </summary>
+            <param name="apponintId">预约标识</param>
+            <returns>取消预约操作的返回消息体</returns>
+        </member>
+        <member name="T:eHPS.Contract.IBasicInfo">
+            <summary>
+            医院基础数据
+            科室、院区、人员信息等
+            </summary>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetDepts(System.String)">
+            <summary>
+            获得医院内的科室组织结构
+            </summary>
+            <param name="areaId">院区标识</param>
+            <returns>当前院区内的科室组织结构</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetDoctors(System.String)">
+            <summary>
+            获得科室下医生信息
+            </summary>
+            <param name="deptId">科室标识</param>
+            <returns>科室下医生信息清单</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetDoctors(System.String,System.String)">
+            <summary>
+            根据姓名或者拼音查询医生信息
+            
+            </summary>
+            <param name="name">姓名</param>
+            <param name="spelling">拼音</param>
+            <returns>查询获取的医生信息清单</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetDeptName(System.String)">
+            <summary>
+            获取科室名称
+            </summary>
+            <param name="deptId">科室标识</param>
+            <returns>科室名称</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetDoctorById(System.String)">
+            <summary>
+             根据医生标示获取医生信息
+            </summary>
+            <param name="doctorId">医生标识</param>
+            <returns>医生信息</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetPatientInfo(System.String)">
+            <summary>
+            根据患者就诊卡获取患者基本信息
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns>患者信息</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetPatientInfoByMobile(System.String)">
+            <summary>
+            根据患者注册的手机号码获取患者基本信息
+            </summary>
+            <param name="mobile">手机号码</param>
+            <returns>患者信息清单</returns>
+        </member>
+        <member name="M:eHPS.Contract.IBasicInfo.GetRegisteredAmount(System.String,System.String)">
+            <summary>
+            获取挂号费用
+            </summary>
+            <param name="diagnosisTypeId">诊疗类型</param>
+            <param name="jobTitleId">挂牌工种</param>
+            <returns>挂号费用</returns>
+        </member>
+        <member name="T:eHPS.Contract.IDiagnosis">
+            <summary>
+            诊疗服务接口
+            </summary>
+        </member>
+        <member name="M:eHPS.Contract.IDiagnosis.GetDiagnosisHistory(System.String)">
+            <summary>
+            根据用户标识，获取用户诊疗记录
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns>患者诊疗信息清单</returns>
+        </member>
+        <member name="M:eHPS.Contract.IDiagnosis.MakeADiagnosis(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            发起在线诊疗
+            操作挂号信息
+            挂号收费后置
+            </summary>
+            <param name="patientId">医院内部患者标识</param>
+            <param name="pId">患者在互联网医院平台的标识</param>
+            <param name="doctorId">医生标识</param>
+            <param name="deptId">科室标识</param>
+            <param name="complaint">患者主诉</param>
+            <returns>发起在线诊疗命令的返回消息体信息</returns>
+        </member>
+        <member name="T:eHPS.Contract.IInspection">
+            <summary>
+            患者检查检验信息
+            </summary>
+        </member>
+        <member name="M:eHPS.Contract.IInspection.GetInspectionReportDetailByPatientId(System.String)">
+            <summary>
+            根据用户标识获取检查检验报告详情
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns>患者详细的报告单信息</returns>
+        </member>
+        <member name="T:eHPS.Contract.IPayment">
+            <summary>
+            支付服务接口：
+            包含 挂号收费、HIS系统内部开具的医嘱收费
+            </summary>
+        </member>
+        <member name="M:eHPS.Contract.IPayment.AwareOrderBooked(System.Collections.Generic.List{System.String})">
+            <summary>
+            主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
+            则本方法实现需主动轮询未支付的收费项目
+            </summary>
+            <param name="patientIds">多个患者标识</param>
+            <returns>患者们待支付项目清单</returns>
+        </member>
+        <member name="M:eHPS.Contract.IPayment.Pay(System.String,System.String,System.String,System.String)">
+            <summary>
+            支付患者的医嘱项目费用
+            支付成功之后，直接返回成功与否信息
+            </summary>
+            <param name="tradingId">本次交易标识</param>
+            <param name="activityId">
+            当前支付的诊疗活动标识
+            </param>
+            <param name="amount">应付金额</param>
+            <param name="actualAmount">实际应付金额</param>
+            <returns>支付命令返回消息体</returns>
+        </member>
+        <member name="M:eHPS.Contract.IPayment.PayRegistration(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            挂号收费
+            收费成功后，往消息队列发送成功与否的消息
+            </summary>
+            <param name="hospitalId">医院标识</param>
+            <param name="appointId">预约标识</param>
+            <param name="tradingId">本次交易标识</param>
+            <param name="amount">交易金额</param>
+            <param name="actualAmount">实际交易金额</param>
+            <returns>挂号收费执行后返回消息体</returns>
+        </member>
+        <member name="M:eHPS.Contract.IPayment.GetPatientAvaliableAmount(System.String)">
+            <summary>
+            获取指定患者的医院账户可用金额（预存for温附一）
+            </summary>
+            <param name="patientId">患者标识</param>
+            <returns>患者账号信息</returns>
+        </member>
+        <member name="M:eHPS.Contract.IPayment.Recharge(System.String,System.String,System.String)">
+            <summary>
+            预存充值
+            </summary>
+            <param name="patientId">患者标识</param>
+            <param name="tradingId">交易标识</param>
+            <param name="amount">实际的交易金额</param>
+            <returns>预存充值执行后返回消息体</returns>
+        </member>
+        <member name="T:eHPS.Contract.Model.BookableDoctor">
+            <summary>
+            可预约的医生信息模型
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.DocotorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.DoctorName">
+            <summary>
+            医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.PhotoUrl">
+            <summary>
+            头像图片链接
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.Photo">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.DeptId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.JobTitleId">
+            <summary>
+            职位标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.JobTitle">
+            <summary>
+            职位名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.UsedBookNum">
+            <summary>
+            已使用号源数
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.SumBookNum">
+            <summary>
+            号源总数
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.UnusedBookNum">
+            <summary>
+            剩余号源
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.DiagnosisType">
+            <summary>
+            诊疗类型
+            1 普通、2 专家
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.ArrangeId">
+            <summary>
+            排班标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.ArrangeStartTime">
+            <summary>
+            排班开始时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.ArrangeEndTime">
+            <summary>
+            排班结束时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.RegisteredAmount">
+            <summary>
+            挂号金额
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.AppointmentState">
+            <summary>
+            医生可预约状态
+            </summary>       
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.BookableTimePoints">
+            <summary>
+            当前排班下的可预约的时间点
+            如果实施医院不支持预约到时间点 则为空
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableDoctor.Remark">
+            <summary>
+            备注说明
+            专病信息等
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.AppointmentState">
+            <summary>
+            医生可预约排班状态
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointmentState.Bookable">
+            <summary>
+            1可以预约
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointmentState.FullyBooked">
+            <summary>
+            2已经预满
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointmentState.Expired">
+            <summary>
+            3已经过期
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointmentState.OtherReason">
+            <summary>
+            4其他原因不可预约
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.BookableTimePoint">
+            <summary>
+            可预约的时间点信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableTimePoint.AppointSequence">
+            <summary>
+            可预约的预约序号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableTimePoint.AppointTime">
+            <summary>
+            可预约的时间点
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookableTimePoint.ArrangeIndicate">
+            <summary>
+            预约号描述
+            如果没有预约到时间点则显示 预约序号
+            如果预约到时间点则显示预约序号+$+预约时间点
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.BookHistory">
+            <summary>
+            患者预约历史
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.ArrangeId">
+            <summary>
+            排班标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.AppointId">
+            <summary>
+            预约标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DeptId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DoctorId">
+            <summary>
+            预约医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DoctorName">
+            <summary>
+            预约医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DoctorJobTitle">
+            <summary>
+            医生职称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DoctorSex">
+            <summary>
+            医生性别
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.DiagnosisType">
+            <summary>
+            诊疗类型
+            1 普通、2 专家
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.AppointTime">
+            <summary>
+            预约时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.AppointSequence">
+            <summary>
+            预约序号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.Attention">
+            <summary>
+            注意事项
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.RegisteredAmount">
+            <summary>
+            挂号收费金额
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.PatientName">
+             <summary>
+            患者姓名
+             </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.PatientMobile">
+            <summary>
+            患者手机号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.PatientIdCard">
+            <summary>
+            患者身份证
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.BookHistory.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.AppointState">
+            <summary>
+            患者预约状态
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.Appointing">
+            <summary>
+            预约中
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.Registering">
+            <summary>
+            挂号中
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.WaitingForCall">
+            <summary>
+            等待叫号
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.InTreatment">
+            <summary>
+            正在就诊
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.TreatmentFinished">
+            <summary>
+            就诊完成
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.AppointState.AlreadyCanceled">
+            <summary>
+            已经取消
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.Department">
+            <summary>
+            医院科室模型
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Department.DeptId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Department.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.DiagnosisRecord">
+            <summary>
+            诊疗记录
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.Id">
+            <summary>
+            诊疗记录id
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.DoctorName">
+            <summary>
+            医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.DiagnosisTime">
+            <summary>
+            诊疗时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.DiagnosisInfo">
+            <summary>
+            诊断结果
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.MedicalHistory">
+            <summary>
+            病史信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.Examination">
+            <summary>
+            体检信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.DiagnosisRecord.Laboratory">
+            <summary>
+            化验信息
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.Diagnostics">
+            <summary>
+            患者一次诊疗的诊断信息
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.Doctor">
+            <summary>
+            医生信息模型
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.DoctorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.DoctorName">
+            <summary>
+            医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.DeptName">
+            <summary>
+            科室名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.DeptId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.JobTitle">
+             <summary>
+             职称 主任医师 等
+            11	主任医师
+            12	副主任医师
+            13	主治医师
+            14	住院医师
+            15	医士
+            16	检验医师
+            17	未确定医师
+             </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.Photo">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.Introduction">
+            <summary>
+            简介
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.Expert">
+            <summary>
+            擅长
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.Sex">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.IfOnlineDiagnosis">
+            <summary>
+            是否支持在线诊疗
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.IfAppointment">
+            <summary>
+            是否可预约
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.IfRegister">
+            <summary>
+            是否可挂号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Doctor.OnlineTreatmentAmount">
+            <summary>
+            在线诊疗金额
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.InspectionReport">
+            <summary>
+            检查、检验报告总览
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.ReportId">
+            <summary>
+            报告标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.PatientId">
+            <summary>
+            病人就诊卡标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.PatientName">
+            <summary>
+            病人姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.ReportTime">
+            <summary>
+            出具报告时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.InspectionTypeName">
+            <summary>
+            检查检验类型中文名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.InspectionTypeCode">
+            <summary>
+            检查检验类型代码
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReport.InspectionName">
+            <summary>
+            检查检验详细名称
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.InspectionReportDetail">
+            <summary>
+            检查、检验报告 详情
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.ReportId">
+            <summary>
+            报告标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.PatientId">
+            <summary>
+            用户标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.PatientName">
+            <summary>
+            用户姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.ReportTime">
+            <summary>
+            报告时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.Reporter">
+            <summary>
+            报告者
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.InspectionTypeCode">
+            <summary>
+            检查检验类型代码
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.InspectionTypeName">
+            <summary>
+            检查检验类型中文名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.Title">
+            <summary>
+            检查标题
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.Result">
+            <summary>
+            检查结果
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.Diagnostic">
+            <summary>
+            检查结果诊断
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.InspectionReportDetail.Details">
+            <summary>
+            检验结果
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.LaboratoryItemDetail">
+            <summary>
+            具体化验项目详情
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.LaboratoryItemDetail.ItemName">
+            <summary>
+            项目名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.LaboratoryItemDetail.Result">
+            <summary>
+            项目结果值
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.LaboratoryItemDetail.IsError">
+            <summary>
+            结果值与正常值比较
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.LaboratoryItemDetail.Normal">
+            <summary>
+            正常值
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.MakeAnAppointment">
+            <summary>
+            预约行为
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.PatientId">
+            <summary>
+            患者标识（就诊卡）
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.ArrangeId">
+            <summary>
+            排班标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.AppointTime">
+            <summary>
+            预约时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.AppointSequence">
+            <summary>
+            预约序号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.ArrangeIndicate">
+            <summary>
+            预约号描述
+            如果没有预约到时间点则显示 预约序号
+            如果预约到时间点则显示预约序号+$+预约时间点
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.PatientName">
+            <summary>
+            患者姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.Mobile">
+            <summary>
+            患者手机号码
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.MakeAnAppointment.PatientIdCard">
+            <summary>
+            患者身份证
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.Order">
+            <summary>
+            患者就诊之后，医生在HIS系统中开具的医嘱及其收费项目明细模型s
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.OrderAmount">
+            <summary>
+            订单金额
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.OrderType">
+            <summary>
+            订单类型
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.HospitalOrderId">
+            <summary>
+            医院HIS内部标识订单的标识
+            为了支持一张处方内的项目可以单独收费
+            比如一张化验单则取化验单的唯一标识+前缀(医院标识)
+            如果是担保挂号则取诊疗活动标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.OrderDescribe">
+            <summary>
+            订单描述
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.Remark">
+            <summary>
+            订单备注
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.BookingTime">
+            <summary>
+            下订单时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.ExpireTime">
+            <summary>
+            订单过期时间
+            如果是挂号订单，则需设置订单过期时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.OrderState">
+            <summary>
+            订单状态
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Order.OrderItems">
+            <summary>
+            收费项目详情
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.OrderState">
+            <summary>
+            订单状态
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderState.Nonpayment">
+            <summary>
+            未支付
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderType.Registration">
+            <summary>
+            挂号费
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderType.Medicine">
+            <summary>
+            药品费
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderType.Inspection">
+            <summary>
+            检查
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderType.Laboratory">
+            <summary>
+            检验
+            </summary>
+        </member>
+        <member name="F:eHPS.Contract.Model.OrderType.Cure">
+            <summary>
+            治疗
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.OrderItem">
+            <summary>
+            患者就诊时，医生在HIS系统开具的医嘱对应的收费项目详细清单
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemId">
+            <summary>
+             医嘱标识
+            （温附一实现中，附加医嘱不设置项目Id）
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemName">
+            <summary>
+            收费项目名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemType">
+            <summary>
+            收费项目类型，医嘱类别
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemUnitPrice">
+            <summary>
+            收费项目单价
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemGroupNO">
+            <summary>
+            项目组号，比如 针剂 需多个项目设为一组来进行收费
+            一些附件项目也放到组里面进行收费
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemCount">
+            <summary>
+            收费项目数量
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.ItemSpecification">
+            <summary>
+            项目规格
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.OrderItem.OrderTime">
+            <summary>
+            项目开单时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Organization.ParentDept">
+            <summary>
+            父级科室
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Organization.Subdivision">
+            <summary>
+            子级科室
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.PatientName">
+            <summary>
+            患者姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.IdCode">
+            <summary>
+            患者身份证号
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.Telephone">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.Mobile">
+            <summary>
+            手机
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.ContactAddress">
+            <summary>
+            联系地址
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.FirstTimeDiagnosis">
+            <summary>
+            首次诊疗时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.BornDate">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Patient.Sex">
+            <summary>
+            患者性别 1 男 2 女
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.PatientConsumption">
+            <summary>
+            推送服务推送的用户待支付项目
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PatientConsumption.AppId">
+            <summary>
+            当前医院在当前平台的医院标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PatientConsumption.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PatientConsumption.PatientName">
+            <summary>
+            患者姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PlatformServiceResponse`1.HasError">
+            <summary>
+            命令执行是否哟错误
+            0 正确 1 有问题
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PlatformServiceResponse`1.ErrorMessage">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.PlatformServiceResponse`1.Data">
+            <summary>
+            消息体
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.ResponseMessage`1.HasError">
+            <summary>
+            命令执行是否哟错误
+            0 正确 1 有问题
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.ResponseMessage`1.ErrorMessage">
+            <summary>
+            错误信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.ResponseMessage`1.Body">
+            <summary>
+            消息体
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.TradingAccount">
+            <summary>
+            患者在医院交易的账户信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TradingAccount.Avaliable">
+            <summary>
+            当前账号是否可用
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TradingAccount.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TradingAccount.Amount">
+            <summary>
+            当前账号可用余额
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.Treatment">
+            <summary>
+            患者一次诊疗活动模型，包含（医疗数据信息、费用信息）
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.AppId">
+            <summary>
+            当前医院在当前平台的医院标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.PID">
+            <summary>
+            患者所在平台的标识
+            用户下去绑定的患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.DiagnosticInformationId">
+            <summary>
+            平台数据库存储的诊疗标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.TreatmentId">
+            <summary>
+            诊疗活动标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.DeptdId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.DoctorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.DoctorName">
+            <summary>
+            医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.Complaint">
+            <summary>
+            主诉
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.PatientId">
+            <summary>
+            患者标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.PatientName">
+            <summary>
+            患者姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.Diagnostics">
+            <summary>
+            患者诊断信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.Treatment.Orders">
+            <summary>
+            患者订单信息
+            </summary>
+        </member>
+        <member name="T:eHPS.Contract.Model.TreatmentActivityInfo">
+            <summary>
+            患者单次就诊，诊疗活动信息
+            包含 就诊科室、诊断信息等
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.TreatmentId">
+            <summary>
+            诊疗活动标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.PId">
+            <summary>
+            患者在平台上对应的在线诊疗唯一标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.CreateTime">
+            <summary>
+            诊疗活动创建时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.Amount">
+            <summary>
+            本次诊疗活动所有收费项目的金额
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.DeptdId">
+            <summary>
+            科室标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.DeptName">
+            <summary>
+            科室名称
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.DoctorId">
+            <summary>
+            医生标识
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.DoctorName">
+            <summary>
+            医生姓名
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.Complaint">
+            <summary>
+            主诉
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.ExpirationTime">
+            <summary>
+            支付诊疗活动项目的过期时间
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.Diagnostics">
+            <summary>
+            患者诊断信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.Orders">
+            <summary>
+            患者订单信息
+            </summary>
+        </member>
+        <member name="P:eHPS.Contract.Model.TreatmentActivityInfo.IfNeedDeliveryAddress">
+            <summary>
+            是否需要收获地址
+            </summary>
+        </member>
+    </members>
+</doc>

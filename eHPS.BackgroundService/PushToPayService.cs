@@ -69,8 +69,7 @@ namespace eHPS.BackgroundService
 
         protected override void OnStart(string[] args)
         {
-            System.Timers.Timer timer = new System.Timers.Timer();
-            timer.Interval = Int32.Parse(interval); 
+            System.Timers.Timer timer = new System.Timers.Timer {Interval = Int32.Parse(interval)};
             timer.Elapsed += new System.Timers.ElapsedEventHandler(this.OnPush);
             timer.Start();
         }
@@ -110,7 +109,7 @@ namespace eHPS.BackgroundService
 
             LoggerFactory.CreateLog().Info("获得用户平台绑定卡号信息", patientIdList);
 
-            var patientConsumptions = new List<PatientConsumption>();
+            List<PatientConsumption> patientConsumptions;
             try
             {
                 patientConsumptions = paymentService.AwareOrderBooked(patientIdList);
