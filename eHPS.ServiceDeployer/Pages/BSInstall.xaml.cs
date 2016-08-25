@@ -79,20 +79,14 @@ namespace eHPS.ServiceDeployer.Pages
 
             if (result == CommonFileDialogResult.Ok)
             {
-
                 string filename = dialog.FileName;
                 FileNameTextBox.Text = filename;
-
-                //    //获取当前目录中的所有文件
+                 //获取当前目录中的所有文件
                 var files = Directory.GetFiles(filename, "*", SearchOption.TopDirectoryOnly);
                 this.FileView.ItemsSource = files;
 
             }
-            
 
-            Window wid = Window.GetWindow(this);
-
-            //MessageBox.Show(wid.ToString());
 
             #region OpenFileDialog
 
@@ -246,7 +240,18 @@ namespace eHPS.ServiceDeployer.Pages
             }
             var serviceUrl = Environment.CurrentDirectory + @"\BSDeploy\eHPS.BackgroundService.exe";
             var result = DeployHelper.InstallWindowService(serviceUrl, serviceName, serviceName);
-            MessageBox.Show(result == "" ? "部署成功" : result);
+
+            if (result == "")
+            {
+                MessageBox.Show( "部署成功" );
+                Window wid = Window.GetWindow(this);
+                wid?.Close();
+            }
+            else
+            {
+                MessageBox.Show(result);
+            }
+
         }
     }
 }

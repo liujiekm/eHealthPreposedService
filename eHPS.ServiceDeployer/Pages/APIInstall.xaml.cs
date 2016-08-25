@@ -203,7 +203,7 @@ namespace eHPS.ServiceDeployer.Pages
                 //拷贝实现文件夹中的类库到API 的bin目录
                 foreach (var file in this.FileView.ItemsSource)
                 {
-                    if (file.ToString().EndsWith(".dll"))
+                    if (file.ToString().EndsWith(".dll")|| file.ToString().EndsWith(".dll.config"))
                     {
                         var destFile = Environment.CurrentDirectory + @"\APIDeploy\bin\" +
                                    file.ToString()
@@ -211,6 +211,7 @@ namespace eHPS.ServiceDeployer.Pages
 
                         File.Copy(file.ToString(), destFile,true);
                     }
+
                 }
 
                 this.BuildInfo.Content = "配置成功！";
@@ -278,15 +279,15 @@ namespace eHPS.ServiceDeployer.Pages
                     {
                         try
                         {
+                            //优化Web服务器IIS 设置
+
+                            IISHelper.OptimizeWebServer();
                             var result = DeployHelper.DeploySite(this.ApiServiceName.Text, DeployHelper.BindingProtocol.HTTP, sitePort, deploySoutionUrl);
                             indicate = result;
-                            MessageBox.Show(indicate==""?"部署成功":indicate);
+                            MessageBox.Show(indicate==""?"部署成功并优化服务器IIS设置，请重启服务器以应用这些设置":indicate);
 
-                            
                             Window wid = Window.GetWindow(this);
-                            wid.Close();
-
-
+                            wid?.Close();
                         }
                         catch (Exception ex)
                         {

@@ -315,9 +315,6 @@
     <Content Include="APIDeploy\bin\eHPS.CrossCutting.NetFramework.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="APIDeploy\bin\eHPS.WYServiceImplement.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="APIDeploy\bin\Elmah.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

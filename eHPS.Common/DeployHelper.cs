@@ -96,6 +96,7 @@ namespace eHPS.Common
                     newPool.ManagedPipelineMode = ManagedPipelineMode.Integrated;
                     site.ApplicationDefaults.ApplicationPoolName = siteName;
                     //网站下所有应用程序的应用程序池都设置为新创建的newPool
+                    IISHelper.OptimizeAppliactionPool(newPool);
 
                     foreach (var item in site.Applications)
                     {
@@ -130,8 +131,9 @@ namespace eHPS.Common
                         newPool.ManagedRuntimeVersion = "v4.0";
                         newPool.Enable32BitAppOnWin64 = false;
                         newPool.ManagedPipelineMode = ManagedPipelineMode.Integrated;
-                        application.ApplicationPoolName = applicationName;
 
+                        IISHelper.OptimizeAppliactionPool(newPool);
+                        application.ApplicationPoolName = applicationName;
                         iisManager.CommitChanges();
                     }
                     else
