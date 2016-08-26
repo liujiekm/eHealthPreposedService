@@ -196,8 +196,11 @@ namespace eHPS.ServiceDeployer.Pages
             var contractUrl = Environment.CurrentDirectory + @"\Contract\eHPS.Contract.dll";
             var impDll = this.FileView.SelectedItem;
             var configUrl = Environment.CurrentDirectory + @"\APIDeploy\Web.config";
-            var webserviceUrl = "";
-            var result = ConfigHelper.ConfigUnityConfig(configUrl,contractUrl,impDll.ToString(),webserviceUrl);
+
+
+            //查找是否有自定义的配置 沟通后缀.dll.config
+            var impConfigFile =impDll + ".config";
+            var result = ConfigHelper.ConfigUnityConfig(configUrl, impConfigFile,contractUrl, impDll.ToString());
             if (result == "")
             {
                 //拷贝实现文件夹中的类库到API 的bin目录

@@ -33,7 +33,6 @@ namespace eHPS.WYServiceImplement
     public class AppointmentService : IAppointment
     {
 
-
         private IBasicInfo basicInfoService;
 
         public AppointmentService(IBasicInfo basicInfoService)

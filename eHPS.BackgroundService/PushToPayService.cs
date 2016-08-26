@@ -41,11 +41,11 @@ namespace eHPS.BackgroundService
 
         private IPayment paymentService;
 
-        private static readonly string  baseUrl = ConfigurationManager.AppSettings["BaseUrl"];
-        private static readonly string  interval = ConfigurationManager.AppSettings["Interval"];
+        private static readonly string  baseUrl = ConfigurationManager.AppSettings["eHPS_Sys_BaseUrl"];
+        private static readonly string  interval = ConfigurationManager.AppSettings["eHPS_Sys_Interval"];
 
-        private static readonly string appid = ConfigurationManager.AppSettings["AppID"];
-        private static readonly string appIdSecret = ConfigurationManager.AppSettings["AppIDSecret"];
+        private static readonly string appid = ConfigurationManager.AppSettings["eHPS_Sys_AppID"];
+        private static readonly string appIdSecret = ConfigurationManager.AppSettings["eHPS_Sys_AppIDSecret"];
 
 
         public PushToPayService()

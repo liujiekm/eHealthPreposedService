@@ -51,7 +51,7 @@ namespace eHPS.API.Filter
 
 
             //验证appid 
-            var allowAppId = ConfigurationManager.AppSettings["AppID"];
+            var allowAppId = ConfigurationManager.AppSettings["eHPS_Sys_AppID"];
 
             if(header.UserName!=allowAppId)
             {

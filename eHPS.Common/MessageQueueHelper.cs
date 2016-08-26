@@ -34,8 +34,8 @@ namespace eHPS.Common
     public class MessageQueueHelper
     {
 
-        private static readonly string  address= ConfigurationManager.AppSettings["Address"];
-        private static readonly Int32 port = Int32.Parse(ConfigurationManager.AppSettings["Port"]);
+        private static readonly string  address= ConfigurationManager.AppSettings["eHPS_Sys_Address"];
+        private static readonly Int32 port = Int32.Parse(ConfigurationManager.AppSettings["eHPS_Sys_Port"]);
         
 
 

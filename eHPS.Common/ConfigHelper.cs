@@ -89,10 +89,11 @@ namespace eHPS.Common
         /// <param name="configUrl">API中的webconfig或者windows
         /// service中的App.config 地址 http://192.168.1.233/webservice/n_webservice.asmx
         /// </param>
+        /// <param name="impConfigUrl">用户自定义实现类库的配置文件</param>
         /// <param name="contractAssemblyUrl">接口类库地址</param>
         /// <param name="implementAssemblyUrl">实现类库地址</param>
         /// <param name="webserviceUrl">HIS暴露的webservice服务地址</param>
-        public static  String ConfigUnityConfig(String configUrl, String contractAssemblyUrl,String implementAssemblyUrl,String webserviceUrl)
+        public static  String ConfigUnityConfig(String configUrl,String impConfigUrl, String contractAssemblyUrl,String implementAssemblyUrl)
         {
             var indicate = String.Empty;
             //Configuration configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -116,6 +117,9 @@ namespace eHPS.Common
                 if (File.Exists(configUrl))
                 {
                     var root = XElement.Load(configUrl);
+                    
+
+                    #region unity 配置修改
                     //config 文件中unity标签
                     var unityElement = root.Element("unity");
                     //config 文件中unity标签下的assembly 标签
@@ -149,11 +153,42 @@ namespace eHPS.Common
                         }
                     }
 
-                    //修改web service引用地址
-                    if(!String.IsNullOrEmpty(webserviceUrl))
+                    #endregion
+
+                    #region appsetting 配置 连接字符串配置  web service 配置  
+                    var appSettings = root.Element("appSettings");
+                    var connectionSettings = root.Element("connectionStrings");
+                    if (File.Exists(impConfigUrl))
                     {
-                        root.Element("system.serviceModel").Element("client").Element("endpoint").SetAttributeValue("address", webserviceUrl);
+                        var impRoot = XElement.Load(impConfigUrl);
+
+                        var impAppSettings = impRoot.Element("appSettings");
+                        if (impAppSettings != null)
+                        {
+                            var impAppSettingsItem = impAppSettings.Elements("add");
+                            appSettings.Add(impAppSettings);
+                        }
+
+                        var impConnectionStrings = impRoot.Element("connectionStrings");
+                        if (impConnectionStrings != null)
+                        {
+                            connectionSettings.Add(impConnectionStrings.Elements("add"));
+                        }
+
+
+                        var impWebService = impRoot.Element("system.serviceModel");
+                        if (impWebService != null)
+                        {
+                            root.Add(impWebService);
+                        }
+
                     }
+
+                   
+                    
+
+                    #endregion
+
 
                     root.Save(configUrl);
                 }

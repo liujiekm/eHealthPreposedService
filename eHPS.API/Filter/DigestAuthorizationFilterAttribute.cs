@@ -30,7 +30,7 @@ namespace eHPS.API.Filter
 
         protected override string GetSecret(string userName)
         {
-            return ConfigurationManager.AppSettings["AppIDSecret"];
+            return ConfigurationManager.AppSettings["eHPS_Sys_AppIDSecret"];
         }
 
         protected override bool IsUserAuthorized(string userName)

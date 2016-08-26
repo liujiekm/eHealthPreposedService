@@ -40,8 +40,8 @@ namespace eHPS.API.Handlers
 
                 if (Nonce.IsValid(header.Nonce, header.NounceCounter))
                 {
-                    var uzkey = ConfigurationManager.AppSettings["UZKey"];
-                    var uzsecret = ConfigurationManager.AppSettings["UZSecret"];
+                    var uzkey = ConfigurationManager.AppSettings["eHPS_Sys_UZKey"];
+                    var uzsecret = ConfigurationManager.AppSettings["eHPS_Sys_UZSecret"];
 
                     var hash1 = HashHelper.GetMD5(String.Format("{0}:{1}:{2}", uzkey, header.Realm, uzsecret));
                     var hash2 = HashHelper.GetMD5(String.Format("{0}:{1}", header.Method, header.Uri));

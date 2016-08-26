@@ -110,7 +110,7 @@ namespace eHPS.Contract.Model
         public DateTime ExpirationTime { get {
 
                 //取订单项目的下单时间再延迟设定天数
-                return Orders[0].OrderTime.AddDays(Double.Parse(ConfigurationManager.AppSettings["ExpirationTime"].ToString()));
+                return Orders[0].OrderTime.AddDays(Double.Parse(ConfigurationManager.AppSettings["eHPS_Sys_ExpirationTime"].ToString()));
 
             } }
         

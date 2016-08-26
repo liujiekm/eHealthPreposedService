@@ -134,135 +134,135 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\Api.cshtml">
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\Api.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ComplexTypeModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\DictionaryModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\EnumTypeModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ImageSample.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\InvalidSample.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\KeyValuePairModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\ModelDescriptionLink.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\Parameters.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\Samples.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\SimpleTypeModelDescription.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TestClientDialogs.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TestClientDialogs.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TestClientReferences.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TestClientReferences.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\DisplayTemplates\TextSample.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\Index.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Help\ResourceModel.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Help\ResourceModel.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Shared\_Layout.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Shared\_Layout.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\Web.config">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Areas\HelpPage\Views\_ViewStart.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Areas\HelpPage\Views\_ViewStart.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\bin\App_global.asax.compiled">
+    </Content>
+    <Content Include="APIDeploy\bin\App_global.asax.compiled">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\bin\NLog.config">
+    </Content>
+    <Content Include="APIDeploy\bin\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\bin\roslyn\Microsoft.CSharp.Core.targets">
+    </Content>
+    <Content Include="APIDeploy\bin\roslyn\Microsoft.CSharp.Core.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\bin\roslyn\Microsoft.VisualBasic.Core.targets">
+    </Content>
+    <Content Include="APIDeploy\bin\roslyn\Microsoft.VisualBasic.Core.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\bin\roslyn\VBCSCompiler.exe.config">
+    </Content>
+    <Content Include="APIDeploy\bin\roslyn\VBCSCompiler.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\packages.config">
+    </Content>
+    <Content Include="APIDeploy\packages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\PrecompiledApp.config">
+    </Content>
+    <Content Include="APIDeploy\PrecompiledApp.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Views\Home\Index.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Views\Home\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Views\Shared\Error.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Views\Shared\Error.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Views\Shared\_Layout.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Views\Shared\_Layout.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Views\Web.config">
+    </Content>
+    <Content Include="APIDeploy\Views\Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Views\_ViewStart.cshtml">
+    </Content>
+    <Content Include="APIDeploy\Views\_ViewStart.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="APIDeploy\Web.config">
+    </Content>
+    <Content Include="APIDeploy\Web.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\App.config">
+    </Content>
+    <Content Include="BSDeploy\App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\eHPS.BackgroundService.exe.config">
+    </Content>
+    <Content Include="BSDeploy\eHPS.BackgroundService.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\eHPS.BackgroundService.InstallLog">
+    </Content>
+    <Content Include="BSDeploy\eHPS.BackgroundService.InstallLog">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\eHPS.BackgroundService.InstallState">
+    </Content>
+    <Content Include="BSDeploy\eHPS.BackgroundService.InstallState">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\eHPS.BackgroundService.vshost.exe.config">
+    </Content>
+    <Content Include="BSDeploy\eHPS.BackgroundService.vshost.exe.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\eHPS.BackgroundService.vshost.exe.manifest">
+    </Content>
+    <Content Include="BSDeploy\eHPS.BackgroundService.vshost.exe.manifest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\InstallUtil.InstallLog">
+    </Content>
+    <Content Include="BSDeploy\InstallUtil.InstallLog">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="BSDeploy\NLog.config">
+    </Content>
+    <Content Include="BSDeploy\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
@@ -819,12 +819,6 @@
     <Content Include="BSDeploy\eHPS.MessageQueueContract.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="BSDeploy\eHPS.WYServiceImplement.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BSDeploy\eHPS.WYServiceImplement.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="BSDeploy\Jil.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -883,9 +877,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BSDeploy\Microsoft.Practices.Unity.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BSDeploy\Microsoft.Web.Administration.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="BSDeploy\NLog.dll">

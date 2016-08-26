@@ -69,11 +69,13 @@ namespace eHPS.ImplementTest
             var contractAssemblyUrl = baseUrl + @"\eHPS.Contract.dll";
             var configFileUrl = "./Web.config";
 
+            var impConfigUrl = baseUrl + @"\eHPS.SomeImplement.dll.config";
+
             var serviceUrl = "http://192.168.1.232/webservice/n_webservice.asmx";
             //var configFileUrl = baseUrl + "\\Web.config";
             var fileExits = File.Exists(configFileUrl);
 
-            ConfigHelper.ConfigUnityConfig(configFileUrl, contractAssemblyUrl, implementAssemblyUrl,serviceUrl);
+            ConfigHelper.ConfigUnityConfig(configFileUrl, impConfigUrl,contractAssemblyUrl, implementAssemblyUrl);
         }
 
 
