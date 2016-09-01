@@ -66,7 +66,7 @@ namespace eHPS.CrossCutting.NetFramework.Caching
 
             var policy = new CacheItemPolicy
             {
-                AbsoluteExpiration = DateTime.Now + TimeSpan.FromMilliseconds(time ?? Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["CacheTime"]))
+                AbsoluteExpiration = DateTime.Now + TimeSpan.FromMilliseconds(time ?? Convert.ToDouble(System.Configuration.ConfigurationManager.AppSettings["eHPS_Sys_SessionTime"]))
             };
             Cache.Add(key, data, policy);
         }
@@ -102,7 +102,7 @@ namespace eHPS.CrossCutting.NetFramework.Caching
                 var cache = Cache.GetCacheItem(key);
                 if (cache != null)
                 {
-                    var policy = new CacheItemPolicy { AbsoluteExpiration = DateTime.Now + TimeSpan.FromMinutes(Convert.ToDouble(ConfigurationManager.AppSettings["SessionTime"])) };
+                    var policy = new CacheItemPolicy { AbsoluteExpiration = DateTime.Now + TimeSpan.FromMinutes(Convert.ToDouble(ConfigurationManager.AppSettings["eHPS_Sys_SessionTime"])) };
                     Cache.Set(cache, policy);
                 }
             }

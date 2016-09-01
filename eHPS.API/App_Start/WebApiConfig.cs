@@ -28,7 +28,9 @@ namespace eHPS.API
             //启用跨域
             config.EnableCors();
             //增加摘要算法验证
-            config.Filters.Add(new DigestAuthorizationFilterAttribute());
+
+
+            //config.Filters.Add(new DigestAuthorizationFilterAttribute());
 
 
             //替换默认的JSON序列化器JSON.NET为Jil

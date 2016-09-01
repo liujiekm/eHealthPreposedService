@@ -42,6 +42,11 @@ namespace eHPS.SomeImplement
             throw new NotImplementedException();
         }
 
+        public List<BookableDoctor> GetBookableInfo(string areaId, string deptId, string doctorId, string registerOrAppointment, DateTime? startTime, DateTime? endTime)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<BookableTimePoint> GetBookableTimePoint(string arrangeId)
         {
             throw new NotImplementedException();

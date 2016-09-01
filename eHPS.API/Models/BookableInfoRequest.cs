@@ -51,5 +51,17 @@ namespace eHPS.API.Models
         /// 预约排班查询结束时间
         /// </summary>
         public DateTime? endTime { get; set; }
+
+
+        /// <summary>
+        /// 表明是挂号还是预约
+        /// Register 挂号
+        /// Appointment预约
+        /// </summary>
+        public String RegisterOrAppointment { get; set; }
+
     }
+
+
+   
 }

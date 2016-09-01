@@ -27,14 +27,16 @@ namespace eHPS.Contract.Model
     /// <summary>
     /// 推送服务推送的用户待支付项目
     /// </summary>
-    public class PatientConsumption
+    public class PatientConsumption//:IEquatable<PatientConsumption>
     {
+
+
 
         /// <summary>
         /// 当前医院在当前平台的医院标识
         /// </summary>
         public String AppId { get {
-                return ConfigurationManager.AppSettings["AppID"];
+                return ConfigurationManager.AppSettings["eHPS_Sys_AppID"];
 
             }
         }
@@ -56,9 +58,28 @@ namespace eHPS.Contract.Model
         /// </summary>
         public String PatientName { get; set; }
 
-        
+
+        //public override bool Equals(object right)
+        //{
+        //    if (Object.ReferenceEquals(right, null))
+        //    {
+        //        return false;
+        //    }
+
+        //    if (this.GetType() != right.GetType())
+        //    {
+        //        return false;
+        //    }
+        //    return this.Equals(right as PatientConsumption);
+
+        //}
 
 
-       
+        //public bool Equals(PatientConsumption other)
+        //{
+        //    //实现值比较
+
+
+        //}
     }
 }

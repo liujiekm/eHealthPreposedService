@@ -30,7 +30,7 @@ namespace eHPS.API.Controllers
     /// 支付服务，包含：
     /// 医嘱收费，挂号收费
     /// </summary>
-    [RoutePrefix("Payment"),Authorize]
+    [RoutePrefix("Payment")]//,Authorize
     public class PaymentController : ApiController
     {
 

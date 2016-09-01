@@ -7,9 +7,10 @@
              mc:Ignorable="d"  Height="680" Width="700" 
              d:DesignHeight="680" d:DesignWidth="700">
 
+    <ScrollViewer  VerticalScrollBarVisibility="Auto">
 
-    
-    <Canvas Style="{StaticResource ContentRoot}" Margin="5">
+
+        <Canvas Style="{StaticResource ContentRoot}" Margin="5" >
         
         
         <TextBox Height="32" HorizontalAlignment="Left" x:Name="FileNameTextBox"  Width="467"
@@ -49,7 +50,8 @@
 
             </StackPanel>
         </GroupBox>
-
+        
 
     </Canvas>
+    </ScrollViewer>
 </UserControl>

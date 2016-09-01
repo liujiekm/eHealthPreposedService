@@ -57,6 +57,9 @@ namespace eHPS.Contract.Model
         /// 如果预约到时间点则显示预约序号+$+预约时间点
         /// </summary>
         public String ArrangeIndicate { get; set; }
+
+
+
         /// <summary>
         /// 患者姓名
         /// </summary>

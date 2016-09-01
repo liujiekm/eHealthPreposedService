@@ -29,7 +29,7 @@ namespace eHPS.API.Controllers
     /// <summary>
     /// 对外预约服务
     /// </summary>
-    [RoutePrefix("Appointment"),Authorize]
+    [RoutePrefix("Appointment")]//,Authorize
     public class AppointmentController : ApiController
     {
         private IBasicInfo basicInfoService;
@@ -52,7 +52,8 @@ namespace eHPS.API.Controllers
         [Route("DoctorAppoint"),HttpPost,ResponseType(typeof(List<BookableDoctor>))]
         public List<BookableDoctor> GetBookableInfo([FromBody]BookableInfoRequest request)
         {
-            return appointmentService.GetBookableInfo(request.areaId,request.deptId, request.doctorId, request.startTime, request.endTime);
+
+            return appointmentService.GetBookableInfo(request.areaId,request.deptId, request.doctorId, request.RegisterOrAppointment,request.startTime, request.endTime);
         }
 
 

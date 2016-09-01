@@ -33,6 +33,8 @@ using eHPS.CrossCutting.Logging;
 using eHPS.CrossCutting.NetFramework.Logging;
 using Microsoft.Practices.Unity.Configuration;
 using System.Net.Http.Formatting;
+using eHPS.CrossCutting.NetFramework.Caching;
+using Jil;
 
 namespace eHPS.BackgroundService
 {
@@ -85,14 +87,12 @@ namespace eHPS.BackgroundService
             LoggerFactory.CreateLog().Info("开始推送用户待收费项目");
             var patientIds =RequestPatientIds();
 
-            var patientIdList = new List<String>();
+            List<String> patientIdList;
             try
             {
-                if(patientIds.IsCompleted)
-                {
-                    patientIdList = patientIds.Result;
-                }
 
+                patientIdList = patientIds.Result;
+                LoggerFactory.CreateLog().Info("获取用户绑定卡号为："+String.Join("$",patientIdList));
                 //patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
             }
             catch (Exception ex)
@@ -104,10 +104,7 @@ namespace eHPS.BackgroundService
                   ex.StackTrace), ex);
                 throw;
             }
-            
 
-
-            LoggerFactory.CreateLog().Info("获得用户平台绑定卡号信息", patientIdList);
 
             List<PatientConsumption> patientConsumptions;
             try
@@ -129,14 +126,37 @@ namespace eHPS.BackgroundService
             try
             {
 
-                //按患者来推送收费项目
-                foreach (var patientConsumption in patientConsumptions)
+                if (CacheProvider.Exist("eHPS_Sys_Consumption"))
                 {
-                    resultCode = MessageQueueHelper.PushMessage<PatientConsumption>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
-                    LoggerFactory.CreateLog().Info("推送患者: "+patientConsumption.PatientName+"待支付项目" + (resultCode == 0 ? "失败" : "成功"));
-                }
+                    var prevConsumption = CacheProvider.Get("eHPS_Sys_Consumption") as List<PatientConsumption>;
 
-                
+                    var prevConsumptionJson = JSON.Serialize(prevConsumption);
+                    var currentConsumptionJson = JSON.Serialize(patientConsumptions);
+                    //与前一次相等
+                    if (!HashHelper.GetMD5(prevConsumptionJson).Equals(HashHelper.GetMD5(currentConsumptionJson)))
+                    {
+                        CacheProvider.Set("eHPS_Sys_Consumption", patientConsumptions);
+
+                        //按患者来推送收费项目
+                        foreach (var patientConsumption in patientConsumptions)
+                        {
+                            resultCode = MessageQueueHelper.PushMessage<PatientConsumption>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
+                            LoggerFactory.CreateLog().Info("推送患者: " + patientConsumption.PatientName + "待支付项目" + (resultCode == 0 ? "失败" : "成功"));
+                        }
+
+                    }
+
+                }
+                else//不存在前一个推送消息，则是第一次推送
+                {
+                    CacheProvider.Set("eHPS_Sys_Consumption", patientConsumptions);
+                    //按患者来推送收费项目
+                    foreach (var patientConsumption in patientConsumptions)
+                    {
+                        resultCode = MessageQueueHelper.PushMessage<PatientConsumption>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
+                        LoggerFactory.CreateLog().Info("推送患者: " + patientConsumption.PatientName + "待支付项目" + (resultCode == 0 ? "失败" : "成功"));
+                    }
+                }
 
             }
             catch (Exception ex)

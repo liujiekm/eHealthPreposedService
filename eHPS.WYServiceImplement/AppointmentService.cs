@@ -161,15 +161,18 @@ namespace eHPS.WYServiceImplement
 
 
 
-
-
-
         /// <summary>
         /// 获取医生可预约信息
         /// </summary>
+        /// <param name="areaId">院区标识</param>
         /// <param name="deptId">科室标识</param>
+        /// <param name="doctorId">医生标识</param>
+        /// <param name="registerOrAppointment">标识是挂号还是预约</param>
+        /// <param name="startTime">排班开始时间</param>
+        /// <param name="endTime">排班结束时间</param>
+        /// <returns>医生可预约信息</returns>
         /// <returns></returns>
-        public List<BookableDoctor> GetBookableInfo(String areaId,String deptId,String doctorId, DateTime? startTime, DateTime? endTime)
+        public List<BookableDoctor> GetBookableInfo(String areaId,String deptId,String doctorId, String registerOrAppointment, DateTime? startTime, DateTime? endTime)
         {
             var bookableDoctors = new List<BookableDoctor>();
             using (var con = DapperFactory.CrateOracleConnection())
@@ -179,14 +182,25 @@ namespace eHPS.WYServiceImplement
                                             FROM YYFZ_YSPB B,R_RYK R WHERE B.ZTBZ='1'AND B.RYKID=R.ID AND R.GZDM2!='0000'  AND B.YQDM=:AreaId AND B.ZKID=:DeptId
                                             AND (B.ZLLX='02' OR B.ZLLX='04' OR B.ZLLX='07') AND B.YSYHID =:DoctorId AND B.SBSJ >=:KSSJ and B.SBSJ<=:JSSJ";
 
-                if(null==startTime)
+                var currentDate = DateTime.Now;
+                if (registerOrAppointment == "Register")
                 {
-                    startTime = DateTime.Now;
+                    startTime = new DateTime(currentDate.Year,currentDate.Month,currentDate.Day,0,0,0);
+                    endTime= new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
                 }
-                if(null==endTime)
+                else
                 {
-                    endTime = DateTime.Now.AddDays(14);
+                    if (null == startTime)
+                    {
+                        startTime = DateTime.Now;
+                    }
+                    if (null == endTime)
+                    {
+                        endTime = DateTime.Now.AddDays(14);
+                    }
                 }
+
+                
                 var condition = new { AreaId=areaId, DeptId=deptId, DoctorId = Int32.Parse(doctorId),KSSJ= startTime, JSSJ= endTime };
                 var result = con.Query(command, condition).ToList();
                 var userPhotos = new Dictionary<Int32, Byte[]>();
@@ -223,7 +237,7 @@ namespace eHPS.WYServiceImplement
                 }
             }
 
-            return bookableDoctors;
+            return bookableDoctors.OrderBy(p=>p.ArrangeStartTime).ToList();
         }
 
 
@@ -545,7 +559,15 @@ namespace eHPS.WYServiceImplement
 
             var appointTimeAndSequence = appointment.ArrangeIndicate.Split(new String[] { "$" }, StringSplitOptions.RemoveEmptyEntries);
             appointment.AppointSequence = appointTimeAndSequence[0] == null ? 0 : Int32.Parse(appointTimeAndSequence[0]);
-            appointment.AppointTime = appointTimeAndSequence[1] == null ? default(DateTime) : DateTime.Parse(appointTimeAndSequence[1]);
+            if (appointTimeAndSequence.Length > 1)
+            {
+                appointment.AppointTime = appointTimeAndSequence[1] == null ? default(DateTime) : DateTime.Parse(appointTimeAndSequence[1]);
+            }
+            else
+            {
+                appointment.AppointTime = default(DateTime);
+            }
+            
 
             if (VerifyArrangeFunctional(appointment.ArrangeId))
             {

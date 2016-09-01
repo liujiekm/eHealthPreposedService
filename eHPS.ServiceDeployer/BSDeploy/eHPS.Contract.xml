@@ -368,6 +368,11 @@
             如果预约到时间点则显示预约序号+$+预约时间点
             </summary>
         </member>
+        <member name="P:eHPS.Contract.Model.BookableTimePoint.ArrangeIndicateName">
+            <summary>
+            前台预约时间点 显示字段，用于App端显示
+            </summary>
+        </member>
         <member name="T:eHPS.Contract.Model.BookHistory">
             <summary>
             患者预约历史

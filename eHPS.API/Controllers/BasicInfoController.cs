@@ -30,7 +30,7 @@ namespace eHPS.API.Controllers
     /// 基础信息服务，包含：
     /// 医院科室信息，科室人员信息等
     /// </summary>
-    [RoutePrefix("BasicInfo"),Authorize]
+    [RoutePrefix("BasicInfo")]//,Authorize
     public class BasicInfoController : ApiController
     {
 

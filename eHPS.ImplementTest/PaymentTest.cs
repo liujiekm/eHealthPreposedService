@@ -45,8 +45,8 @@ namespace eHPS.ImplementTest
         {
             paymentService = container.Resolve<IPayment>();
 
-            //, "0000003001775739", "0000003001779855"
-            var result = paymentService.AwareOrderBooked(new List<String> { "0000003001777361"});
+
+            var result = paymentService.AwareOrderBooked(new List<String> { "0000003001775739","0000003001777361" });
 
             Assert.IsNotNull(result);
         }
@@ -64,6 +64,26 @@ namespace eHPS.ImplementTest
         }
 
 
+
+
+
+        [TestMethod]
+        public void Verify_Pay_Register_Functional()
+        {
+            paymentService = container.Resolve<IPayment>(); ;
+
+            var TradingId = "gh_86_290_1000";
+            var AppointId = "27652";
+
+            var Amount = "0";
+
+            //{ AppointId = "27652", TradingId = "gh_86_290_1000", Amount = 0 }
+
+            var result = paymentService.Recharge(TradingId, AppointId, Amount);
+
+            Assert.AreEqual(0, result.HasError);
+            Assert.IsNotNull(result.Body);
+        }
 
 
 

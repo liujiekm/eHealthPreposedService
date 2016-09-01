@@ -29,7 +29,7 @@ namespace eHPS.API.Controllers
     /// 诊疗服务，包含：
     /// 获取用户诊疗记录，发起在线诊疗
     /// </summary>
-    [RoutePrefix("Diagnosis"),Authorize]
+    [RoutePrefix("Diagnosis")]//,Authorize
     public class DiagnosisController : ApiController
     {
 

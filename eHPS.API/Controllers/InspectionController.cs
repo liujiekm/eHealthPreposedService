@@ -27,7 +27,7 @@ namespace eHPS.API.Controllers
     /// <summary>
     /// 检验检查单对外服务
     /// </summary>
-    [RoutePrefix("Inspection"),Authorize]
+    [RoutePrefix("Inspection")]//,Authorize
     public class InspectionController : ApiController
     {
 

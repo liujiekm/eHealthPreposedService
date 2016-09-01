@@ -39,7 +39,7 @@ namespace eHPS.ImplementTest
         public void Verify_OnlineDiagnosis_Functionality()
         {
             var diagnosisService = container.Resolve<IDiagnosis>();
-            var result = diagnosisService.MakeADiagnosis("0000003001777361", "000000300177736111111", "8798", "15", "just get out here");
+            var result = diagnosisService.MakeADiagnosis("0000003001777361", "000000300177736111111", "8798", "15", "just get out here 111");
             Assert.AreEqual(0, result.HasError);
         }
 

@@ -468,6 +468,7 @@ namespace eHPS.WYServiceImplement
             
             var serviceReturnCode = client.f_get_data(code,ref content,ref serviceReturn);
 
+
             if (serviceReturnCode == 0)
             {
                 var items = CommonService.RetriveFromString(content);
@@ -778,7 +779,19 @@ namespace eHPS.WYServiceImplement
                         var returnCode = "";
                         using (HISService.n_webserviceSoapClient client = new HISService.n_webserviceSoapClient())
                         {
-                            var resultCode = client.f_get_data("yccz", ref requestMessage, ref returnCode);
+                            Int32 resultCode = 0;
+
+                            try
+                            {
+                                client.f_get_data("yccz", ref requestMessage, ref returnCode);
+                            }
+                            catch (Exception ex)
+                            {
+
+                                result.HasError = 2;
+                                result.ErrorMessage = ex.Message;
+                                return result;
+                            }
 
                             if (resultCode == 0)
                             {
@@ -793,6 +806,8 @@ namespace eHPS.WYServiceImplement
                                 result.ErrorMessage = returnCode;
 
                             }
+                            return result;
+                            
                         }
                     }
                     else

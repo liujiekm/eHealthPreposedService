@@ -65,5 +65,26 @@ namespace eHPS.Contract.Model
         }
 
 
+
+
+        /// <summary>
+        /// 前台预约时间点 显示字段，用于App端显示
+        /// </summary>
+        public String ArrangeIndicateName
+        {
+            get
+            {
+                if (AppointTime != null)
+                {
+                    return  "" + AppointTime.ToUniversalTime().ToString("HH:mm");
+                }
+                else
+                {
+                    return AppointSequence.ToString();
+                }
+
+            }
+        }
+
     }
 }
