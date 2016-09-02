@@ -746,7 +746,7 @@ namespace eHPS.WYServiceImplement
                     AppointId = appointId.ToString(),
                     AppointSequence= appointment.AppointSequence.Value,
                     AppointState=AppointState.Appointing,
-                    AppointTime=appointment.AppointTime.Value,
+                    AppointTime=appointment.AppointTime.Value.ToLocalTime(),
                     ArrangeId= appointment.ArrangeId,
                     Attention="",
                     CreateTime=DateTime.Now,
