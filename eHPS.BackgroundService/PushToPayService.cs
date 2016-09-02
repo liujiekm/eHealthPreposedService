@@ -33,6 +33,7 @@ using eHPS.CrossCutting.Logging;
 using eHPS.CrossCutting.NetFramework.Logging;
 using Microsoft.Practices.Unity.Configuration;
 using System.Net.Http.Formatting;
+using System.Text;
 using eHPS.CrossCutting.NetFramework.Caching;
 using Jil;
 
@@ -133,7 +134,7 @@ namespace eHPS.BackgroundService
                     var prevConsumptionJson = JSON.Serialize(prevConsumption);
                     var currentConsumptionJson = JSON.Serialize(patientConsumptions);
                     //与前一次相等
-                    if (!HashHelper.GetMD5(prevConsumptionJson).Equals(HashHelper.GetMD5(currentConsumptionJson)))
+                    if (!HashHelper.GetMD5(prevConsumptionJson,Encoding.UTF8).Equals(HashHelper.GetMD5(currentConsumptionJson, Encoding.UTF8)))
                     {
                         CacheProvider.Set("eHPS_Sys_Consumption", patientConsumptions);
 
@@ -154,7 +155,7 @@ namespace eHPS.BackgroundService
                     foreach (var patientConsumption in patientConsumptions)
                     {
                         resultCode = MessageQueueHelper.PushMessage<PatientConsumption>(QueueDescriptor.AwareOrderBooked.Item1, patientConsumption);
-                        LoggerFactory.CreateLog().Info("推送患者: " + patientConsumption.PatientName + "待支付项目" + (resultCode == 0 ? "失败" : "成功"));
+                        LoggerFactory.CreateLog().Info("首次推送患者: " + patientConsumption.PatientName + "待支付项目" + (resultCode == 0 ? "失败" : "成功"));
                     }
                 }
 

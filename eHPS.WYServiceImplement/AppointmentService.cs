@@ -185,14 +185,14 @@ namespace eHPS.WYServiceImplement
                 var currentDate = DateTime.Now;
                 if (registerOrAppointment == "Register")
                 {
-                    startTime = new DateTime(currentDate.Year,currentDate.Month,currentDate.Day,0,0,0);
-                    endTime= new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
+                    startTime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 0, 0, 0);
+                    endTime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59);
                 }
                 else
                 {
                     if (null == startTime)
                     {
-                        startTime = DateTime.Now;
+                        startTime = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 0, 0, 0).AddDays(1);
                     }
                     if (null == endTime)
                     {
