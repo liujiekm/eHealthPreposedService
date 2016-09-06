@@ -47,7 +47,7 @@ namespace eHPS.Contract
         /// <param name="amount">应付金额</param>
         /// <param name="actualAmount">实际应付金额</param>
         /// <returns>支付命令返回消息体</returns>
-        ResponseMessage<String> Pay(String tradingId,String activityId,String amount, String actualAmount);//
+        ResponseMessage<String> Pay(String tradingId,String activityId,Decimal amount, Decimal actualAmount);//
 
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace eHPS.Contract
         /// <param name="tradingId">交易标识</param>
         /// <param name="amount">实际的交易金额</param>
         /// <returns>预存充值执行后返回消息体</returns>
-        ResponseMessage<String> Recharge(String patientId,String tradingId, String amount);
+        ResponseMessage<String> Recharge(String patientId,String tradingId, Decimal amount);
 
 
     }

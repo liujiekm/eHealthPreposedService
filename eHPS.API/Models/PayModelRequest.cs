@@ -46,12 +46,12 @@ namespace eHPS.API.Models
         /// 本次支付的总金额
         /// </summary>
         [Required(AllowEmptyStrings = false, ErrorMessage = "本次支付的总金额不允许为空")]
-        public String Amount { get; set; }
+        public Decimal Amount { get; set; }
 
         /// <summary>
         /// 本次支付的实际金额
         /// </summary>
         [Required(AllowEmptyStrings = false, ErrorMessage = "本次支付的实际金额不允许为空")]
-        public String ActualAmount { get; set; }
+        public Decimal ActualAmount { get; set; }
     }
 }

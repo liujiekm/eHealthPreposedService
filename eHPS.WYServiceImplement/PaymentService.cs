@@ -441,6 +441,12 @@ namespace eHPS.WYServiceImplement
 
 
 
+
+
+
+
+
+
         /// <summary>
         /// 主动推送：如果医生在HIS系统内部给平台用户开具了医嘱并等待收费，
         /// 则本方法实现需主动轮询，未支付的收费项目
@@ -452,7 +458,7 @@ namespace eHPS.WYServiceImplement
 
             var patientConsumptions = new List<PatientConsumption>();
 
-            if(patientIds==null)
+            if(patientIds==null||patientIds.Count==0)
             {
                 return patientConsumptions;
             }
@@ -614,25 +620,25 @@ namespace eHPS.WYServiceImplement
         /// 支付患者的医嘱项目费用
         /// 支付成功之后，直接返回成功与否信息
         /// </summary>
-        /// <param name="trading">本次交易标识</param>
+        /// <param name="tradingId">本次交易标识</param>
         /// <param name="activityId">
         /// 当前支付的诊疗活动标识
         /// </param>
         /// <param name="amount">总金额</param>
-        /// <param name="amount">实际交易金额</param>
+        /// <param name="actualAmount">实际交易金额</param>
         /// <returns>
         /// HasError：0 支付成功
         /// HasError：1 交易标识、诊疗活动标识、总金额、实际交易金额不可为空
         /// HasError：2 预存充值失败
         /// HasError：3 充值成功，结算失败，余额存入医院预存账户
         /// </returns>
-        public ResponseMessage<string> Pay(String tradingId ,String activityId, String amount,String actualAmount)
+        public ResponseMessage<string> Pay(String tradingId ,String activityId, Decimal amount,Decimal actualAmount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
-            if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(activityId) || String.IsNullOrEmpty(amount)||String.IsNullOrEmpty(actualAmount))
+            if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(activityId))
             {
                 result.HasError = 1;
-                result.ErrorMessage = "交易标识、诊疗活动标识、总金额、实际交易金额不可为空";
+                result.ErrorMessage = "交易标识、诊疗活动标识不可为空";
                 return result;
             }
 
@@ -749,7 +755,7 @@ namespace eHPS.WYServiceImplement
         /// HasError :1 交易标识、预约不能为空/患者未用就诊卡预约，无法挂号/不存在预约记录
         /// HasError :2 挂号充值失败(ErrorMessage 包含错误信息)
         /// </returns>
-        public ResponseMessage<string> Recharge(string tradingId, string appointId,string amount)
+        public ResponseMessage<string> Recharge(string tradingId, string appointId,Decimal amount)
         {
             var result = new ResponseMessage<string> { HasError = 0, ErrorMessage = "", Body = "" };
             if (String.IsNullOrEmpty(tradingId) || String.IsNullOrEmpty(appointId))

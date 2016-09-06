@@ -42,7 +42,7 @@ namespace eHPS.BackgroundService
     partial class PushToPayService : ServiceBase
     {
 
-        private IPayment paymentService;
+        private readonly IPayment paymentService;
 
         private static readonly string  baseUrl = ConfigurationManager.AppSettings["eHPS_Sys_BaseUrl"];
         private static readonly string  interval = ConfigurationManager.AppSettings["eHPS_Sys_Interval"];
@@ -83,26 +83,24 @@ namespace eHPS.BackgroundService
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public void OnPush(object sender, System.Timers.ElapsedEventArgs args)
+        private void OnPush(object sender, System.Timers.ElapsedEventArgs args)
         {
             LoggerFactory.CreateLog().Info("开始推送用户待收费项目");
-            var patientIds =RequestPatientIds();
 
-            List<String> patientIdList;
+            List<String> patientIdList=new List<String>();
             try
             {
+                var patientIds = RequestPatientIds();
 
                 patientIdList = patientIds.Result;
-                LoggerFactory.CreateLog().Info("获取用户绑定卡号为："+String.Join("$",patientIdList));
-                //patientIdList = new List<String> { "0000003001777361", "0000003001775739", "0000003001779855" };
+                LoggerFactory.CreateLog().Info("获取用户绑定卡号为：" + String.Join("$", patientIdList));
+
+                
             }
             catch (Exception ex)
             {
-                LoggerFactory.CreateLog().Error(String.Format(
-
-                  "获取用户绑定卡号信息服务{0} 抛出异常 {1}\r\n堆栈信息：{2}", "RequestPatientIds().Result",
-                  ex.Message,
-                  ex.StackTrace), ex);
+                LoggerFactory.CreateLog().Error(
+                    $"获取用户绑定卡号信息服务RequestPatientIds().Result 抛出异常 {ex.Message}\r\n堆栈信息：{ex.StackTrace}", ex);
                 throw;
             }
 
@@ -114,11 +112,8 @@ namespace eHPS.BackgroundService
             }
             catch (Exception ex)
             {
-                LoggerFactory.CreateLog().Error(String.Format(
-
-                  "获取患者待支付项目服务 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "paymentService.AwareOrderBooked",
-                  ex.Message,
-                  ex.StackTrace), ex);
+                LoggerFactory.CreateLog().Error(
+                    $"获取患者待支付项目服务 paymentService.AwareOrderBooked 抛出异常 {ex.Message}\r\n堆栈信息：{ex.StackTrace}", ex);
                 throw;
             }
             
@@ -133,11 +128,10 @@ namespace eHPS.BackgroundService
 
                     var prevConsumptionJson = JSON.Serialize(prevConsumption);
                     var currentConsumptionJson = JSON.Serialize(patientConsumptions);
-                    //与前一次相等
+                    //与前一次不相等
                     if (!HashHelper.GetMD5(prevConsumptionJson,Encoding.UTF8).Equals(HashHelper.GetMD5(currentConsumptionJson, Encoding.UTF8)))
                     {
                         CacheProvider.Set("eHPS_Sys_Consumption", patientConsumptions);
-
                         //按患者来推送收费项目
                         foreach (var patientConsumption in patientConsumptions)
                         {
@@ -162,11 +156,8 @@ namespace eHPS.BackgroundService
             }
             catch (Exception ex)
             {
-                LoggerFactory.CreateLog().Error(String.Format(
-
-                  "推送患者待支付项目到RabbitMQ队列 {0} 抛出异常 {1}\r\n堆栈信息：{2}", "MessageQueueHelper.PushMessage<List<PatientConsumption>>",
-                  ex.Message,
-                  ex.StackTrace), ex);
+                LoggerFactory.CreateLog().Error(
+                    $"推送患者待支付项目到RabbitMQ队列 MessageQueueHelper.PushMessage<List<PatientConsumption>> 抛出异常 {ex.Message}\r\n堆栈信息：{ex.StackTrace}", ex);
 
                 throw;
             }
@@ -184,9 +175,7 @@ namespace eHPS.BackgroundService
             {
                 client.BaseAddress = requestUri;
                 client.DefaultRequestHeaders.Accept.Clear();
-                
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                
                 var response = await client.GetAsync("api/User/GetHospitalBindingCard/" + appid);
                 if (response.IsSuccessStatusCode)
                 {

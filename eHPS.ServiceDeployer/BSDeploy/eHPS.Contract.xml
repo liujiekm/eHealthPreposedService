@@ -178,7 +178,7 @@
             <param name="patientIds">多个患者标识</param>
             <returns>患者们待支付项目清单</returns>
         </member>
-        <member name="M:eHPS.Contract.IPayment.Pay(System.String,System.String,System.String,System.String)">
+        <member name="M:eHPS.Contract.IPayment.Pay(System.String,System.String,System.Decimal,System.Decimal)">
             <summary>
             支付患者的医嘱项目费用
             支付成功之后，直接返回成功与否信息
@@ -210,7 +210,7 @@
             <param name="patientId">患者标识</param>
             <returns>患者账号信息</returns>
         </member>
-        <member name="M:eHPS.Contract.IPayment.Recharge(System.String,System.String,System.String)">
+        <member name="M:eHPS.Contract.IPayment.Recharge(System.String,System.String,System.Decimal)">
             <summary>
             预存充值
             </summary>

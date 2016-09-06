@@ -742,6 +742,13 @@
             预约排班查询结束时间
             </summary>
         </member>
+        <member name="P:eHPS.API.Models.BookableInfoRequest.RegisterOrAppointment">
+            <summary>
+            表明是挂号还是预约
+            Register 挂号
+            Appointment预约
+            </summary>
+        </member>
         <member name="T:eHPS.API.Models.DoctorSearchModel">
             <summary>
             查询医生信息的查询对象模型

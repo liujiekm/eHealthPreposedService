@@ -127,6 +127,12 @@ namespace eHPS.Contract.Model
         /// <summary>
         /// 是否需要收获地址
         /// </summary>
-        public bool IfNeedDeliveryAddress { get; set; }
+        public bool IfNeedDeliveryAddress {
+            get
+            {
+                return Orders.Any(p => p.ItemType.Equals("药品医嘱"));
+                
+            }
+            }
     }
 } 

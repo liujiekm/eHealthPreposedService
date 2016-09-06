@@ -114,7 +114,8 @@ namespace eHPS.WYServiceImplement
                         break;
 
                     case "YZLB": //详细项目医嘱类别
-                        result.ItemType = propertyDic[1];
+
+                        result.ItemType = ConvertItemType(propertyDic[1]);
                         break;
                     default:
 
@@ -123,6 +124,42 @@ namespace eHPS.WYServiceImplement
             }
         }
 
+
+
+
+
+
+        private static string ConvertItemType(String itemTypeIndicate)
+        {
+            var result = String.Empty;
+            switch (itemTypeIndicate)
+            {
+                case "1":
+                case "2":
+                case "3":
+                    result = "药品医嘱";
+                    break;
+                case "5":
+                case "6":
+                    result = "申请单和治疗单";
+                    break;
+                case "9":
+                    result = "化验";
+                    break;
+                case "49":
+                    result = "化验医嘱追加项目";
+                    break;
+                case "7":
+                    result = "药品附加医嘱";
+                    break;
+                default:
+                    break;
+
+            }
+
+            return result;
+            ;
+        }
 
         /// <summary>
         /// 根据温附一项目拼音名称赋值动态类型属性，并返回表示一条项目的动态对象

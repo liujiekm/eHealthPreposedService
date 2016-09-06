@@ -41,7 +41,7 @@ namespace eHPS.API.Models
         /// 实际的充值金额
         /// </summary>
         [Required(AllowEmptyStrings = false,ErrorMessage = "实际的充值金额不允许为空")]
-        public String Amount { get; set; }
+        public Decimal Amount { get; set; }
 
 
     }

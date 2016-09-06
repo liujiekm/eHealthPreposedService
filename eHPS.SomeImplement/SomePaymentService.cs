@@ -37,7 +37,7 @@ namespace eHPS.SomeImplement
             throw new NotImplementedException();
         }
 
-        public ResponseMessage<string> Pay(string tradingId, string activityId, string amount, string actualAmount)
+        public ResponseMessage<string> Pay(string tradingId, string activityId, Decimal amount, Decimal actualAmount)
         {
             throw new NotImplementedException();
         }
@@ -47,7 +47,7 @@ namespace eHPS.SomeImplement
             throw new NotImplementedException();
         }
 
-        public ResponseMessage<string> Recharge(string patientId, string tradingId, string amount)
+        public ResponseMessage<string> Recharge(string patientId, string tradingId, Decimal amount)
         {
             throw new NotImplementedException();
         }
