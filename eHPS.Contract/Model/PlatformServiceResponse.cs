@@ -23,6 +23,10 @@ using System.Threading.Tasks;
 
 namespace eHPS.Contract.Model
 {
+    /// <summary>
+    /// 平台服务调用返回类型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PlatformServiceResponse<T> where T : class
     {
         /// <summary>

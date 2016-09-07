@@ -109,6 +109,7 @@ namespace eHPS.BackgroundService
             try
             {
                 patientConsumptions = paymentService.AwareOrderBooked(patientIdList);
+                
             }
             catch (Exception ex)
             {
@@ -131,6 +132,8 @@ namespace eHPS.BackgroundService
                     //与前一次不相等
                     if (!HashHelper.GetMD5(prevConsumptionJson,Encoding.UTF8).Equals(HashHelper.GetMD5(currentConsumptionJson, Encoding.UTF8)))
                     {
+                        LoggerFactory.CreateLog().Info("两次对比推送数据MD5值不相等！前一次数据 ："+ prevConsumptionJson+ " 当前数据：" + currentConsumptionJson+"\r\n"+"前一次数据MD5："+ HashHelper.GetMD5(prevConsumptionJson, Encoding.UTF8)+" 当前数据MD5："+ HashHelper.GetMD5(currentConsumptionJson, Encoding.UTF8));
+                        CacheProvider.Delete("eHPS_Sys_Consumption");
                         CacheProvider.Set("eHPS_Sys_Consumption", patientConsumptions);
                         //按患者来推送收费项目
                         foreach (var patientConsumption in patientConsumptions)
@@ -139,6 +142,10 @@ namespace eHPS.BackgroundService
                             LoggerFactory.CreateLog().Info("推送患者: " + patientConsumption.PatientName + "待支付项目" + (resultCode == 0 ? "失败" : "成功"));
                         }
 
+                    }
+                    else
+                    {
+                        return;
                     }
 
                 }

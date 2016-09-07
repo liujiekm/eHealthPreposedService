@@ -75,7 +75,7 @@ namespace eHPS.ImplementTest
             var TradingId = "gh_86_290_1000";
             var AppointId = "27652";
 
-            var Amount = "0";
+            var Amount = 0;
 
             //{ AppointId = "27652", TradingId = "gh_86_290_1000", Amount = 0 }
 
@@ -92,12 +92,13 @@ namespace eHPS.ImplementTest
         {
             paymentService = container.Resolve<IPayment>(); ;
 
-            var activityId = "284492";
-            var amount = "703.56";
+            var tradingId = "5487";
+            var activityId = "283591";
+            decimal amount = 30.08M;
 
-            var actualAmount = "100";
+            decimal actualAmount = 0M;
 
-            var result = paymentService.Pay("111", activityId, amount,actualAmount);
+            var result = paymentService.Pay(tradingId, activityId, amount,actualAmount);
 
             Assert.AreEqual(0, result.HasError);
             Assert.IsNotNull(result.Body);

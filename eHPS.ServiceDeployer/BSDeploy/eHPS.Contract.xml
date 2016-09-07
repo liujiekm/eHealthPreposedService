@@ -1035,6 +1035,12 @@
             患者姓名
             </summary>
         </member>
+        <member name="T:eHPS.Contract.Model.PlatformServiceResponse`1">
+            <summary>
+            平台服务调用返回类型
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="P:eHPS.Contract.Model.PlatformServiceResponse`1.HasError">
             <summary>
             命令执行是否哟错误
