@@ -36,6 +36,7 @@ namespace eHPS.CrossCutting.NetFramework.Adapter
         {
             //获得所有自定义的继承自TinyMapperBind的子类（自定义映射规则）
             var binds = AppDomain.CurrentDomain.GetAssemblies().SelectMany(p => p.GetTypes()).Where(t => t.BaseType == typeof(TinyMapperBind));
+
             foreach (var bind in binds)
             {
                 //bind.GetConstructor(Type.EmptyTypes).Invoke(null)

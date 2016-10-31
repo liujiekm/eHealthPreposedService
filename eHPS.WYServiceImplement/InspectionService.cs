@@ -134,7 +134,7 @@ namespace eHPS.WYServiceImplement
                               '' as bgryid,' ' as bgry,t1.shsj,'' as zhshysid,' ' as shry,'' as dycs
                               from fs_petbg t1,yyfz_tjyy t2 where t1.jch=t2.jch(+) " + condition + "  order by t1.bgsj";
                     break;
-                case "JY":
+                case "JYBG":
                     ls_sql = @"SELECT b.sampleno,c.patientid,c.patientname brxm,decode(c.sex,'1','男','女') as brxb,c.birthday,'',
                             c.patientid,'','','',null sqrq,null jclx,null sqzkid,' ' as sqks,null as sqysid,' ' as sqys,examinaim as jcbw,
                    '' smcs,CHINESENAME||'&'|| b.TESTRESULT||'&'|| HINT||'&'||lpad(reflo,7,' ')||decode(nvl(length(refhi),0),0,'','~')||rpad(nvl(refhi,' '),decode(nvl(length(refhi),0),0,5 - length(reflo),7),' ') jgsj,' ' as jgzd,executetime bgsj,

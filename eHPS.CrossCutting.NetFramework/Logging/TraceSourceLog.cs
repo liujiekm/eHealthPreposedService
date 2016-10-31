@@ -164,6 +164,5 @@ namespace eHPS.CrossCutting.NetFramework.Logging
         }
 
         #endregion
-
     }
 }

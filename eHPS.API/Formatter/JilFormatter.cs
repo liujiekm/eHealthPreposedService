@@ -85,6 +85,10 @@ namespace eHPS.API.Formatter
         {
             var streamWriter = new StreamWriter(writeStream);
             JSON.Serialize(value, streamWriter, _jilOptions);
+
+            
+
+
             streamWriter.Flush();
             return Task.FromResult(writeStream);
         }

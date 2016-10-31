@@ -11,6 +11,7 @@
     <ProjectView>ProjectFiles</ProjectView>
     <NameOfLastUsedPublishProfile>eHPS.API</NameOfLastUsedPublishProfile>
     <IISExpressSSLPort>44394</IISExpressSSLPort>
+    <WebStackScaffolding_AreaDialogWidth>600</WebStackScaffolding_AreaDialogWidth>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

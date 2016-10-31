@@ -55,7 +55,7 @@ Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "eHPS.Contract.Document", "e
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "eHPS.Setup", "eHPS.Setup\eHPS.Setup.vdproj", "{047C0089-974A-46BC-A1E9-B2BED95E2F60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.SGServiceImplement", "eHPS.SGServiceImplement\eHPS.SGServiceImplement.csproj", "{B0FC3389-1DFC-49B5-B9E7-DEED274AF6BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eHPS.SGServiceImplement", "..\..\eHealthPreposedService\eHPS.SGServiceImplement\eHPS.SGServiceImplement.csproj", "{B0FC3389-1DFC-49B5-B9E7-DEED274AF6BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

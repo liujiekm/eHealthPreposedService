@@ -108,7 +108,6 @@
     <Compile Include="MessageQueueHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceInstaller.cs" />
-    <Compile Include="WebServiceInvoker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
